@@ -7,7 +7,7 @@ Construit un arbre lexicographique à partir d’un dictionnaire (dico.txt), le 
 
 /*
 dictionnaire en texte brut (.txt)
-Un fichier contenant tous les mots admis du dictionnaire (un par ligne). Les mots sont en majuscule, en utilisant
+Un fichier contenant tous les words admis du dictionnaire (un par ligne). Les words sont en majuscule, en utilisant
 uniquement les caractères A-Z (pas d’accent, de ponctuation, etc.). Ils peuvent éventuellement être suivis d’un espace
 et d’un commentaire, (par exemple pour indiquer une valeur utilisée dans le calcul de score). L’ordre alphabétique
 n’est pas nécessairement respecté. Une ligne commençant par un espace est ignorée.
@@ -29,7 +29,7 @@ ABACOST
     Bloc    Position    Valeur  Signification
     En-tête:
                 0       16      Taille de l’en-tête:
-                4       300     Nombre de mots
+                4       300     Nombre de words
                 8       1000    Nombre de cellules
                 12      12      Taille de chaque cellule
     Cellule 0:
@@ -56,7 +56,172 @@ ABACOST
 #include <string.h>
 #include <ctype.h> 
 
-// fonction qui transforme les mots du dico.txt en majuscule
+const char *filename = "dico.lex";
+
+// Définition du type child Sibling Tree (CSTree)
+
+typedef int Element;
+
+typedef struct node {
+    Element elem;
+    struct node* firstChild;
+    struct node* nextSibling;
+} Node;
+typedef Node* CSTree;
+
+typedef struct {
+    Element elem;
+    unsigned int firstChild;
+    unsigned int nSiblings;
+} ArrayCell;
+
+typedef struct {
+    ArrayCell* nodeArray;
+    unsigned int nNodes
+} StaticTree;
+
+CSTree newCSTree(Element elem, CSTree firstChild, CSTree nextSibling){
+    CSTree t = malloc(sizeof(Node));
+    if (t == NULL) return NULL;
+    t->elem = elem;
+    t->firstChild = firstChild;
+    t->nextSibling = nextSibling;
+    return t;
+}
+
+// Imprime t en ordre préfixe (dans l’exemple : 1,2,3,4,6,7,5).
+void printPrefix(CSTree t) {
+    if (t == NULL) {
+        return;
+    }
+
+    printf("%d ", t->elem);
+    printPrefix(t->firstChild);
+    printPrefix(t->nextSibling);
+}
+
+// Compte le nombre de nœuds dans l’arbre t.
+int size(CSTree t) {
+    if (t == NULL) {
+        return 0;
+    }
+
+    return 1 + size(t->firstChild) + size(t->nextSibling);
+}
+
+// Compte le nombre d’enfants du nœud t.
+int nChildren(CSTree t) {
+    if (t == NULL) {
+        return 0;
+    }
+
+    return 1 + nSibling(t->firstChild);
+}
+
+// Fontion auxiliaire
+int nSibling(CSTree t) {
+    if (t == NULL || t->nextSibling == NULL) {
+        return 0;
+    }
+    return 1 + nSibling(t->nextSibling);
+}
+
+// Fonction auxiliaire
+void exportStaticTreeAux(CSTree t, int* i, ArrayCell* nodeArray) {
+    if (t == NULL) {
+        return;
+    }
+
+    nodeArray[*i].elem = t->elem;
+    nodeArray[*i].firstChild = *i;
+    nodeArray[*i].nSiblings = nChildren(t) - 1;
+    (*i)++;
+
+    exportStaticTreeAux(t->nextSibling, i, nodeArray);
+    nodeArray[*i].firstChild = *i + 1;
+    exportStaticTreeAux(t->firstChild, i, nodeArray);
+}
+
+
+// Crée un arbre statique avec le même contenu que t.
+StaticTree exportStaticTree(CSTree t) {
+    StaticTree st;
+    st.nNodes = size(t);
+    st.nodeArray = malloc(st.nNodes * sizeof(ArrayCell));
+
+    int i = 0;
+    exportStaticTreeAux(t, &i, st.nodeArray);
+
+    return st;
+}
+
+// Renvoie le premier frère de t contenant l’´el´ement e (ou t lui-mˆeme), NULL si aucun n’existe.
+CSTree siblingLookup(CSTree t, Element e) {
+    if (t == NULL) {
+        return NULL;
+    }
+    
+    if (t->elem == e) {
+        return t;
+    }
+
+    if (t->nextSibling == NULL) {
+        return NULL;
+    }
+
+    return siblingLookup(t->nextSibling, e);
+}
+
+// Insère un noeud contenant e dans la liste de frères de t, et renvoie le noeud correspondant
+CSTree sortInsertSibling(CSTree *t, Element e) {
+    if (*t == NULL) {
+        (*t) = newCSTree(e, NULL, NULL);
+        return (*t);
+    }
+
+    if ((*t)->nextSibling == NULL) {
+        (*t)->nextSibling = newCSTree(e, NULL, NULL);
+        return (*t);
+    }
+
+    return sortInsertSibling(&(*t)->nextSibling, e);
+}
+
+// Renvoie le premier fr`ere de *t contenant e, le noeud est cr´e´e si absent
+CSTree sortContinue(CSTree *t, Element e) {
+    if (siblingLookup(*t, e) != NULL) return siblingLookup(*t, e);
+    return sortInsertSibling(&(*t), e);
+}
+
+// Recherche l’´el´ement e parmi les ´el´ements cons´ecutifs de t aux
+// positions from,..., from+len-1, renvoie la position de cet ´el´ement
+// s’il existe, NONE sinon.
+int siblingLookupStatic(StaticTree t, Element e, int from, int len) {
+    if (t.nodeArray == NULL) {
+        return NULL;
+    }
+
+    if (len == 0) {
+        if (t.nodeArray[from].elem == e) {
+            return e;
+        }
+        if (t.nodeArray[from].nSiblings == 0) {
+            return NULL;
+        }
+        return siblingLookupStatic(t, e, from + 1, len);
+    }
+
+    if (t.nodeArray[from + len - 1].elem == e) {
+        return from + len-1;
+    }
+
+    if (len > 0) {
+        return siblingLookupStatic(t, e, from, len - 1);
+    }
+
+    return NULL;
+}
+
 void majuscule() {
     FILE *dico_file;
     dico_file = fopen("dico.txt", "r");
@@ -64,21 +229,22 @@ void majuscule() {
     FILE *dico_file_maj;
     dico_file_maj = fopen("dico_maj.txt", "w");
 
-    char mot[100];
+    char word[100];
 
-    while (fgets(mot, 100, dico_file) != NULL) {
-        for (int i = 0; i < strlen(mot); i++) {
-            mot[i] = toupper(mot[i]);
+    while (fgets(word, 100, dico_file) != NULL) {
+        for (int i = 0; i < strlen(word); i++) {
+            word[i] = toupper(word[i]);
         }
-        fprintf(dico_file_maj, "%s", mot);
+        fprintf(dico_file_maj, "%s", word);
     }
     fclose(dico_file);
     fclose(dico_file_maj);
 }
 
-// main
 int main(int argc, char *argv[])
 {
     majuscule();
+
+    return 0;
 
 }
