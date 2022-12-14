@@ -17,26 +17,46 @@ struct Cell
     int nSibling;
 };
 
-int readCellAt(FILE *lexFile, struct Cell *cell, int pos)
-{
-    fseek(lexFile, pos, SEEK_SET);
-    fread(&cell->letter, sizeof(int), 1, lexFile);
-    fread(&cell->firstChild, sizeof(int), 1, lexFile);
-    fread(&cell->nSibling, sizeof(int), 1, lexFile);
-    return 0;
-}
-
 void _printCell(struct Cell *cell)
 {
     printf("letter: %c firstChild: %d nextSibling: %d", cell->letter, cell->firstChild, cell->nSibling);
 }
 
+void readCellAt(FILE *lexFile, struct Cell *cell, int pos)
+{
+    fseek(lexFile, pos, SEEK_SET);
+    fread(&cell->letter, sizeof(int), 1, lexFile);
+    fread(&cell->firstChild, sizeof(int), 1, lexFile);
+    fread(&cell->nSibling, sizeof(int), 1, lexFile);
+}
+
+int checkIfSiblingRowContainLetter(char letter, FILE *lexFile, struct Cell *currentCell, int pos, int cellSize)
+{
+    readCellAt(lexFile, currentCell, pos);
+
+    if (currentCell->letter == letter)
+    {
+        return 1;
+    }
+
+    if (currentCell->nSibling <= 0)
+    {
+        return 0;
+    }
+
+    return checkIfSiblingRowContainLetter(letter, lexFile, currentCell, pos + cellSize, cellSize);
+}
+
+void returnMessageWithCode(char *message, int code, FILE *lexFile, char *file_contents)
+{
+    fclose(lexFile);
+    free(file_contents);
+    printf("%s", message);
+    exit(code);
+}
+
 int main(int argc, char *argv[])
 {
-    // read fr.lex file
-    // get user word
-    printf("The argument supplied is %s\n", argv[1]);
-
     FILE *lexFile = fopen(filename, "rb");
     if (lexFile == NULL)
     {
@@ -67,50 +87,36 @@ int main(int argc, char *argv[])
     fread(&cellsCount, sizeof(int), 1, lexFile);
     fread(&cellSize, sizeof(int), 1, lexFile);
 
-    printf("headerSize: %d wordsCount: %d cellsCount: %d cellSize: %d", headerSize, wordsCount, cellsCount, cellSize);
-
-    // read header
-    // fread(file_contents, 1, headerSize, lexFile);
     int pos = 0;
     char *wordToVerify = argv[1];
     struct Cell *currentCell = malloc(sizeof(struct Cell));
 
+    int parentPos = 0;
+
     for (int i = 0; i < strlen(wordToVerify); i++)
     {
         char letter = wordToVerify[i];
-        printf("\n%c : ", letter);
+        int found = checkIfSiblingRowContainLetter(letter, lexFile, currentCell, headerSize + parentPos, cellSize);
 
-        readCellAt(lexFile, currentCell, (headerSize + pos) * cellSize);
-        int nSibling = currentCell->nSibling;
-        printf("\nread cell at %d, with %d siblings", (headerSize + pos) * cellSize, nSibling);
-        for (int j = 0; j < nSibling; j++)
+        if (found == 0)
         {
-            readCellAt(lexFile, currentCell, headerSize + pos + (j * cellSize));
-            printf("\n");
-            _printCell(currentCell);
-            if (wordToVerify[i] == currentCell->letter)
-            {
-                pos = currentCell->firstChild;
-                break;
-            }
+            returnMessageWithCode("not found", 2, lexFile, file_contents);
         }
+
+        parentPos = currentCell->firstChild * cellSize;
     }
 
-    // lire la case qui correspond à la premiere lettre, lire le nSibling pour avoir la case de meme niveau suivante
-    // Quand on est sur la bonne case, lire le first child
-    // lire le nsibling a chaque fois afin de tomber sur la deuxieme lettre
-    // ...
-
-    // se placer sur la premiere lettre
-    // lire le first child
-
-    // si quand on parcourt le nsibling on trouve pas la lettre demandée, alors le mot n'est pas présent
     // si on trouve toutes les cases et que la case contient un first child alors c'est un préfixe
     // si on trouve toutes les cases et que la case ne contient aucun first child alors c'est le mot
 
-    fclose(lexFile);
+    readCellAt(lexFile, currentCell, headerSize + currentCell->firstChild * cellSize);
 
-    free(file_contents);
+    if (currentCell->firstChild > 0)
+    {
+        returnMessageWithCode("prefix", 1, lexFile, file_contents);
+    }
+
+    returnMessageWithCode("found", 0, lexFile, file_contents);
 
     return 0;
 }
