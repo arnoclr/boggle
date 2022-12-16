@@ -222,6 +222,69 @@ int siblingLookupStatic(StaticTree t, Element e, int from, int len) {
     return NULL;
 }
 
+int getWordsNumber(FILE *file) {
+    char c;
+    int nb_lines = 0;
+
+    fseek(file , 0, SEEK_SET);
+    while ((c = fgetc(file)) != EOF) {
+        if (c == '\n') {
+            nb_lines++;
+        }
+    }
+
+    return nb_lines;
+}
+
+CSTree example() {
+    CSTree a = newCSTree('A', 
+                newCSTree('B', NULL, NULL), 
+                newCSTree('C', NULL, NULL)
+            );
+    CSTree b =  newCSTree('D', NULL,  a );
+    return b;
+}
+
+// dictionnary_build construit le dictionnaire à partir du fichier dico_text
+// il écrit pour chaque mot les cellules avec les éléments (lettre) et le firstChild et le nombre de frères
+// Une cellule est codé sur 12 octets (4 octets pour l'élément, 4 octets pour le firstChild et 4 octets pour le nombre de frères)
+// L'en tête du fichier est codé sur 16 octets (4 octets pour la taille de l'en tête, 4 octets pour le nombre de mots, 4 octets pour le nombre de cellules et 4 octets pour la taille de chaque cellule)
+void dictionnary_build(FILE *dico_text, FILE *dico_lex) {
+
+    dico_text = fopen("dico_maj.txt", "r");
+    dico_lex = fopen("dico.lex", "wb");
+
+    // En tête du fichier
+    int header_size = 16;
+    int nb_words = getWordsNumber(dico_text);
+    int nb_cells = 0;
+    int cell_size = 12;
+
+    printf("Nombre de mots : %d", nb_words);
+
+    CSTree cs_tree = example();
+    // On récupère le nombre de cellules
+    nb_cells = size(cs_tree);
+
+    // On écrit l'en tête
+    fwrite(&header_size, sizeof(int), 1, dico_lex);
+    fwrite(&nb_words, sizeof(int), 1, dico_lex);
+    fwrite(&nb_cells, sizeof(int), 1, dico_lex);
+    fwrite(&cell_size, sizeof(int), 1, dico_lex);
+
+    // On écrit les cellules
+    StaticTree st = exportStaticTree(cs_tree);
+    for (int i = 0; i < nb_cells; i++) {
+        fwrite(&st.nodeArray[i].elem, sizeof(Element), 1, dico_lex);
+        fwrite(&st.nodeArray[i].firstChild, sizeof(int), 1, dico_lex);
+        fwrite(&st.nodeArray[i].nSiblings, sizeof(int), 1, dico_lex);
+    }
+
+    fclose(dico_text);
+    fclose(dico_lex);
+
+}
+
 void majuscule() {
     FILE *dico_file;
     dico_file = fopen("dico.txt", "r");
@@ -244,6 +307,11 @@ void majuscule() {
 int main(int argc, char *argv[])
 {
     majuscule();
+
+    FILE *dico_text;
+    FILE *dico_lex;
+
+    dictionnary_build(dico_text, dico_lex);
 
     return 0;
 
