@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
         score += scoreOfWord(argv[i]);
     }
 
-    printf("Score: %d", score);
+    printf("%d", score);
 
     return 0;
 }
