@@ -67,6 +67,7 @@ typedef struct node {
     struct node* firstChild;
     struct node* nextSibling;
 } Node;
+
 typedef Node* CSTree;
 
 typedef struct {
@@ -109,6 +110,14 @@ int size(CSTree t) {
     return 1 + size(t->firstChild) + size(t->nextSibling);
 }
 
+// Fontion auxiliaire
+int nSibling(CSTree t) {
+    if (t == NULL || t->nextSibling == NULL) {
+        return 0;
+    }
+    return 1 + nSibling(t->nextSibling);
+}
+
 // Compte le nombre d’enfants du nœud t.
 int nChildren(CSTree t) {
     if (t == NULL) {
@@ -118,39 +127,28 @@ int nChildren(CSTree t) {
     return 1 + nSibling(t->firstChild);
 }
 
-// Fontion auxiliaire
-int nSibling(CSTree t) {
-    if (t == NULL || t->nextSibling == NULL) {
-        return 0;
+void exportStaticTreeRec(CSTree t, int *i, ArrayCell *nodeArray)
+{
+    if (t != NULL)
+    {
+        int j = *i;
+        nodeArray[*i].elem = t->elem;
+        nodeArray[*i].nSiblings = nSibling(t->firstChild);
+        (*i)++;
+        exportStaticTreeRec(t->nextSibling, i, nodeArray);
+        nodeArray[j].firstChild = *i;
+        exportStaticTreeRec(t->firstChild, i, nodeArray);
     }
-    return 1 + nSibling(t->nextSibling);
 }
 
-// Fonction auxiliaire
-void exportStaticTreeAux(CSTree t, int* i, ArrayCell* nodeArray) {
-    if (t == NULL) {
-        return;
-    }
-
-    nodeArray[*i].elem = t->elem;
-    nodeArray[*i].firstChild = *i;
-    nodeArray[*i].nSiblings = nChildren(t) - 1;
-    (*i)++;
-
-    exportStaticTreeAux(t->nextSibling, i, nodeArray);
-    nodeArray[*i].firstChild = *i + 1;
-    exportStaticTreeAux(t->firstChild, i, nodeArray);
-}
-
-
-// Crée un arbre statique avec le même contenu que t.
-StaticTree exportStaticTree(CSTree t) {
+StaticTree exportStaticTree(CSTree t)
+{
     StaticTree st;
     st.nNodes = size(t);
     st.nodeArray = malloc(st.nNodes * sizeof(ArrayCell));
 
     int i = 0;
-    exportStaticTreeAux(t, &i, st.nodeArray);
+    exportStaticTreeRec(t, &i, st.nodeArray);
 
     return st;
 }
@@ -187,7 +185,7 @@ CSTree sortInsertSibling(CSTree *t, Element e) {
     return sortInsertSibling(&(*t)->nextSibling, e);
 }
 
-// Renvoie le premier fr`ere de *t contenant e, le noeud est cr´e´e si absent
+// Renvoie le premier frère de *t contenant e, le noeud est créé si absent
 CSTree sortContinue(CSTree *t, Element e) {
     if (siblingLookup(*t, e) != NULL) return siblingLookup(*t, e);
     return sortInsertSibling(&(*t), e);
@@ -237,12 +235,48 @@ int getWordsNumber(FILE *file) {
 }
 
 CSTree example() {
-    CSTree a = newCSTree('A', 
-                newCSTree('B', NULL, NULL), 
-                newCSTree('C', NULL, NULL)
-            );
+    CSTree a = newCSTree('A', newCSTree('B', NULL, NULL), newCSTree('C', NULL, NULL));
     CSTree b =  newCSTree('D', NULL,  a );
     return b;
+}
+
+CSTree getCSTreeFromFile() {
+    FILE *dico_text = fopen("dico_maj.txt", "r");
+    
+    // On veut pour chaque mot du dictionnaire, créer un CSTree avec la fonction newCSTree comme dans l'exemple ci-dessus
+    
+    // On commence par créer un CSTree vide
+    CSTree t = NULL;
+
+    // On récupère le nombre de mots du dictionnaire
+    int nb_words = getWordsNumber(dico_text);
+
+    for(int i = 0; i < nb_words; i++) {
+        char word[100];
+        fscanf(dico_text, "%s", word);
+        printf("%s", word);
+
+        // On récupère la taille du mot
+        int word_size = strlen(word);
+
+        for(int j = 0; j < word_size; j++) {
+            // On récupère la lettre du mot
+            char letter = word[j];
+            printf("%c", letter);
+
+            // On crée un noeud avec la lettre
+            CSTree node = newCSTree(letter, NULL, NULL);
+
+            // On insère le noeud dans le CSTree
+            sortContinue(&t, node);
+        }
+
+        // On insère un noeud avec l'élément '\0' pour indiquer la fin du mot
+        sortContinue(&t, '\0');
+    }
+
+    return t;
+
 }
 
 // dictionnary_build construit le dictionnaire à partir du fichier dico_text
@@ -262,7 +296,8 @@ void dictionnary_build(FILE *dico_text, FILE *dico_lex) {
 
     printf("Nombre de mots : %d", nb_words);
 
-    CSTree cs_tree = example();
+    CSTree cs_tree = getCSTreeFromFile();
+    printPrefix(cs_tree);
     // On récupère le nombre de cellules
     nb_cells = size(cs_tree);
 
