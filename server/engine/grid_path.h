@@ -100,7 +100,7 @@ int goToNextSibling(int letterPos, char *word, char grid[], int (*siblings)[8], 
     // letter pos start at 0, path length start at 1
     if (letterPos + 1 < pathLength)
     {
-        int lastVisitedSibling = (*path)[letterPos];
+        int lastVisitedSibling = (*path)[letterPos + 1];
         int nextSibling = -1;
         for (int i = 0; i < 8; i++)
         {
@@ -156,7 +156,17 @@ int goToNextSibling(int letterPos, char *word, char grid[], int (*siblings)[8], 
 
 extern int isWordInGrid(char *word, char grid[])
 {
-    int path[16] = {6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+    int path[16] = {0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
     int siblings[8];
-    return goToNextSibling(0, word, grid, &siblings, &path, 1);
+
+    for (int i = 0; i < gridLength; i++)
+    {
+        path[0] = i;
+        if (grid[i] == word[0] && goToNextSibling(0, word, grid, &siblings, &path, 1))
+        {
+            return 1;
+        }
+    }
+
+    return 0;
 }
