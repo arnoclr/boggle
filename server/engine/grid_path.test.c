@@ -14,8 +14,9 @@ void main()
 
     // printf("Siblings of %d: %d, %d, %d, %d, %d, %d, %d, %d", siblingOf, siblings[0], siblings[1], siblings[2], siblings[3], siblings[4], siblings[5], siblings[6], siblings[7]);
 
-    char grid[9] = {'C', 'X', 'X', 'A', 'X', 'X', 'B', 'A', 'C'};
+    char grid[9] = {'D', 'X', 'X', 'A', 'X', 'X', 'B', 'A', 'D'};
     char *word = "BAC";
 
-    printf("Word %s is in grid: %d", word, isWordInGrid(word, grid));
+    int inGrid = isWordInGrid(word, grid);
+    printf("Word %s is in grid: %d", word, inGrid);
 }
