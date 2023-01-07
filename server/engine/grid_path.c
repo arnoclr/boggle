@@ -17,6 +17,20 @@ int main(int argc, char *argv[])
         grid[i] = letter;
     }
 
+    // replace QU in word by 1
+    int len = strlen(word);
+    for (int i = 0; i < len; i++)
+    {
+        if (word[i] == 'Q' && word[i + 1] == 'U')
+        {
+            // décaler tous les caractères suivants d'une position vers la gauche
+            memmove(&word[i + 1], &word[i + 2], len - i - 2 + 1);
+            len--;         // mettre à jour la longueur du word
+            word[i] = '1'; // remplacer "qu" par "1"
+        }
+    }
+
+    // printf("Word: %s", word);
     // printf("Grid: %s", grid);
 
     return !isWordInGrid(word, grid);
