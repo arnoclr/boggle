@@ -51,6 +51,7 @@ ABACOST
                 12012       0       nSibling
 */
 
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -129,8 +130,7 @@ int nChildren(CSTree t) {
 
 void exportStaticTreeRec(CSTree t, int *i, ArrayCell *nodeArray)
 {
-    if (t != NULL)
-    {
+    if (t != NULL) {
         int j = *i;
         nodeArray[*i].elem = t->elem;
         nodeArray[*i].nSiblings = nSibling(t->firstChild);
@@ -153,7 +153,7 @@ StaticTree exportStaticTree(CSTree t)
     return st;
 }
 
-// Renvoie le premier frère de t contenant l’´el´ement e (ou t lui-mˆeme), NULL si aucun n’existe.
+// Renvoie le premier frère de t contenant l’élément e (ou t lui-mˆeme), NULL si aucun n’existe.
 CSTree siblingLookup(CSTree t, Element e) {
     if (t == NULL) {
         return NULL;
@@ -191,8 +191,8 @@ CSTree sortContinue(CSTree *t, Element e) {
     return sortInsertSibling(&(*t), e);
 }
 
-// Recherche l’´el´ement e parmi les ´el´ements cons´ecutifs de t aux
-// positions from,..., from+len-1, renvoie la position de cet ´el´ement
+// Recherche l’élément e parmi les éléments cons´ecutifs de t aux
+// positions from,..., from+len-1, renvoie la position de cet élément
 // s’il existe, NONE sinon.
 int siblingLookupStatic(StaticTree t, Element e, int from, int len) {
     if (t.nodeArray == NULL) {
@@ -242,41 +242,44 @@ CSTree example() {
 
 CSTree getCSTreeFromFile() {
     FILE *dico_text = fopen("dico_maj.txt", "r");
-    
-    // On veut pour chaque mot du dictionnaire, créer un CSTree avec la fonction newCSTree comme dans l'exemple ci-dessus
-    
-    // On commence par créer un CSTree vide
     CSTree t = NULL;
 
-    // On récupère le nombre de mots du dictionnaire
-    int nb_words = getWordsNumber(dico_text);
-
-    for(int i = 0; i < nb_words; i++) {
-        char word[100];
+    while (!feof(dico_text)) {
+        char word[255];
         fscanf(dico_text, "%s", word);
-        printf("%s", word);
-
+       
         // On récupère la taille du mot
         int word_size = strlen(word);
 
-        for(int j = 0; j < word_size; j++) {
+        // On crée un noeud avec la lettre
+        CSTree node = newCSTree(word[0], NULL, NULL);
+
+        // On insère le noeud dans le CSTree
+        sortContinue(&t, node->elem);
+
+        // On récupère la première lettre du mot
+        char letter = word[0];
+        CSTree current_node = siblingLookup(t, letter);
+
+        for(int j = 1; j < word_size; j++) {
             // On récupère la lettre du mot
-            char letter = word[j];
-            printf("%c", letter);
+            letter = word[j];
 
             // On crée un noeud avec la lettre
-            CSTree node = newCSTree(letter, NULL, NULL);
+            node = newCSTree(letter, NULL, NULL);
 
             // On insère le noeud dans le CSTree
-            sortContinue(&t, node);
+            sortContinue(&current_node->firstChild, node->elem);
+
+            current_node = siblingLookup(current_node->firstChild, letter);
         }
 
-        // On insère un noeud avec l'élément '\0' pour indiquer la fin du mot
-        sortContinue(&t, '\0');
+        // On rajoute le caractère \0 à la fin du mot
+        node = newCSTree('\0', NULL, NULL);
+        sortContinue(&current_node->firstChild, node->elem);
     }
-
+    
     return t;
-
 }
 
 // dictionnary_build construit le dictionnaire à partir du fichier dico_text
@@ -294,10 +297,9 @@ void dictionnary_build(FILE *dico_text, FILE *dico_lex) {
     int nb_cells = 0;
     int cell_size = 12;
 
-    printf("Nombre de mots : %d", nb_words);
+    printf("Nombre de mots : %d\n", nb_words);
 
     CSTree cs_tree = getCSTreeFromFile();
-    printPrefix(cs_tree);
     // On récupère le nombre de cellules
     nb_cells = size(cs_tree);
 
@@ -308,6 +310,7 @@ void dictionnary_build(FILE *dico_text, FILE *dico_lex) {
     fwrite(&cell_size, sizeof(int), 1, dico_lex);
 
     // On écrit les cellules
+    // Attention il faut prendre en compte la place que prend le header qu'on va ajouter à chaque firstChild de chaque lettre
     StaticTree st = exportStaticTree(cs_tree);
     for (int i = 0; i < nb_cells; i++) {
         fwrite(&st.nodeArray[i].elem, sizeof(Element), 1, dico_lex);
