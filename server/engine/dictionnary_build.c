@@ -1,356 +1,142 @@
-/*
-dictionnary_build
-$ dictionnary_build dico.txt dico.lex
-Construit un arbre lexicographique à partir d’un dictionnaire (dico.txt), le sauvegarde dans un fichier binaire
-(dico.lex). Aucune sortie n’est attendue.
-*/
-
-/*
-dictionnaire en texte brut (.txt)
-Un fichier contenant tous les words admis du dictionnaire (un par ligne). Les words sont en majuscule, en utilisant
-uniquement les caractères A-Z (pas d’accent, de ponctuation, etc.). Ils peuvent éventuellement être suivis d’un espace
-et d’un commentaire, (par exemple pour indiquer une valeur utilisée dans le calcul de score). L’ordre alphabétique
-n’est pas nécessairement respecté. Une ligne commençant par un espace est ignorée.
-dico.txt:
-AA
-AALENIEN
-AALENIENNE (éventuel commentaire ici)
-AALENIENNES
-AALENIENS
-AAS
-ABACA ## un autre commentaire
-ABACAS
-ABACOST
-...
-
-*/
-
-/*
-    Bloc    Position    Valeur  Signification
-    En-tête:
-                0       16      Taille de l’en-tête:
-                4       300     Nombre de words
-                8       1000    Nombre de cellules
-                12      12      Taille de chaque cellule
-    Cellule 0:
-                16      ‘A’     Element
-                20      26      FirstChild
-                24      25      nSibling
-    Cellule 1:
-                28      ‘B’     Element
-                32      37      FirstChild
-                36      24      nSibling
-    Cellule 2:
-                40      ‘C’     Element
-                44      64      FirstChild
-                48      24      nSibling
-    Cellule 3:
-                52      ‘D’     Element
-        . . . . . . . . . . .
-    Cellule 999:
-                12012       0       nSibling
-*/
-
-#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h> 
+#include <ctype.h>
 
-const char *filename = "dico.lex";
-
-// Définition du type child Sibling Tree (CSTree)
-
-typedef int Element;
-
-typedef struct node {
-    Element elem;
-    struct node* firstChild;
-    struct node* nextSibling;
+typedef struct node
+{
+    char letter;
+    struct node *firstChild;
+    struct node *nextSibling;
 } Node;
 
-typedef Node* CSTree;
+typedef Node *CSTree;
 
-typedef struct {
-    Element elem;
-    unsigned int firstChild;
-    unsigned int nSiblings;
-} ArrayCell;
-
-typedef struct {
-    ArrayCell* nodeArray;
-    unsigned int nNodes
-} StaticTree;
-
-CSTree newCSTree(Element elem, CSTree firstChild, CSTree nextSibling){
+CSTree newCSTree(char letter, CSTree firstChild, CSTree nextSibling)
+{
     CSTree t = malloc(sizeof(Node));
-    if (t == NULL) return NULL;
-    t->elem = elem;
+    if (t == NULL)
+        return NULL;
+    t->letter = letter;
     t->firstChild = firstChild;
     t->nextSibling = nextSibling;
     return t;
 }
 
-// Imprime t en ordre préfixe (dans l’exemple : 1,2,3,4,6,7,5).
-void printPrefix(CSTree t) {
-    if (t == NULL) {
-        return;
-    }
-
-    printf("%d ", t->elem);
-    printPrefix(t->firstChild);
-    printPrefix(t->nextSibling);
-}
-
-// Compte le nombre de nœuds dans l’arbre t.
-int size(CSTree t) {
-    if (t == NULL) {
-        return 0;
-    }
-
-    return 1 + size(t->firstChild) + size(t->nextSibling);
-}
-
-// Fontion auxiliaire
-int nSibling(CSTree t) {
-    if (t == NULL || t->nextSibling == NULL) {
+int nSibling(CSTree t)
+{
+    if (t == NULL || t->nextSibling == NULL)
+    {
         return 0;
     }
     return 1 + nSibling(t->nextSibling);
 }
 
-// Compte le nombre d’enfants du nœud t.
-int nChildren(CSTree t) {
-    if (t == NULL) {
+int nChildren(CSTree t)
+{
+    if (t == NULL)
+    {
         return 0;
     }
 
     return 1 + nSibling(t->firstChild);
 }
 
-void exportStaticTreeRec(CSTree t, int *i, ArrayCell *nodeArray)
+void printPrefix(CSTree t)
 {
-    if (t != NULL) {
-        int j = *i;
-        nodeArray[*i].elem = t->elem;
-        nodeArray[*i].nSiblings = nSibling(t->firstChild);
-        (*i)++;
-        exportStaticTreeRec(t->nextSibling, i, nodeArray);
-        nodeArray[j].firstChild = *i;
-        exportStaticTreeRec(t->firstChild, i, nodeArray);
+    if (t != NULL)
+    {
+        printf("%c", t->letter);
+        printPrefix(t->firstChild);
+        printPrefix(t->nextSibling);
     }
 }
 
-StaticTree exportStaticTree(CSTree t)
+void printDetails(CSTree t)
 {
-    StaticTree st;
-    st.nNodes = size(t);
-    st.nodeArray = malloc(st.nNodes * sizeof(ArrayCell));
-
-    int i = 0;
-    exportStaticTreeRec(t, &i, st.nodeArray);
-
-    return st;
+    if (t != NULL)
+    {
+        printf("%c, siblings: %d, children: %d\n", t->letter, nSibling(t), nChildren(t));
+        printDetails(t->firstChild);
+        printDetails(t->nextSibling);
+    }
 }
 
-// Renvoie le premier frère de t contenant l’élément e (ou t lui-mˆeme), NULL si aucun n’existe.
-CSTree siblingLookup(CSTree t, Element e) {
-    if (t == NULL) {
-        return NULL;
+void _printLexHumanLanguage(CSTree t, int childAt)
+{
+    if (t != NULL)
+    {
+        childAt += nChildren(t);
+        printf("%c, siblings: %d, childAt: %d\n", t->letter, nSibling(t), childAt);
+        _printLexHumanLanguage(t->nextSibling, childAt);
+        _printLexHumanLanguage(t->firstChild, nChildren(t));
     }
-    
-    if (t->elem == e) {
-        return t;
-    }
-
-    if (t->nextSibling == NULL) {
-        return NULL;
-    }
-
-    return siblingLookup(t->nextSibling, e);
 }
 
-// Insère un noeud contenant e dans la liste de frères de t, et renvoie le noeud correspondant
-CSTree sortInsertSibling(CSTree *t, Element e) {
-    if (*t == NULL) {
-        (*t) = newCSTree(e, NULL, NULL);
-        return (*t);
-    }
-
-    if ((*t)->nextSibling == NULL) {
-        (*t)->nextSibling = newCSTree(e, NULL, NULL);
-        return (*t);
-    }
-
-    return sortInsertSibling(&(*t)->nextSibling, e);
+void printLexHumanLanguage(CSTree t)
+{
+    _printLexHumanLanguage(t, nSibling(t));
 }
 
-// Renvoie le premier frère de *t contenant e, le noeud est créé si absent
-CSTree sortContinue(CSTree *t, Element e) {
-    if (siblingLookup(*t, e) != NULL) return siblingLookup(*t, e);
-    return sortInsertSibling(&(*t), e);
-}
+void insertLetterAt(CSTree *t, char *word, int pos)
+{
+    // parcourir les voisins tant qu'on a pas trouvé la lettre, si on ne la trouve pas arrivé au bout, on créé un nouveau voisin
 
-// Recherche l’élément e parmi les éléments cons´ecutifs de t aux
-// positions from,..., from+len-1, renvoie la position de cet élément
-// s’il existe, NONE sinon.
-int siblingLookupStatic(StaticTree t, Element e, int from, int len) {
-    if (t.nodeArray == NULL) {
-        return NULL;
+    if (pos >= strlen(word))
+        return;
+
+    char letter = word[pos];
+
+    // printf("\nLettre a inserer: %c", letter);
+
+    if (*t == NULL)
+    {
+        // printf("\nCreation d'un noeud car il n'existe pas");
+        *t = newCSTree(letter, NULL, NULL);
     }
 
-    if (len == 0) {
-        if (t.nodeArray[from].elem == e) {
-            return e;
-        }
-        if (t.nodeArray[from].nSiblings == 0) {
-            return NULL;
-        }
-        return siblingLookupStatic(t, e, from + 1, len);
+    if ((*t)->letter == letter)
+    {
+        // printf("\nNoeud trouve, on passe au fils");
+        return insertLetterAt(&(*t)->firstChild, word, pos + 1);
     }
 
-    if (t.nodeArray[from + len - 1].elem == e) {
-        return from + len-1;
-    }
-
-    if (len > 0) {
-        return siblingLookupStatic(t, e, from, len - 1);
-    }
-
-    return NULL;
-}
-
-int getWordsNumber(FILE *file) {
-    char c;
-    int nb_lines = 0;
-
-    fseek(file , 0, SEEK_SET);
-    while ((c = fgetc(file)) != EOF) {
-        if (c == '\n') {
-            nb_lines++;
-        }
-    }
-
-    return nb_lines;
-}
-
-CSTree example() {
-    CSTree a = newCSTree('A', newCSTree('B', NULL, NULL), newCSTree('C', NULL, NULL));
-    CSTree b =  newCSTree('D', NULL,  a );
-    return b;
-}
-
-CSTree getCSTreeFromFile() {
-    FILE *dico_text = fopen("dico_maj.txt", "r");
-    CSTree t = NULL;
-
-    while (!feof(dico_text)) {
-        char word[255];
-        fscanf(dico_text, "%s", word);
-       
-        // On récupère la taille du mot
-        int word_size = strlen(word);
-
-        // On crée un noeud avec la lettre
-        CSTree node = newCSTree(word[0], NULL, NULL);
-
-        // On insère le noeud dans le CSTree
-        sortContinue(&t, node->elem);
-
-        // On récupère la première lettre du mot
-        char letter = word[0];
-        CSTree current_node = siblingLookup(t, letter);
-
-        for(int j = 1; j < word_size; j++) {
-            // On récupère la lettre du mot
-            letter = word[j];
-
-            // On crée un noeud avec la lettre
-            node = newCSTree(letter, NULL, NULL);
-
-            // On insère le noeud dans le CSTree
-            sortContinue(&current_node->firstChild, node->elem);
-
-            current_node = siblingLookup(current_node->firstChild, letter);
-        }
-
-        // On rajoute le caractère \0 à la fin du mot
-        node = newCSTree('\0', NULL, NULL);
-        sortContinue(&current_node->firstChild, node->elem);
-    }
-    
-    return t;
-}
-
-// dictionnary_build construit le dictionnaire à partir du fichier dico_text
-// il écrit pour chaque mot les cellules avec les éléments (lettre) et le firstChild et le nombre de frères
-// Une cellule est codé sur 12 octets (4 octets pour l'élément, 4 octets pour le firstChild et 4 octets pour le nombre de frères)
-// L'en tête du fichier est codé sur 16 octets (4 octets pour la taille de l'en tête, 4 octets pour le nombre de mots, 4 octets pour le nombre de cellules et 4 octets pour la taille de chaque cellule)
-void dictionnary_build(FILE *dico_text, FILE *dico_lex) {
-
-    dico_text = fopen("dico_maj.txt", "r");
-    dico_lex = fopen("dico.lex", "wb");
-
-    // En tête du fichier
-    int header_size = 16;
-    int nb_words = getWordsNumber(dico_text);
-    int nb_cells = 0;
-    int cell_size = 12;
-
-    printf("Nombre de mots : %d\n", nb_words);
-
-    CSTree cs_tree = getCSTreeFromFile();
-    // On récupère le nombre de cellules
-    nb_cells = size(cs_tree);
-
-    // On écrit l'en tête
-    fwrite(&header_size, sizeof(int), 1, dico_lex);
-    fwrite(&nb_words, sizeof(int), 1, dico_lex);
-    fwrite(&nb_cells, sizeof(int), 1, dico_lex);
-    fwrite(&cell_size, sizeof(int), 1, dico_lex);
-
-    // On écrit les cellules
-    // Attention il faut prendre en compte la place que prend le header qu'on va ajouter à chaque firstChild de chaque lettre
-    StaticTree st = exportStaticTree(cs_tree);
-    for (int i = 0; i < nb_cells; i++) {
-        fwrite(&st.nodeArray[i].elem, sizeof(Element), 1, dico_lex);
-        fwrite(&st.nodeArray[i].firstChild, sizeof(int), 1, dico_lex);
-        fwrite(&st.nodeArray[i].nSiblings, sizeof(int), 1, dico_lex);
-    }
-
-    fclose(dico_text);
-    fclose(dico_lex);
-
-}
-
-void majuscule() {
-    FILE *dico_file;
-    dico_file = fopen("dico.txt", "r");
-
-    FILE *dico_file_maj;
-    dico_file_maj = fopen("dico_maj.txt", "w");
-
-    char word[100];
-
-    while (fgets(word, 100, dico_file) != NULL) {
-        for (int i = 0; i < strlen(word); i++) {
-            word[i] = toupper(word[i]);
-        }
-        fprintf(dico_file_maj, "%s", word);
-    }
-    fclose(dico_file);
-    fclose(dico_file_maj);
+    // printf("\nNoeud non trouve, on passe au voisin");
+    return insertLetterAt(&(*t)->nextSibling, word, pos);
 }
 
 int main(int argc, char *argv[])
 {
-    majuscule();
+    if (argc != 3)
+    {
+        printf("Usage: %s <inputFile> <outputFile>", argv[0]);
+        exit(1);
+    }
 
-    FILE *dico_text;
-    FILE *dico_lex;
+    char *inputFilename = argv[1];
+    char *outputFilename = argv[2];
 
-    dictionnary_build(dico_text, dico_lex);
+    // we assume that the inputFile is a list of word written in CAPITAL letters and ordered alphabetically
 
-    return 0;
+    FILE *inputFile = fopen(inputFilename, "r");
+    FILE *outputFile = fopen(outputFilename, "wb");
 
+    CSTree t = NULL;
+
+    while (!feof(inputFile))
+    {
+        char word[255];
+        fscanf(inputFile, "%s", word);
+
+        int wordLen = strlen(word);
+
+        // printf("\n---\nword: %s len: %d", word, wordLen);
+
+        insertLetterAt(&t, word, 0);
+    }
+
+    printLexHumanLanguage(t);
+    // printDetails(t);
+
+    // printf("\nNombre de fils: %d, Nombre de voisins: %d", nChildren(t), nSibling(t));
 }
