@@ -67,6 +67,46 @@
         input[name=word] {
             text-transform: uppercase;
         }
+
+        input.error {
+            animation: inputError .3s;
+        }
+
+        @keyframes inputError {
+            0% {
+                border-color: red;
+                transform: translateX(0%);
+            }
+
+            10% {
+                transform: translateX(-10%);
+            }
+
+            20% {
+                transform: translateX(0%);
+            }
+
+            30% {
+                transform: translateX(-8%);
+            }
+
+            50% {
+                transform: translateX(0%);
+            }
+
+            80% {
+                transform: translateX(-6%);
+            }
+
+            100% {
+                transform: translateX(0%);
+            }
+        }
+
+        form[aria-busy=true] {
+            opacity: 0.7;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -81,7 +121,7 @@
             <?php endforeach; ?>
         </div>
 
-        <form class="getWordPath">
+        <form class="getWordPath" aria-busy="true">
             <br>
             <label>
                 <span>Inscrire un mot de la grille</span>
@@ -98,6 +138,7 @@
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
+            form.attributes["aria-busy"].value = true;
             const word = form.word.value;
 
             const response = await fetch(`?word=${word}&action=verifyWordAndGetPath`);
@@ -117,8 +158,17 @@
                         }, 300);
                     }, 150 * i);
                 });
+            } else {
+                form.word.classList.add("error");
+                setTimeout(() => {
+                    form.word.classList.remove("error");
+                }, 300);
             }
+
+            form.attributes["aria-busy"].value = false;
         });
+
+        form.attributes["aria-busy"].value = false;
     </script>
 
 </body>
