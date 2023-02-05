@@ -1,31 +1,51 @@
 <?php
 
+session_start();
+
 require "app/AntiCheat.php";
+require "functions/response.php";
 
 const GRID_SIZE = 4;
 
-exec("cd ..\\engine && grid_build frequence.txt 4 4", $gridString, $ret);
-$grid = explode(" ", $gridString[0]);
+$action = $_GET['action'] ?? "home";
 
-$antiCheat = new AntiCheat();
+switch ($action) {
+    case 'home':
 
-$submittedWord = strtoupper($_GET['word'] ?? "bonjour");
+        exec("cd ..\\engine && grid_build frequence.txt 4 4", $gridString, $ret);
+        $_SESSION['grid'] = $gridString[0];
+        $grid = explode(" ", $gridString[0]);
 
-// TODO: Accept only words
-exec("cd ..\\engine && dictionnary_lookup fr32.lex $submittedWord", $out, $ret);
+        $antiCheat = new AntiCheat();
 
-$displayResult = "";
-switch ($out[0]) {
-    case "found":
-        $displayResult = "Le mot $submittedWord est valide";
+        $submittedWord = strtoupper($_GET['word'] ?? "bonjour");
+
+        // TODO: Accept only words
+        exec("cd ..\\engine && dictionnary_lookup fr32.lex $submittedWord", $out, $ret);
+
+        $displayResult = "";
+        switch ($out[0]) {
+            case "found":
+                $displayResult = "Le mot $submittedWord est valide";
+                break;
+            case "prefix":
+                $displayResult = "Le mot $submittedWord est un préfixe valide";
+                break;
+            default:
+                $displayResult = "Le mot $submittedWord n'est pas valide";
+                break;
+        }
+
+
+        require "views/home.php";
         break;
-    case "prefix":
-        $displayResult = "Le mot $submittedWord est un préfixe valide";
-        break;
+
     default:
-        $displayResult = "Le mot $submittedWord n'est pas valide";
-        break;
+        $actionPath = "actions/$action.php";
+        if (file_exists($actionPath)) {
+            require $actionPath;
+        } else {
+            http_response_code(404);
+            require "views/404.php";
+        }
 }
-
-
-require "views/home.php";

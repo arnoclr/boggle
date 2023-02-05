@@ -7,7 +7,7 @@ class AntiCheat
         $image = imagecreatetruecolor($size, $size);
         $backgroundColor = imagecolorallocate($image, 255, 255, 255);
         $textColor = imagecolorallocate($image, 0, 0, 0);
-        $availableFontVariants = ["Xed", "Noise", "False"];
+        $availableFontVariants = ["Xed", "Noise"];
         $fontVariant = $availableFontVariants[array_rand($availableFontVariants)];
         $font = realpath("./assets/fonts/anticheat/ZXX $fontVariant.otf");
         $fontSize = $size;
