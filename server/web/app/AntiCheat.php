@@ -10,9 +10,10 @@ class AntiCheat
         $availableFontVariants = ["Xed", "Noise"];
         $fontVariant = $availableFontVariants[array_rand($availableFontVariants)];
         $font = realpath("./assets/fonts/anticheat/ZXX $fontVariant.otf");
-        $fontSize = $size;
+        $fontSize = $size / sizeof(str_split($letter));
+        $y = $size - ($size - $fontSize) / 2;
         imagefill($image, 0, 0, $backgroundColor);
-        imagefttext($image, $fontSize, 0, 0, $fontSize, $textColor, $font, $letter);
+        imagefttext($image, $fontSize, 0, 0, $y, $textColor, $font, $letter);
         ob_start();
         imagepng($image);
         $imageData = ob_get_contents();
