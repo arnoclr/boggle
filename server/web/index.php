@@ -1,10 +1,9 @@
 <?php
 
 const GRID_SIZE = 4;
-const GRID_STRING = "G A I R R U V E QU E O T A S M J";
 
-// TODO: Use C program to get grid
-$grid = explode(" ", GRID_STRING);
+exec("cd ..\\engine && grid_build frequence.txt 4 4", $gridString, $ret);
+$grid = explode(" ", $gridString[0]);
 
 $submittedWord = strtoupper($_GET['word'] ?? "bonjour");
 
