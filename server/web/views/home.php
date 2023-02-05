@@ -27,6 +27,7 @@
         }
 
         .letter {
+            padding: 12px;
             border: 2px solid gray;
             border-radius: 4px;
             display: grid;
@@ -34,8 +35,10 @@
             background-color: white;
         }
 
-        .letter span {
-            font-size: 32px;
+        .letter img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         label {
@@ -55,7 +58,7 @@
         <div class="grid">
             <?php foreach ($grid as $letter) : ?>
                 <div class="letter">
-                    <span><?= $letter ?></span>
+                    <img src="<?= $antiCheat->generateImageFor($letter) ?>" alt="Lettre masquée">
                 </div>
             <?php endforeach; ?>
         </div>

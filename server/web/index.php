@@ -1,9 +1,13 @@
 <?php
 
+require "app/AntiCheat.php";
+
 const GRID_SIZE = 4;
 
 exec("cd ..\\engine && grid_build frequence.txt 4 4", $gridString, $ret);
 $grid = explode(" ", $gridString[0]);
+
+$antiCheat = new AntiCheat();
 
 $submittedWord = strtoupper($_GET['word'] ?? "bonjour");
 
