@@ -62,20 +62,30 @@ void printDetails(CSTree t)
     }
 }
 
-void _printLexHumanLanguage(CSTree t, int childAt)
+void _printLexHumanLanguage(CSTree t, int *writtenLetters)
 {
     if (t != NULL)
     {
-        childAt += nChildren(t);
-        printf("%c, siblings: %d, childAt: %d\n", t->letter, nSibling(t), childAt);
-        _printLexHumanLanguage(t->nextSibling, childAt);
-        _printLexHumanLanguage(t->firstChild, nChildren(t));
+        *writtenLetters += 1;
+        int childAt;
+        if (t->firstChild == NULL)
+        {
+            childAt = 0;
+        }
+        else
+        {
+            childAt = *writtenLetters + nSibling(t);
+        }
+        printf("%d.%c, siblings: %d, childAt: %d\n", *writtenLetters - 1, t->letter, nSibling(t), childAt);
+        _printLexHumanLanguage(t->nextSibling, writtenLetters);
+        _printLexHumanLanguage(t->firstChild, writtenLetters);
     }
 }
 
 void printLexHumanLanguage(CSTree t)
 {
-    _printLexHumanLanguage(t, nSibling(t));
+    int writtenLetters = 0;
+    _printLexHumanLanguage(t, &writtenLetters);
 }
 
 void insertLetterAt(CSTree *t, char *word, int pos)
@@ -83,7 +93,10 @@ void insertLetterAt(CSTree *t, char *word, int pos)
     // parcourir les voisins tant qu'on a pas trouvé la lettre, si on ne la trouve pas arrivé au bout, on créé un nouveau voisin
 
     if (pos >= strlen(word))
+    {
+        *t = newCSTree('\0', NULL, NULL);
         return;
+    }
 
     char letter = word[pos];
 
