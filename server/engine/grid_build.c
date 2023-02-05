@@ -2,6 +2,28 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
+
+unsigned long long rdtsc()
+{
+    unsigned int lo, hi;
+    __asm__ __volatile__("rdtsc"
+                         : "=a"(lo), "=d"(hi));
+    return ((unsigned long long)hi << 32) | lo;
+}
+
+int _getPID()
+{
+#ifdef _WIN32
+    return GetCurrentProcessId();
+#else
+    return getpid();
+#endif
+}
 
 int main(int argc, char *argv[])
 {
@@ -78,7 +100,7 @@ int main(int argc, char *argv[])
 
     int gridLength = width * height;
 
-    srand(time(NULL));
+    srand(rdtsc() + time(NULL) + _getPID());
 
     for (int i = 0; i < gridLength; i++)
     {
