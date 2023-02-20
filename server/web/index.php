@@ -4,7 +4,7 @@ require "app/AntiCheat.php";
 
 const GRID_SIZE = 4;
 
-exec("cd ..\\engine && grid_build frequence.txt 4 4", $gridString, $ret);
+exec("cd ../engine && ./grid_build frequence.txt 4 4", $gridString, $ret);
 $grid = explode(" ", $gridString[0]);
 
 $antiCheat = new AntiCheat();
@@ -12,7 +12,7 @@ $antiCheat = new AntiCheat();
 $submittedWord = strtoupper($_GET['word'] ?? "bonjour");
 
 // TODO: Accept only words
-exec("cd ..\\engine && dictionnary_lookup fr32.lex $submittedWord", $out, $ret);
+exec("cd ../engine && ./dictionnary_lookup fr32.lex $submittedWord", $out, $ret);
 
 $displayResult = "";
 switch ($out[0]) {

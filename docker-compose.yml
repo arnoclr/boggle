@@ -18,9 +18,13 @@ services:
     volumes:
       - db:/var/lib/mysql
   php:
-    build: server/web
+    build:
+      context: server
+      dockerfile: web/Dockerfile
     ports:
       - "8081:80"
+    volumes:
+      - ./server/web:/var/www/html
   vite:
     build: client/vite
     ports:
