@@ -18,4 +18,9 @@ RUN gcc dictionnary_lookup.c -o dictionnary_lookup
 RUN gcc dictionnary_build.c -o dictionnary_build
 RUN gcc score.c -o score
 
+COPY /jdict /var/www/jdict
+
+RUN apt-get install -y openjdk-11-jre-headless && \
+    rm -rf /var/lib/apt/lists/*
+
 CMD ["apache2-foreground"]
