@@ -25,6 +25,8 @@ services:
     build: client/vite
     ports:
       - "5173:5173"
+    volumes:
+      - ./client/vite/src:/app/src
 
 volumes:
   db:
