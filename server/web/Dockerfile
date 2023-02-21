@@ -7,6 +7,11 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
+RUN docker-php-ext-install pdo pdo_mysql
+
+RUN apt-get install -y openjdk-11-jre-headless && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /var/www/html
 
 COPY /engine /var/www/engine
@@ -19,8 +24,5 @@ RUN gcc dictionnary_build.c -o dictionnary_build
 RUN gcc score.c -o score
 
 COPY /jdict /var/www/jdict
-
-RUN apt-get install -y openjdk-11-jre-headless && \
-    rm -rf /var/lib/apt/lists/*
 
 CMD ["apache2-foreground"]
