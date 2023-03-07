@@ -10,14 +10,7 @@ $action = $_GET['action'] ?? null;
 
 $controller = "controllers" . DIRECTORY_SEPARATOR . $action . ".php";
 
-function assertParamsExists($requiredParams, $method)
-{
-    foreach ($requiredParams as $param) {
-        if (!isset($method[$param])) {
-            throw new Exception("Paramètre manquant : $param");
-        }
-    }
-}
+require "functions/utils.php";
 
 if (file_exists($controller)) {
     require $controller;
