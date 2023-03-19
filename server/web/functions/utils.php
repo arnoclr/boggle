@@ -35,6 +35,7 @@ function respondWithSuccessJSON($data)
 function sendEmail($to, $subject, $HTML)
 {
     $ch = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_URL, EMAIL_API_URL);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
