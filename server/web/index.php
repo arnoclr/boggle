@@ -1,9 +1,11 @@
 <?php
 
+session_start();
 
-// TODO: retirer le test et mettre la connexion à part
-$pdo = new PDO("mysql:host=db;port=3306;dbname=boggle", "boggle", "password");
+require "vendor/autoload.php";
+require "env.php";
 
+$pdo = new PDO("mysql:host=" . DB_HOST . ";port=3306;dbname=" . DB_NAME, DB_USER, DB_PASSWORD);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $action = $_GET['action'] ?? null;
