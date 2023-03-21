@@ -23,7 +23,7 @@ try {
     $player = $query->fetch();
 
     if ($player) {
-        respondWithErrorJSON("Un utilisateur avec cette adresse email existe déjà");
+        respondWithErrorJSONAndStatus("Un utilisateur avec cette adresse email existe déjà", "email_already_used");
     }
 
     $query = $pdo->prepare("INSERT INTO players (email, name, createdAt, lastConnection, isPrivateAccount) VALUES (:email, :name, NOW(), NOW(), :isPrivateAccount)");
