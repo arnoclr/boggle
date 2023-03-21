@@ -12,15 +12,27 @@ export default function LoginModal() {
 
     const isDialogOpen = (): boolean => !!dialog.current?.open
 
-    callAction("amIConnected", toMap({})).then((res) => {
-        isDialogOpen() === false && res.data.connected === false && dialog.current?.showModal()
-    })
+    useEffect(() => {
+        callAction("amIConnected", toMap({})).then((res) => {
+            isDialogOpen() === false && res.data.connected === false && dialog.current?.showModal()
+        })
+    }, [])
 
     const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         if (needToCreateAnAccount) {
-            await callAction("createUser", toMap({ email }))
+            try {
+                await callAction("createUser", toMap({ email }))
+            } catch(e) {
+                const error = (e as ErrorWithStatus)
+                if (error.status === "email_already_used") {
+                    setNeedToCreateAnAccount(false)
+                } else {
+                    setError(error.message)
+                    return
+                }
+            }
         }
 
         try {
@@ -63,14 +75,18 @@ export default function LoginModal() {
                 <input onInput={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} type="email" name="email" autoComplete="email" required />
             </label>
             {needToCreateAnAccount && <p>Vous n'avez pas de compte, cliquez sur le bouton ci-dessous pour en créer un</p>}
+            <br />
             <button>Suivant</button>
         </form>}
 
         {section === "code" && <form onSubmit={handleCodeSubmit}>
+            <button onClick={() => setSection("email")}>Changer d'adresse E-mail</button>
+            <br />
             <label>
                 <span>Code à usage unique</span>
                 <input type="text" inputMode="numeric" minLength={7} maxLength={7} name="code" autoComplete="one-time-code" pattern="[0-9]*" required />
             </label>
+            <br />
             <button>Valider</button>
         </form>}
 
