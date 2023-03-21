@@ -26,7 +26,7 @@ if ($player == false) {
     respondWithErrorJSONAndStatus("Aucun utilisateur avec cette adresse email n'existe", "email_not_found");
 }
 
-respondWithJSON(sendEmail(
+respondWithSuccessJSON(sendEmail(
     $email,
     "Connexion à Boggle",
     <<<HTML

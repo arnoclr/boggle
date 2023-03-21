@@ -70,3 +70,11 @@ function randomNumbers($length)
     $key = str_pad($key, $length, 0, STR_PAD_LEFT);
     return $key;
 }
+
+function dd($var)
+{
+    echo "<pre>";
+    var_dump($var);
+    echo "</pre>";
+    exit;
+}
