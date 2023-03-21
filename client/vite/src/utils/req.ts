@@ -31,6 +31,7 @@ export async function callAction(
   try {
     res = await fetch(apiUrl + "?action=" + action, {
       method: "POST",
+      credentials: "include",
       body: formData,
     }).then((res) => res.json());
   } catch (e) {

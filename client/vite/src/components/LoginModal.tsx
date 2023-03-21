@@ -4,6 +4,9 @@ import { callAction, ErrorWithStatus, toMap } from "../utils/req"
 export default function LoginModal() {
     const [isLogin, setIsLogin] = useState<boolean>(false)
     const [needToCreateAnAccount, setNeedToCreateAnAccount] = useState<boolean>(false)
+    const [section, setSection] = useState<"email" | "code">("email")
+    const [error, setError] = useState<string | null>(null)
+    const [email, setEmail] = useState<string | null>(null)
 
     const dialog = createRef<HTMLDialogElement>()
 
@@ -14,27 +17,64 @@ export default function LoginModal() {
         !isDialogOpen() && dialog.current?.showModal()
     }, [])
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const email = e.currentTarget.email.value
+
+        if (needToCreateAnAccount) {
+            await callAction("createUser", toMap({ email }))
+        }
+
         try {
-            const response = await callAction("sendLoginCode", toMap({ email }))
+            console.log("sending code")
+            await callAction("sendLoginCode", toMap({ email }))
+            setSection("code")
+            setError(null)
         } catch(e) {
             const status = (e as ErrorWithStatus).status
             if (status === "email_not_found") {
                 setNeedToCreateAnAccount(true)
+                setError(null)
+            } else {
+                const message = (e as ErrorWithStatus).message
+                setError(message)
             }
         }
     }
 
+    const handleCodeSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const code = e.currentTarget.code.value
+
+        try {
+            await callAction("loginFromCode", toMap({ code, email }))
+            setIsLogin(true)
+            if (isDialogOpen()) {
+                dialog.current?.close()
+            }
+        } catch(e) {
+            const message = (e as ErrorWithStatus).message
+            setError(message)
+        }
+    }
+
     return <dialog ref={dialog}>
-        <form onSubmit={handleSubmit}>
+        {section === "email" && <form onSubmit={handleEmailSubmit}>
             <label>
                 <span>Adresse E-mail</span>
-                <input type="email" name="email" autoComplete="email" required />
+                <input onInput={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} type="email" name="email" autoComplete="email" required />
             </label>
             {needToCreateAnAccount && <p>Vous n'avez pas de compte, cliquez sur le bouton ci-dessous pour en créer un</p>}
-            <button>Recevoir un code !!</button>
-        </form>
+            <button>Suivant</button>
+        </form>}
+
+        {section === "code" && <form onSubmit={handleCodeSubmit}>
+            <label>
+                <span>Code à usage unique</span>
+                <input type="text" inputMode="numeric" minLength={7} maxLength={7} name="code" autoComplete="one-time-code" pattern="[0-9]*" required />
+            </label>
+            <button>Valider</button>
+        </form>}
+
+        {error && <p>{error}</p>}
     </dialog>
 }
