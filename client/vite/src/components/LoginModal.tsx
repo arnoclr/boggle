@@ -12,10 +12,9 @@ export default function LoginModal() {
 
     const isDialogOpen = (): boolean => !!dialog.current?.open
 
-    useEffect(() => {
-        // TODO: check if user is logged in
-        !isDialogOpen() && dialog.current?.showModal()
-    }, [])
+    callAction("amIConnected", toMap({})).then((res) => {
+        isDialogOpen() === false && res.data.connected === false && dialog.current?.showModal()
+    })
 
     const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
