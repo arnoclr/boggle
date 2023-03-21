@@ -23,7 +23,7 @@ $_SESSION['player_onetime_code_email'] = $email;
 $_SESSION['player_onetime_code_expires'] = time() + 60 * 5;
 
 if ($player == false) {
-    respondWithErrorJSON("Aucun utilisateur avec cette adresse email n'existe");
+    respondWithErrorJSONAndStatus("Aucun utilisateur avec cette adresse email n'existe", "email_not_found");
 }
 
 respondWithJSON(sendEmail(
