@@ -32,6 +32,15 @@ function respondWithSuccessJSON($data)
     ]);
 }
 
+function respondWithErrorJSONAndStatus($message, $status)
+{
+    respondWithJSON([
+        "success" => false,
+        "error" => $message,
+        "status" => $status
+    ]);
+}
+
 function sendEmail($to, $subject, $HTML)
 {
     $ch = curl_init();
