@@ -57,6 +57,8 @@ function sendEmail($to, $subject, $HTML)
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         "Authorization: Bearer " . EMAIL_BEARER,
     ]);
+    // FIXME: Trouver un moyen de faire sans
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
     $content = curl_exec($ch);
     curl_close($ch);
