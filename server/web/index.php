@@ -1,39 +1,24 @@
 <?php
 
-require "app/AntiCheat.php";
+session_start();
 
-const GRID_SIZE = 4;
+header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Credentials: true');
 
-exec("cd ../engine && ./grid_build frequence.txt 4 4", $gridString, $ret);
-$grid = explode(" ", $gridString[0]);
+require "vendor/autoload.php";
+require "env.php";
 
-$antiCheat = new AntiCheat();
-
-$submittedWord = strtoupper($_GET['word'] ?? "bonjour");
-
-// TODO: Accept only words
-exec("cd ../engine && ./dictionnary_lookup fr32.lex $submittedWord", $out, $ret);
-
-$displayResult = "";
-switch ($out[0]) {
-    case "found":
-        $displayResult = "Le mot $submittedWord est valide";
-        break;
-    case "prefix":
-        $displayResult = "Le mot $submittedWord est un préfixe valide";
-        break;
-    default:
-        $displayResult = "Le mot $submittedWord n'est pas valide";
-        break;
-}
-
-
-require "views/home.php";
-
-
-// TODO: retirer le test et mettre la connexion à part
-$pdo = new PDO("mysql:host=db;port=3306;dbname=boggle", "boggle", "password");
-
+$pdo = new PDO("mysql:host=" . DB_HOST . ";port=3306;dbname=" . DB_NAME, DB_USER, DB_PASSWORD);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$players = $pdo->query("SELECT * FROM players")->fetchAll();
+$action = $_GET['action'] ?? null;
+
+$controller = "controllers" . DIRECTORY_SEPARATOR . $action . ".php";
+
+require "functions/utils.php";
+
+if (file_exists($controller)) {
+    require $controller;
+} else {
+    require "views/404.php";
+}
