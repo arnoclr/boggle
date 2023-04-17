@@ -4,7 +4,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm ci
+RUN rm -rf node_modules
+RUN npm i
 
 EXPOSE 3000
 
