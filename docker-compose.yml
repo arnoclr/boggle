@@ -4,6 +4,8 @@ services:
     build: server/tchat
     ports:
       - "8082:3000"
+    volumes:
+      - ./server/tchat:/app
   db:
     image: mariadb:10
     environment:
