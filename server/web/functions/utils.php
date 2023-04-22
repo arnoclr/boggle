@@ -73,6 +73,12 @@ function randomNumbers($length)
     return $key;
 }
 
+function secureRandomToken(int $length): string
+{
+    $token = bin2hex(random_bytes($length));
+    return $token;
+}
+
 function dd($var)
 {
     echo "<pre>";
