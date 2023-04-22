@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon --exec ts-node index.ts"
+    "start": "nodemon --legacy-watch --exec ts-node index.ts"
   },
   "dependencies": {
     "@types/ws": "^8.5.4",
