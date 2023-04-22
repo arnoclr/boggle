@@ -1,19 +1,66 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbox</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Websocket server</title>
 </head>
+
 <body>
-    <h1>Test broadcast API</h1>
-    <form id="message-form">
-      <label for="channel-input">Channel:</label>
-      <input type="text" id="channel-input" name="channel"><br><br>
-      <label for="message-input">Message:</label>
-      <input type="text" id="message-input" name="message"><br><br>
-      <input type="submit" value="Send">
+  <h1>Websocket server test</h1>
+  <div style="display: flex;">
+    <table width="350">
+      <tr>
+        <th>Sent</th>
+        <th>Received</th>
+      </tr>
+    </table>
+    <form>
+      <textarea name="object" id="" cols="30" rows="10"></textarea>
+      <button>Send</button>
     </form>
-  </body>
+  </div>
+
+  <script>
+    const table = document.querySelector('table');
+    const form = document.querySelector('form');
+    const ws = new WebSocket('ws://localhost:8082');
+
+    function createRow(sent = true, data) {
+      const row = table.insertRow();
+      const sentCell = row.insertCell();
+      const receivedCell = row.insertCell();
+      const date = new Date();
+      const time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+      if (sent) {
+        receivedCell.innerHTML = time;
+        sentCell.innerHTML = data;
+      } else {
+        sentCell.innerHTML = time;
+        receivedCell.innerHTML = data;
+      }
+    }
+
+    ws.onopen = () => {
+      console.log('Connected to server');
+    };
+    ws.onmessage = (event) => {
+      console.log('Message from server', event.data);
+      createRow(false, event.data);
+    };
+    ws.onclose = () => {
+      console.log('Disconnected from server');
+    };
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const object = form.elements.object.value;
+      ws.send(object);
+      createRow(true, object);
+    });
+  </script>
+</body>
+
 </html>
