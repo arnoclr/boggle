@@ -13,7 +13,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $action = $_GET['action'] ?? null;
 
-$controller = "controllers" . DIRECTORY_SEPARATOR . $action . ".php";
+$controller = "controllers" . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, explode(".", $action)) . ".php";
 
 require "functions/utils.php";
 

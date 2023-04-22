@@ -3,6 +3,7 @@
     "start": "nodemon --exec ts-node index.ts"
   },
   "dependencies": {
+    "@types/ws": "^8.5.4",
     "express": "^4.18.2",
     "socket.io": "^4.6.0"
   },

@@ -1,16 +1,7 @@
-import { createServer } from "http";
-import { Server } from "socket.io";
+import WebSocket from "ws";
 
-const httpServer = createServer();
-const io = new Server(httpServer, {
-  cors: {
-    origin: "http://localhost:5500",
-    credentials: true,
-  },
+const server = new WebSocket.Server({ port: 8082 });
+
+server.on("listening", () => {
+  console.log("Le serveur WebSocket est en cours d'écoute sur le port 8082");
 });
-
-io.on("connection", (socket) => {
-  console.log("a user connected");
-});
-
-httpServer.listen(8082);
