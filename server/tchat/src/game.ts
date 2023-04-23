@@ -1,23 +1,25 @@
+import { Player } from "../types";
 import { connection } from "./sql";
 
-export async function getAllTokensOfAPartyFromUserToken(
-  userToken: string
-): Promise<string[]> {
+export async function getAllUserOfAParty(userToken: string): Promise<Player[]> {
   return new Promise((resolve, reject) => {
     connection.query(
       "WITH mostRecentGame AS (SELECT * FROM gamesplayers NATURAL JOIN players WHERE websocketToken = ? ORDER BY idGame DESC LIMIT 1) SELECT DISTINCT * FROM gamesplayers NATURAL JOIN players WHERE idGame = (SELECT idGame FROM mostRecentGame)",
       [userToken],
       (error, results) => {
-        console.log(results);
         if (error) reject(error);
-        resolve(
-          results.map(
-            (result: { websocketToken: string }) => result.websocketToken
-          )
-        );
+        resolve(results);
       }
     );
   });
+}
+
+export async function getAllTokensOfAPartyFromUserToken(
+  userToken: string
+): Promise<string[]> {
+  return await getAllUserOfAParty(userToken).then((results) =>
+    results.map((result) => result.websocketToken)
+  );
 }
 
 export async function thisUserExists(token: string): Promise<boolean> {

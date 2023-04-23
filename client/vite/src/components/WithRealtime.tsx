@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Chat from "./Chat";
 import { callAction } from "../utils/req";
+import ConnectedUsers from "./ConnectedUsers";
 
 interface Props {
   gameId: string;
@@ -11,6 +12,7 @@ export default function WithRealtime({ gameId }: Props) {
     new WebSocket("ws://localhost:8082")
   );
   const [websocketToken, setWebsocketToken] = useState<string | null>(null);
+  const [users, setUsers] = useState<string[]>([]);
 
   function tryToReconnect(): void {
     setTimeout(() => {
@@ -51,6 +53,12 @@ export default function WithRealtime({ gameId }: Props) {
 
     ws.onmessage = (event) => {
       console.log("message", event.data);
+
+      const { type, payload } = JSON.parse(event.data);
+
+      if (type === "users") {
+        setUsers(payload.users.map((user: { name: string }) => user.name));
+      }
     };
 
     ws.onclose = () => {
@@ -66,9 +74,14 @@ export default function WithRealtime({ gameId }: Props) {
 
   return (
     <>
-      {websocketToken !== null && ws.readyState === WebSocket.OPEN && (
-        <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
-      )}
+      {websocketToken !== null &&
+        ws.readyState === WebSocket.OPEN &&
+        users.length > 0 && (
+          <>
+            <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
+            <ConnectedUsers users={users}></ConnectedUsers>
+          </>
+        )}
     </>
   );
 }
