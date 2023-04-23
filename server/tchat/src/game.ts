@@ -1,8 +1,23 @@
 import { connection } from "./sql";
 
-export function getAllTokensOfAPartyFromUserToken(userToken: string): string[] {
-  // TODO: retourner tous les tokens des joueurs connectés à la partie. Pour cela, on connait un des token des joueurs de la partie et on renvoie tous les autres dont le token fourni.
-  return [userToken];
+export async function getAllTokensOfAPartyFromUserToken(
+  userToken: string
+): Promise<string[]> {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "WITH mostRecentGame AS (SELECT * FROM gamesplayers NATURAL JOIN players WHERE websocketToken = ? ORDER BY idGame DESC LIMIT 1) SELECT DISTINCT * FROM gamesplayers NATURAL JOIN players WHERE idGame = (SELECT idGame FROM mostRecentGame)",
+      [userToken],
+      (error, results) => {
+        console.log(results);
+        if (error) reject(error);
+        resolve(
+          results.map(
+            (result: { websocketToken: string }) => result.websocketToken
+          )
+        );
+      }
+    );
+  });
 }
 
 export async function thisUserExists(token: string): Promise<boolean> {
