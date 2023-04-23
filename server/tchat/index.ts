@@ -18,7 +18,6 @@ server.on("listening", () => {
 
 server.on("connection", (socket) => {
   socket.on("message", async (message) => {
-    console.log(connectedUsers.size);
     const { type, token, payload } = JSON.parse(
       message.toString()
     ) as WebSocketMessage<any>;
@@ -58,7 +57,7 @@ server.on("connection", (socket) => {
   });
 
   socket.on("close", () => {
-    disconnectAllInactiveUsers();
+    // TODO: faire une fonction qui supprime le socket et le token des Maps. Qui broadcast la nouvelle liste des utilisateurs connectés dans la partie ou le joueur était. Et qui supprime le joueur de la partie en BDD si la partie n'a pas encore commencée (startedAt est NULL)
     const token = connectedSockets.get(socket);
     if (token) {
       connectedUsers.delete(token);
@@ -91,13 +90,5 @@ async function sendConnectedUsersList(userToken: string): Promise<void> {
     users: (await getAllUserOfAParty(userToken))
       .filter((user) => connectedUsers.has(user.websocketToken))
       .map((user) => ({ name: user.name })),
-  });
-}
-
-function disconnectAllInactiveUsers() {
-  connectedUsers.forEach((socket, token) => {
-    if (socket.readyState !== WebSocket.OPEN) {
-      connectedUsers.delete(token);
-    }
   });
 }
