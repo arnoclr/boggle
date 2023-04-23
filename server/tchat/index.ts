@@ -27,15 +27,14 @@ server.on("connection", (socket) => {
     connectedUsers.set(token, socket);
     switch (type) {
       case "chat":
-        broadcastToParty(true, token, type, {
+        await broadcastToParty(true, token, type, {
           ...payload,
           displayName: await getUserName(token),
         });
         break;
       case "joinGame":
         if (await joinGame(token, payload.gameId)) {
-          broadcastToParty(true, token, type, {
-            // TODO: renvoyer la liste des utilisateurs connectés sur la partie
+          await broadcastToParty(true, token, type, {
             users: [],
           });
         } else {
@@ -60,19 +59,18 @@ server.on("connection", (socket) => {
   });
 });
 
-function broadcastToParty(
+async function broadcastToParty(
   includeSender: boolean,
   userToken: string,
   type: string,
   payload: any
 ) {
-  const tokens = getAllTokensOfAPartyFromUserToken(userToken);
-  // tokens.forEach((token) => {
-  connectedUsers.forEach((socket, token) => {
+  const tokens = await getAllTokensOfAPartyFromUserToken(userToken);
+  tokens.forEach((token) => {
     if (includeSender === false && token === userToken) {
       return;
     }
-    // const socket = connectedUsers.get(token);
+    const socket = connectedUsers.get(token);
     if (socket) {
       socket.send(JSON.stringify({ type, payload }));
     }
