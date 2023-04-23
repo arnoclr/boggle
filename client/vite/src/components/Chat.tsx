@@ -6,7 +6,9 @@ interface Props {
 }
 
 export default function Chat({ sendRealtimeEvent, ws }: Props) {
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<
+    { message: string; receivedAt: Date }[]
+  >([]);
 
   const form = createRef<HTMLFormElement>();
 
@@ -18,19 +20,22 @@ export default function Chat({ sendRealtimeEvent, ws }: Props) {
   };
 
   useEffect(() => {
-    // ws.addEventListener("message", (event) => {
-    //   const data = JSON.parse(event.data);
-    //   if (data.type === "chat") {
-    //     setMessages((messages) => [...messages, data.payload.message]);
-    //   }
-    // });
-  }, []);
+    ws.addEventListener("message", (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === "chat") {
+        setMessages((messages) => [
+          ...messages,
+          { message: data.payload.message, receivedAt: new Date() },
+        ]);
+      }
+    });
+  }, [ws]);
 
   return (
     <>
       <ul>
-        {messages.map((message) => (
-          <li>{message}</li>
+        {messages.map((entry) => (
+          <li key={+entry.receivedAt}>{entry.message}</li>
         ))}
       </ul>
       <form onSubmit={handleSubmit} ref={form}>

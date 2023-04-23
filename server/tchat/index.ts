@@ -11,6 +11,7 @@ server.on("listening", () => {
 
 server.on("connection", (socket) => {
   socket.on("message", (message) => {
+    console.log(connectedUsers.size);
     const { type, token, payload } = JSON.parse(
       message.toString()
     ) as WebSocketMessage<any>;
@@ -34,11 +35,12 @@ function broadcastToParty(
   payload: any
 ) {
   const tokens = getAllTokensOfAPartyFromUserToken(userToken);
-  tokens.forEach((token) => {
+  // tokens.forEach((token) => {
+  connectedUsers.forEach((socket, token) => {
     if (includeSender === false && token === userToken) {
       return;
     }
-    const socket = connectedUsers.get(token);
+    // const socket = connectedUsers.get(token);
     if (socket) {
       socket.send(JSON.stringify({ type, payload }));
     }
