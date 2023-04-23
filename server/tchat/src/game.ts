@@ -18,3 +18,17 @@ export async function thisUserExists(token: string): Promise<boolean> {
     );
   });
 }
+
+export async function getUserName(token: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM players WHERE websocketToken = ?",
+      [token],
+      (error, results) => {
+        console.log(error, results);
+        if (error) reject(error);
+        resolve(results[0].name);
+      }
+    );
+  });
+}

@@ -1,6 +1,10 @@
 import WebSocket from "ws";
 import { WebSocketMessage } from "./types";
-import { getAllTokensOfAPartyFromUserToken, thisUserExists } from "./src/game";
+import {
+  getAllTokensOfAPartyFromUserToken,
+  getUserName,
+  thisUserExists,
+} from "./src/game";
 
 const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
@@ -22,7 +26,10 @@ server.on("connection", (socket) => {
     connectedUsers.set(token, socket);
     switch (type) {
       case "chat":
-        broadcastToParty(true, token, type, payload);
+        broadcastToParty(true, token, type, {
+          ...payload,
+          displayName: await getUserName(token),
+        });
     }
   });
 

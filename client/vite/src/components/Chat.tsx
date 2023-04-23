@@ -7,7 +7,7 @@ interface Props {
 
 export default function Chat({ sendRealtimeEvent, ws }: Props) {
   const [messages, setMessages] = useState<
-    { message: string; receivedAt: Date }[]
+    { message: string; displayName: string; receivedAt: Date }[]
   >([]);
 
   const form = createRef<HTMLFormElement>();
@@ -23,9 +23,10 @@ export default function Chat({ sendRealtimeEvent, ws }: Props) {
     ws.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
       if (data.type === "chat") {
+        const { message, displayName } = data.payload;
         setMessages((messages) => [
           ...messages,
-          { message: data.payload.message, receivedAt: new Date() },
+          { message, displayName, receivedAt: new Date() },
         ]);
       }
     });
@@ -35,7 +36,9 @@ export default function Chat({ sendRealtimeEvent, ws }: Props) {
     <>
       <ul>
         {messages.map((entry) => (
-          <li key={+entry.receivedAt}>{entry.message}</li>
+          <li key={+entry.receivedAt}>
+            <i>{entry.displayName}</i> {entry.message}
+          </li>
         ))}
       </ul>
       <form onSubmit={handleSubmit} ref={form}>

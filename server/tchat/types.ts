@@ -11,6 +11,7 @@ interface BasePayload {
 export interface ChatPayload extends BasePayload {
   type: "chat";
   message: string;
+  displayName: string;
 }
 
 type Payload = ChatPayload;
