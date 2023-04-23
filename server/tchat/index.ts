@@ -1,6 +1,6 @@
 import WebSocket from "ws";
 import { WebSocketMessage } from "./types";
-import { getAllTokensOfAPartyFromUserToken } from "./game";
+import { getAllTokensOfAPartyFromUserToken, thisUserExists } from "./src/game";
 
 const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
@@ -10,12 +10,15 @@ server.on("listening", () => {
 });
 
 server.on("connection", (socket) => {
-  socket.on("message", (message) => {
+  socket.on("message", async (message) => {
     console.log(connectedUsers.size);
     const { type, token, payload } = JSON.parse(
       message.toString()
     ) as WebSocketMessage<any>;
-    // TODO: verify that token is the same in the database
+    if ((await thisUserExists(token)) === false) {
+      socket.close();
+      return;
+    }
     connectedUsers.set(token, socket);
     switch (type) {
       case "chat":
