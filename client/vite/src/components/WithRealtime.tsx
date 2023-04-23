@@ -3,19 +3,46 @@ import Chat from "./Chat";
 import { callAction } from "../utils/req";
 
 export default function WithRealtime() {
-  const ws = new WebSocket("ws://localhost:8082");
+  const [ws, setWebSocket] = useState<WebSocket>(
+    new WebSocket("ws://localhost:8082")
+  );
   const [websocketToken, setWebsocketToken] = useState<string | null>(null);
 
+  function tryToReconnect(): void {
+    setTimeout(() => {
+      console.log("try to reconnect");
+      setWebSocket(new WebSocket("ws://localhost:8082"));
+    }, 1000);
+  }
+
+  async function fetchWebsocketToken(): Promise<void> {
+    if (websocketToken !== null) return;
+    const response = await callAction("auth.getWebsocketToken", new Map());
+    setWebsocketToken(response.data.token);
+  }
+
+  function sendRealtimeEvent(type: string, payload: any): void {
+    console.log(websocketToken, ws.readyState);
+    if (websocketToken === null) {
+      // fetchWebsocketToken();
+      return;
+    }
+    if (ws.readyState !== WebSocket.OPEN) {
+      console.log("not open");
+      tryToReconnect();
+      return;
+    }
+    console.log("sending", type, payload);
+    ws.send(JSON.stringify({ type, payload, token: websocketToken }));
+  }
+
   useEffect(() => {
-    const fetchWebsocketToken = async () => {
-      const response = await callAction("auth.getWebsocketToken", new Map());
-      setWebsocketToken(response.data.token);
-    };
+    sendRealtimeEvent("ping", null);
+  }, [websocketToken]);
 
-    fetchWebsocketToken();
-
+  useEffect(() => {
     ws.onopen = () => {
-      console.log("connected");
+      fetchWebsocketToken();
     };
 
     ws.onmessage = (event) => {
@@ -24,25 +51,20 @@ export default function WithRealtime() {
 
     ws.onclose = () => {
       console.log("disconnected");
+      tryToReconnect();
     };
 
     ws.onerror = (error) => {
       console.log("error", error);
+      tryToReconnect();
     };
   }, []);
 
-  const sendRealtimeEvent = (type: string, payload: any) => {
-    if (websocketToken === null) {
-      return;
-    }
-    console.log("sending", type, payload);
-    ws.send(JSON.stringify({ type, payload, token: websocketToken }));
-  };
-
   return (
     <>
-      <small>{websocketToken}</small>
-      <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
+      {websocketToken !== null && ws.readyState === WebSocket.OPEN && (
+        <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
+      )}
     </>
   );
 }
