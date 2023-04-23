@@ -3,6 +3,7 @@ import { WebSocketMessage } from "./types";
 import {
   getAllTokensOfAPartyFromUserToken,
   getUserName,
+  joinGame,
   thisUserExists,
 } from "./src/game";
 
@@ -30,6 +31,27 @@ server.on("connection", (socket) => {
           ...payload,
           displayName: await getUserName(token),
         });
+        break;
+      case "joinGame":
+        if (await joinGame(token, payload.gameId)) {
+          broadcastToParty(true, token, type, {
+            // TODO: renvoyer la liste des utilisateurs connectés sur la partie
+            users: [],
+          });
+        } else {
+          connectedUsers.get(token)?.send(
+            JSON.stringify({
+              type: "error",
+              payload: {
+                code: "joinGameFailed",
+                message: "Impossible de rejoindre la partie",
+              },
+            })
+          );
+        }
+        break;
+      default:
+        break;
     }
   });
 

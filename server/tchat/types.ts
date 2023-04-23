@@ -14,4 +14,15 @@ export interface ChatPayload extends BasePayload {
   displayName: string;
 }
 
-type Payload = ChatPayload;
+export interface ErrorPayload extends BasePayload {
+  type: "error";
+  code: string;
+  message: string;
+}
+
+export interface JoinGamePayload extends BasePayload {
+  type: "joinGame";
+  publicGameId: string;
+}
+
+type Payload = ChatPayload | ErrorPayload | JoinGamePayload;

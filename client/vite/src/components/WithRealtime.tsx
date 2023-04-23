@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import Chat from "./Chat";
 import { callAction } from "../utils/req";
 
-export default function WithRealtime() {
+interface Props {
+  gameId: string;
+}
+
+export default function WithRealtime({ gameId }: Props) {
   const [ws, setWebSocket] = useState<WebSocket>(
     new WebSocket("ws://localhost:8082")
   );
@@ -37,7 +41,7 @@ export default function WithRealtime() {
   }
 
   useEffect(() => {
-    sendRealtimeEvent("ping", null);
+    sendRealtimeEvent("joinGame", { gameId });
   }, [websocketToken]);
 
   useEffect(() => {
