@@ -39,6 +39,7 @@ CREATE TABLE `games` (
   `idGame` int(11) NOT NULL,
   `grid` varchar(255) NOT NULL,
   `createdAt` timestamp NOT NULL,
+  `startedAt` timestamp NULL DEFAULT NULL,
   `endedAt` timestamp NULL DEFAULT NULL,
   `isPrivateGame` tinyint(1) NOT NULL,
   `publicId` varchar(255) NOT NULL
