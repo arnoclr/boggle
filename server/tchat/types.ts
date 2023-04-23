@@ -26,3 +26,9 @@ export interface JoinGamePayload extends BasePayload {
 }
 
 type Payload = ChatPayload | ErrorPayload | JoinGamePayload;
+
+export interface Player {
+  idPlayer: number;
+  name: string;
+  websocketToken: string;
+}

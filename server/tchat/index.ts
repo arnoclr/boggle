@@ -2,6 +2,7 @@ import WebSocket from "ws";
 import { WebSocketMessage } from "./types";
 import {
   getAllTokensOfAPartyFromUserToken,
+  getAllUserOfAParty,
   getUserName,
   joinGame,
   thisUserExists,
@@ -9,6 +10,7 @@ import {
 
 const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
+const connectedSockets: Map<WebSocket.WebSocket, string> = new Map();
 
 server.on("listening", () => {
   console.log("Listening on port 8082");
@@ -24,7 +26,10 @@ server.on("connection", (socket) => {
       socket.close();
       return;
     }
+
     connectedUsers.set(token, socket);
+    connectedSockets.set(socket, token);
+
     switch (type) {
       case "chat":
         await broadcastToParty(true, token, type, {
@@ -34,9 +39,7 @@ server.on("connection", (socket) => {
         break;
       case "joinGame":
         if (await joinGame(token, payload.gameId)) {
-          await broadcastToParty(true, token, type, {
-            users: [],
-          });
+          sendConnectedUsersList(token);
         } else {
           connectedUsers.get(token)?.send(
             JSON.stringify({
@@ -56,6 +59,12 @@ server.on("connection", (socket) => {
 
   socket.on("close", () => {
     disconnectAllInactiveUsers();
+    const token = connectedSockets.get(socket);
+    if (token) {
+      connectedUsers.delete(token);
+      connectedSockets.delete(socket);
+      sendConnectedUsersList(token);
+    }
   });
 });
 
@@ -74,6 +83,14 @@ async function broadcastToParty(
     if (socket) {
       socket.send(JSON.stringify({ type, payload }));
     }
+  });
+}
+
+async function sendConnectedUsersList(userToken: string): Promise<void> {
+  await broadcastToParty(true, userToken, "users", {
+    users: (await getAllUserOfAParty(userToken))
+      .filter((user) => connectedUsers.has(user.websocketToken))
+      .map((user) => ({ name: user.name })),
   });
 }
 
