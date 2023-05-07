@@ -2,11 +2,12 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY . .
+COPY package*.json ./
 
-RUN rm -rf node_modules
-RUN npm i
+RUN npm install
+
+COPY . .
 
 EXPOSE 8082
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]

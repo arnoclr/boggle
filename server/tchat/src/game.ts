@@ -1,4 +1,4 @@
-import { Player } from "../types";
+import { Player } from "./types";
 import { connection } from "./sql";
 
 export async function getAllUserOfAParty(userToken: string): Promise<Player[]> {
