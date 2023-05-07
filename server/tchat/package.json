@@ -1,14 +1,13 @@
 {
   "scripts": {
-    "start": "nodemon --legacy-watch --exec ts-node index.ts"
+    "start": "nodemon --legacy-watch --exec ts-node src/index.ts"
   },
   "dependencies": {
     "@types/mysql": "^2.15.21",
     "@types/ws": "^8.5.4",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2",
     "mysql": "^2.18.1",
-    "socket.io": "^4.6.0"
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22",

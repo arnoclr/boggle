@@ -6,7 +6,7 @@ import {
   getUserName,
   joinGame,
   thisUserExists,
-} from "./src/game";
+} from "./game";
 
 const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
