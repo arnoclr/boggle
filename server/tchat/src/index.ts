@@ -7,7 +7,7 @@ import {
   joinGame,
   thisUserExists,
 } from "./game";
-import { saveMessage } from "./message";
+import { getMessages } from "./message";
 
 const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
@@ -39,7 +39,7 @@ server.on("connection", (socket) => {
         break;
       case "joinGame":
         if (await joinGame(token, payload.gameId)) {
-          sendConnectedUsersList(token);
+          sendConnectedUsersList(token, payload.gameId);
         } else {
           connectedUsers.get(token)?.send(
             JSON.stringify({
@@ -63,7 +63,7 @@ server.on("connection", (socket) => {
     if (token) {
       connectedUsers.delete(token);
       connectedSockets.delete(socket);
-      sendConnectedUsersList(token);
+      sendConnectedUsersList(token, 0);
     }
   });
 });
@@ -86,10 +86,53 @@ async function broadcastToParty(
   });
 }
 
-async function sendConnectedUsersList(userToken: string): Promise<void> {
+async function sendConnectedUsersList(userToken: string, gameId: number): Promise<void> {
   await broadcastToParty(true, userToken, "users", {
     users: (await getAllUserOfAParty(userToken))
       .filter((user) => connectedUsers.has(user.websocketToken))
       .map((user) => ({ name: user.name })),
   });
+  
+  if (gameId === 0) return;
+  
+  const messages = await getMessages(gameId);
+
+  function formatMessageTimestamp(timestamp: string): string {
+    const date = new Date(timestamp);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    return `${hours}:${minutes}:${seconds}`;
+  }
+
+  const socket = connectedUsers.get(userToken);
+  if (socket) {
+    const messagesContainer = document.getElementById("messages");
+    if (messagesContainer) {
+      messagesContainer.innerHTML = "";
+
+      messages.forEach((message) => {
+        const messageElement = document.createElement("div");
+        messageElement.className = "message";
+
+        const pseudoElement = document.createElement("p");
+        pseudoElement.className = "pseudo";
+        pseudoElement.textContent = message.payload.displayName;
+
+        const sendAtElement = document.createElement("p");
+        sendAtElement.className = "sendAt";
+        sendAtElement.textContent = formatMessageTimestamp(message.payload.sendAt);
+
+        const messageContentElement = document.createElement("p");
+        messageContentElement.className = "message-content";
+        messageContentElement.textContent = message.payload.content;
+
+        messageElement.appendChild(pseudoElement);
+        messageElement.appendChild(sendAtElement);
+        messageElement.appendChild(messageContentElement);
+
+        messagesContainer.appendChild(messageElement);
+      });
+    }
+  }
 }
