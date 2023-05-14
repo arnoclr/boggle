@@ -11,7 +11,6 @@ import {
   wordIsAlreadySubmitted,
 } from "./game";
 import { isValidWord } from "./words";
-import { get } from "http";
 
 const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
@@ -25,7 +24,8 @@ server.on("connection", (socket) => {
   socket.on("message", async (message) => {
     const { type, token, payload } = JSON.parse(
       message.toString()
-    ) as WebSocketMessage<any>;
+    ) as WebSocketMessage;
+
     if ((await thisUserExists(token)) === false) {
       socket.close();
       return;
@@ -88,7 +88,7 @@ async function broadcastToParty(
   includeSender: boolean,
   userToken: string,
   type: string,
-  payload: any
+  payload: WebSocketMessage["payload"]
 ) {
   const tokens = await getAllTokensOfAPartyFromUserToken(userToken);
   tokens.forEach((token) => {
