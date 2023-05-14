@@ -33,7 +33,6 @@ export function Grid({ gameId, ws, colors }: GridProps) {
   }
 
   function drawWord(path: number[], playerName: string) {
-    console.log(colors);
     clearCellsStyle();
     path.forEach((cell) => {
       const cellElement = document.getElementById(cellId(cell));

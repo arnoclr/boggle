@@ -98,7 +98,10 @@ export default function WithRealtime({ gameId }: Props) {
           <>
             <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
             <Grid gameId={gameId} ws={ws} colors={playerColors}></Grid>
-            <WordInput sendRealtimeEvent={sendRealtimeEvent}></WordInput>
+            <WordInput
+              sendRealtimeEvent={sendRealtimeEvent}
+              ws={ws}
+            ></WordInput>
             <WordsFound ws={ws}></WordsFound>
             <ConnectedUsers
               users={users}

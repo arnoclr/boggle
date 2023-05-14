@@ -49,13 +49,19 @@ export interface submitWordMessage extends BaseWebSocketMessage {
   };
 }
 
+export interface wrongWordMessage extends BaseWebSocketMessage {
+  type: "wrongWord";
+  payload: null;
+}
+
 export type WebSocketMessage =
   | ChatMessage
   | ErrorMessage
   | JoinGameMessage
   | WordFoundMessage
   | ConnectedUsersListMessage
-  | submitWordMessage;
+  | submitWordMessage
+  | wrongWordMessage;
 
 export interface Player {
   idPlayer: number;
