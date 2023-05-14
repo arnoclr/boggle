@@ -87,6 +87,7 @@ CREATE TABLE `wordsfound` (
   `idWord` int(11) NOT NULL,
   `idGame` int(11) NOT NULL,
   `idPlayer` int(11) NOT NULL,
+  `word` varchar(255) NOT NULL,
   `foundAt` timestamp NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 --

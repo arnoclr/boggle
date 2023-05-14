@@ -1,12 +1,14 @@
 import WebSocket from "ws";
 import { WebSocketMessage } from "./types";
 import {
+  addWordToGame,
   getAllTokensOfAPartyFromUserToken,
   getAllUserOfAParty,
   getGridString,
   getUserName,
   joinGame,
   thisUserExists,
+  wordIsAlreadySubmitted,
 } from "./game";
 import { isValidWord } from "./words";
 import { get } from "http";
@@ -56,8 +58,11 @@ server.on("connection", (socket) => {
         break;
       case "submitWord":
         const grid = await getGridString(token);
-        console.log(grid);
-        if (await isValidWord(payload.word, grid)) {
+        const word = payload.word.toUpperCase() as string;
+        const valid = await isValidWord(word, grid);
+        const alreadyFound = await wordIsAlreadySubmitted(token, word);
+        if (valid && !alreadyFound) {
+          await addWordToGame(token, word);
           await broadcastToParty(true, token, "wordFound", {
             ...payload,
             displayName: await getUserName(token),
