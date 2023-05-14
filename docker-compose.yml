@@ -1,7 +1,9 @@
 version: "3.9"
 services:
   nodejs:
-    build: server/tchat
+    build:
+      context: server
+      dockerfile: tchat/Dockerfile
     ports:
       - "8082:8082"
     volumes:

@@ -3,6 +3,8 @@ import Chat from "./Chat";
 import { callAction } from "../utils/req";
 import ConnectedUsers from "./ConnectedUsers";
 import { Grid } from "./Grid";
+import { WordInput } from "./WordInput";
+import { WordsFound } from "./WordsFound";
 
 interface Props {
   gameId: string;
@@ -80,7 +82,9 @@ export default function WithRealtime({ gameId }: Props) {
         users.length > 0 && (
           <>
             <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
-            <Grid gameId={gameId}></Grid>
+            <Grid gameId={gameId} ws={ws}></Grid>
+            <WordInput sendRealtimeEvent={sendRealtimeEvent}></WordInput>
+            <WordsFound ws={ws}></WordsFound>
             <ConnectedUsers users={users}></ConnectedUsers>
           </>
         )}

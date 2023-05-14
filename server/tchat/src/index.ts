@@ -3,10 +3,13 @@ import { WebSocketMessage } from "./types";
 import {
   getAllTokensOfAPartyFromUserToken,
   getAllUserOfAParty,
+  getGridString,
   getUserName,
   joinGame,
   thisUserExists,
 } from "./game";
+import { isValidWord } from "./words";
+import { get } from "http";
 
 const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
@@ -51,6 +54,15 @@ server.on("connection", (socket) => {
           );
         }
         break;
+      case "submitWord":
+        const grid = await getGridString(token);
+        console.log(grid);
+        if (await isValidWord(payload.word, grid)) {
+          await broadcastToParty(true, token, "wordFound", {
+            ...payload,
+            displayName: await getUserName(token),
+          });
+        }
       default:
         break;
     }
