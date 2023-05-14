@@ -31,7 +31,7 @@ export interface WordFoundMessage extends BaseWebSocketMessage {
   payload: {
     word: string;
     displayName: string;
-    path: string;
+    path: number[];
   };
 }
 

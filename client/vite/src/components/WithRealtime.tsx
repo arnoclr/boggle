@@ -6,6 +6,10 @@ import { Grid } from "./Grid";
 import { WordInput } from "./WordInput";
 import { WordsFound } from "./WordsFound";
 
+const PLAYER_COLORS = ["red", "blue", "green", "yellow"];
+
+export type PlayerColors = Map<string, string>;
+
 interface Props {
   gameId: string;
 }
@@ -16,6 +20,7 @@ export default function WithRealtime({ gameId }: Props) {
   );
   const [websocketToken, setWebsocketToken] = useState<string | null>(null);
   const [users, setUsers] = useState<string[]>([]);
+  const [playerColors, setPlayerColors] = useState<PlayerColors>();
 
   function tryToReconnect(): void {
     setTimeout(() => {
@@ -60,7 +65,16 @@ export default function WithRealtime({ gameId }: Props) {
       const { type, payload } = JSON.parse(event.data);
 
       if (type === "users") {
-        setUsers(payload.users.map((user: { name: string }) => user.name));
+        const users = [...payload.users];
+        setUsers(users.map((user: { name: string }) => user.name));
+        setPlayerColors(
+          new Map(
+            users.map((user: { name: string }, index: number) => [
+              user.name,
+              PLAYER_COLORS[index],
+            ])
+          )
+        );
       }
     };
 
@@ -79,13 +93,17 @@ export default function WithRealtime({ gameId }: Props) {
     <>
       {websocketToken !== null &&
         ws.readyState === WebSocket.OPEN &&
-        users.length > 0 && (
+        users.length > 0 &&
+        playerColors && (
           <>
             <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
-            <Grid gameId={gameId} ws={ws}></Grid>
+            <Grid gameId={gameId} ws={ws} colors={playerColors}></Grid>
             <WordInput sendRealtimeEvent={sendRealtimeEvent}></WordInput>
             <WordsFound ws={ws}></WordsFound>
-            <ConnectedUsers users={users}></ConnectedUsers>
+            <ConnectedUsers
+              users={users}
+              colors={playerColors}
+            ></ConnectedUsers>
           </>
         )}
     </>
