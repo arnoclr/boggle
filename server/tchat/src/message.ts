@@ -23,3 +23,25 @@ export async function deleteOldMessages(): Promise<void> {
         [oneWeekAgo]
     );
 }
+
+export async function getMessages(gameId: number): Promise<WebSocketMessage<any>[]> {
+    try {
+        const messages = await connection.query(
+            "SELECT * FROM chat WHERE idGame = ? ORDER BY sendAt ASC",
+            [gameId]
+        );
+        return messages.map((message: any) => ({
+            type: "chat",
+            token: "",
+            payload: {
+                gameId: message.idGame,
+                playerId: message.idPlayer,
+                content: message.message,
+                displayName: "",
+            }
+        }));
+    } catch (e) {
+        console.error("Error getting messages:", e);
+        return [];
+    }
+}
