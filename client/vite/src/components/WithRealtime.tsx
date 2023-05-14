@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Chat from "./Chat";
 import { callAction } from "../utils/req";
 import ConnectedUsers from "./ConnectedUsers";
+import { Grid } from "./Grid";
 
 interface Props {
   gameId: string;
@@ -79,6 +80,7 @@ export default function WithRealtime({ gameId }: Props) {
         users.length > 0 && (
           <>
             <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
+            <Grid gameId={gameId}></Grid>
             <ConnectedUsers users={users}></ConnectedUsers>
           </>
         )}
