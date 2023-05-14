@@ -1,29 +1,32 @@
 import { exec } from "./exec";
 
-export async function isValidWord(
+export async function getWordPathIfValid(
   word: string,
   grid: string
-): Promise<boolean> {
+): Promise<false | number[]> {
   const upperCaseWord = word.toUpperCase();
-  const inGrid = await isWordInGrid(upperCaseWord, grid);
+  const path = await getWordPathIfInGrid(upperCaseWord, grid);
   const inDict = await isWordInDictionary(upperCaseWord);
-  console.log(inGrid, inDict);
-  return inDict && inGrid;
+  if (inDict && path !== false) {
+    return path;
+  }
+  return false;
 }
 
-export async function isWordInGrid(
+export async function getWordPathIfInGrid(
   word: string,
   grid: string
-): Promise<boolean> {
+): Promise<false | number[]> {
   if (!isRealWord(word)) {
     return false;
   }
   try {
     const output = await exec(`../engine/grid_path ${word} 4 4 ${grid}`);
-    return output.stdout !== "";
-  } catch (e) {
-    return false;
-  }
+    if (output.stdout !== "") {
+      return output.stdout.split(" ").map((n) => parseInt(n));
+    }
+  } catch (e) {}
+  return false;
 }
 
 export async function isWordInDictionary(word: string): Promise<boolean> {

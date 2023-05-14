@@ -10,7 +10,7 @@ import {
   thisUserExists,
   wordIsAlreadySubmitted,
 } from "./game";
-import { isValidWord } from "./words";
+import { getWordPathIfValid } from "./words";
 
 const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
@@ -59,13 +59,14 @@ server.on("connection", (socket) => {
       case "submitWord":
         const grid = await getGridString(token);
         const word = payload.word.toUpperCase() as string;
-        const valid = await isValidWord(word, grid);
+        const path = await getWordPathIfValid(word, grid);
         const alreadyFound = await wordIsAlreadySubmitted(token, word);
-        if (valid && !alreadyFound) {
+        if (path !== false && alreadyFound === false) {
           await addWordToGame(token, word);
           await broadcastToParty(true, token, "wordFound", {
             ...payload,
             displayName: await getUserName(token),
+            path,
           });
         }
       default:
