@@ -17,7 +17,7 @@ $ac = new AntiCheat();
 
 // get seed by transforming hash to int
 
-$seed = sha1($game->publicId . $cell . $game->created_at . $game->grid);
+$seed = sha1($game->publicId . $cell . $game->createdAt . $game->grid);
 $seed = intval(substr($seed, 0, 8), 16);
 
 $ac->returnImageFor($grid[$cell], 64, $seed);

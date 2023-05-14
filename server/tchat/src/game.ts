@@ -101,3 +101,30 @@ export const joinGame = async (
     return false;
   }
 };
+
+export const getGameIdFromToken = async (token: string): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM gamesplayers NATURAL JOIN players WHERE websocketToken = ? ORDER BY idGame DESC LIMIT 1",
+      [token],
+      (error, results) => {
+        if (error) reject(error);
+        resolve(results[0].idGame);
+      }
+    );
+  });
+};
+
+export const getGridString = async (token: string): Promise<string> => {
+  const gameId = await getGameIdFromToken(token);
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM games WHERE idGame = ?",
+      [gameId],
+      (error, results) => {
+        if (error) reject(error);
+        resolve(results[0].grid);
+      }
+    );
+  });
+};

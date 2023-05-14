@@ -1,12 +1,14 @@
+import { useEffect, useState } from "react";
 import { apiUrl } from "../vars";
 
 const GRID_SIZE = 4;
 
 export interface GridProps {
   gameId: string;
+  ws: WebSocket;
 }
 
-export function Grid({ gameId }: GridProps) {
+export function Grid({ gameId, ws }: GridProps) {
   function getCellImage(row: number, col: number) {
     const cell = row * GRID_SIZE + col;
     return apiUrl + `?action=game.getCellImage&gameId=${gameId}&cell=${cell}`;

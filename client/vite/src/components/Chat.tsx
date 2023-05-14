@@ -42,7 +42,7 @@ export default function Chat({ sendRealtimeEvent, ws }: Props) {
         ))}
       </ul>
       <form onSubmit={handleSubmit} ref={form}>
-        <input type="text" name="message" />
+        <input type="text" name="message" placeholder="Message chat" />
         <button type="submit">Envoyer</button>
       </form>
     </>
