@@ -68,6 +68,13 @@ server.on("connection", (socket) => {
             displayName: await getUserName(token),
             path,
           });
+        } else {
+          connectedUsers.get(token)?.send(
+            JSON.stringify({
+              type: "wrongWord",
+              payload: null,
+            })
+          );
         }
       default:
         break;
