@@ -128,3 +128,38 @@ export const getGridString = async (token: string): Promise<string> => {
     );
   });
 };
+
+export async function addWordToGame(
+  token: string,
+  word: string
+): Promise<boolean> {
+  const gameId = await getGameIdFromToken(token);
+  const playerId = await getUserId(token);
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "INSERT INTO wordsfound (idGame, idPlayer, word, foundAt) VALUES (?, ?, ?, NOW())",
+      [gameId, playerId, word],
+      (error, results) => {
+        if (error) reject(error);
+        resolve(true);
+      }
+    );
+  });
+}
+
+export async function wordIsAlreadySubmitted(
+  token: string,
+  word: string
+): Promise<boolean> {
+  const gameId = await getGameIdFromToken(token);
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM wordsfound WHERE idGame = ? AND word = ?",
+      [gameId, word],
+      (error, results) => {
+        if (error) reject(error);
+        resolve(results.length > 0);
+      }
+    );
+  });
+}
