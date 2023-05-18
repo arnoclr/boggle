@@ -26,7 +26,7 @@ export async function deleteOldMessages(): Promise<void> {
 
 export async function getMessages(gameId: number): Promise<WebSocketMessage<any>[]> {
     try {
-        const rows = await connection.query(
+        const [rows] = await connection.query(
             "SELECT * FROM chat WHERE idGame = ? ORDER BY sendAt ASC",
             [gameId]
         );
