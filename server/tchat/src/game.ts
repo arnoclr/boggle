@@ -1,7 +1,7 @@
 import { Player } from "./types";
 import { connection } from "./sql";
 
-export const DEFAULT_GAME_DURATION = 300;
+export const DEFAULT_GAME_DURATION = 90;
 
 export async function getAllUserOfAParty(userToken: string): Promise<Player[]> {
   return new Promise((resolve, reject) => {

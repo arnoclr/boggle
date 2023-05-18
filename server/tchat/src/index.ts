@@ -76,7 +76,7 @@ server.on("connection", (socket) => {
         }
         break;
       case "submitWord":
-        console.log(await gameIsActive(token));
+        // TODO: timeout de 2 secondes pour éviter le spam / triche
         if (!(await gameIsActive(token))) return;
         const grid = await getGridString(token);
         const word = payload.word.toUpperCase() as string;
