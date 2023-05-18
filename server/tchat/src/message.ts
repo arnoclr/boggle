@@ -26,10 +26,11 @@ export async function deleteOldMessages(): Promise<void> {
 
 export async function getMessages(gameId: number): Promise<WebSocketMessage<any>[]> {
     try {
-        const messages = await connection.query(
+        const rows = await connection.query(
             "SELECT * FROM chat WHERE idGame = ? ORDER BY sendAt ASC",
             [gameId]
         );
+        const messages = rows as any;
         return messages.map((message: any) => ({
             type: "chat",
             token: "",
