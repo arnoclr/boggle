@@ -63,6 +63,16 @@ export default function WithRealtime({ gameId }: Props) {
   }
 
   useEffect(() => {
+    const id = setInterval(() => {
+      if (gameActive === false) return;
+      setRemainingSeconds((prev) => prev - 1);
+    }, 1000);
+    return () => {
+      clearInterval(id);
+    };
+  }, [gameActive]);
+
+  useEffect(() => {
     sendRealtimeEvent("joinGame", { gameId });
   }, [websocketToken]);
 
@@ -119,10 +129,12 @@ export default function WithRealtime({ gameId }: Props) {
                 <Timer remainingSeconds={remainingSeconds}></Timer>
                 <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
                 <Grid gameId={gameId} ws={ws} colors={playerColors}></Grid>
-                <WordInput
-                  sendRealtimeEvent={sendRealtimeEvent}
-                  ws={ws}
-                ></WordInput>
+                {remainingSeconds > 0 && (
+                  <WordInput
+                    sendRealtimeEvent={sendRealtimeEvent}
+                    ws={ws}
+                  ></WordInput>
+                )}
                 <WordsFound ws={ws}></WordsFound>
               </>
             ) : (

@@ -10,11 +10,15 @@ export default function Timer({ remainingSeconds }: TimerProps) {
     return value.toString().padStart(2, "0");
   }
 
-  return (
+  return remainingSeconds > 0 ? (
     <div className="timer">
       <span className="minutes">{withLeadingsZeroes(minutes)}</span>
       <span className="separator">:</span>
       <span className="seconds">{withLeadingsZeroes(seconds)}</span>
     </div>
+  ) : (
+    <>
+      <p>Partie terminée</p>
+    </>
   );
 }
