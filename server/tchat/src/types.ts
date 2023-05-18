@@ -54,6 +54,13 @@ export interface wrongWordMessage extends BaseWebSocketMessage {
   payload: null;
 }
 
+export interface startGameMessage extends BaseWebSocketMessage {
+  type: "startGame";
+  payload: {
+    durationSeconds: number;
+  };
+}
+
 export type WebSocketMessage =
   | ChatMessage
   | ErrorMessage
@@ -61,7 +68,8 @@ export type WebSocketMessage =
   | WordFoundMessage
   | ConnectedUsersListMessage
   | submitWordMessage
-  | wrongWordMessage;
+  | wrongWordMessage
+  | startGameMessage;
 
 export interface Player {
   idPlayer: number;

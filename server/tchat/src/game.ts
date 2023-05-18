@@ -163,3 +163,46 @@ export async function wordIsAlreadySubmitted(
     );
   });
 }
+
+export async function gameIsActive(token: string): Promise<boolean> {
+  const gameId = await getGameIdFromToken(token);
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM games WHERE idGame = ? AND startedAt IS NOT NULL AND endedAt IS NULL",
+      [gameId],
+      (error, results) => {
+        if (error) reject(error);
+        resolve(results[0].isActive);
+      }
+    );
+  });
+}
+
+export async function startGame(token: string): Promise<void> {
+  const gameId = await getGameIdFromToken(token);
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "UPDATE games SET startedAt = NOW() WHERE idGame = ?",
+      [gameId],
+      (error, results) => {
+        if (error) reject(error);
+        resolve();
+      }
+    );
+  });
+}
+
+export async function isGameOwner(token: string): Promise<boolean> {
+  const gameId = await getGameIdFromToken(token);
+  const playerId = await getUserId(token);
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM gamesplayers WHERE idGame = ? ORDER BY idGame ASC LIMIT 1",
+      [gameId, playerId],
+      (error, results) => {
+        if (error) reject(error);
+        resolve(results.length > 0 && results[0].idPlayer === playerId);
+      }
+    );
+  });
+}

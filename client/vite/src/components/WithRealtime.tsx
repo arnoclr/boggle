@@ -5,6 +5,7 @@ import ConnectedUsers from "./ConnectedUsers";
 import { Grid } from "./Grid";
 import { WordInput } from "./WordInput";
 import { WordsFound } from "./WordsFound";
+import Timer from "./Timer";
 
 const PLAYER_COLORS = ["red", "blue", "green", "yellow"];
 
@@ -21,6 +22,17 @@ export default function WithRealtime({ gameId }: Props) {
   const [websocketToken, setWebsocketToken] = useState<string | null>(null);
   const [users, setUsers] = useState<string[]>([]);
   const [playerColors, setPlayerColors] = useState<PlayerColors>();
+  const [gameActive, setGameActive] = useState<boolean>(false);
+  const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
+
+  function canStartGame(): boolean {
+    return users.length >= 2;
+  }
+
+  function startGame(): void {
+    if (!canStartGame()) return;
+    sendRealtimeEvent("startGame", { durationSeconds: 0 });
+  }
 
   function tryToReconnect(): void {
     setTimeout(() => {
@@ -76,6 +88,12 @@ export default function WithRealtime({ gameId }: Props) {
           )
         );
       }
+
+      if (type === "startGame") {
+        // TODO: recuperer le timer envoyé par le back et lancer le décompte
+        setGameActive(true);
+        setRemainingSeconds(payload.durationSeconds as number);
+      }
     };
 
     ws.onclose = () => {
@@ -96,13 +114,29 @@ export default function WithRealtime({ gameId }: Props) {
         users.length > 0 &&
         playerColors && (
           <>
-            <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
-            <Grid gameId={gameId} ws={ws} colors={playerColors}></Grid>
-            <WordInput
-              sendRealtimeEvent={sendRealtimeEvent}
-              ws={ws}
-            ></WordInput>
-            <WordsFound ws={ws}></WordsFound>
+            {gameActive ? (
+              <>
+                <Timer remainingSeconds={remainingSeconds}></Timer>
+                <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
+                <Grid gameId={gameId} ws={ws} colors={playerColors}></Grid>
+                <WordInput
+                  sendRealtimeEvent={sendRealtimeEvent}
+                  ws={ws}
+                ></WordInput>
+                <WordsFound ws={ws}></WordsFound>
+              </>
+            ) : (
+              <div>
+                <p>
+                  Partie :{" "}
+                  <span style={{ textTransform: "uppercase" }}>{gameId}</span>
+                </p>
+                <p>Attente d'autres joueurs ...</p>
+                <button onClick={startGame} disabled={!canStartGame()}>
+                  Démarrer la partie
+                </button>
+              </div>
+            )}
             <ConnectedUsers
               users={users}
               colors={playerColors}
