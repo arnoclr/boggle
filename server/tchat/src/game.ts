@@ -1,6 +1,8 @@
 import { Player } from "./types";
 import { connection } from "./sql";
 
+export const DEFAULT_GAME_DURATION = 300;
+
 export async function getAllUserOfAParty(userToken: string): Promise<Player[]> {
   return new Promise((resolve, reject) => {
     connection.query(
@@ -172,7 +174,7 @@ export async function gameIsActive(token: string): Promise<boolean> {
       [gameId],
       (error, results) => {
         if (error) reject(error);
-        resolve(results[0].isActive);
+        resolve(results.length > 0);
       }
     );
   });
@@ -202,6 +204,25 @@ export async function isGameOwner(token: string): Promise<boolean> {
       (error, results) => {
         if (error) reject(error);
         resolve(results.length > 0 && results[0].idPlayer === playerId);
+      }
+    );
+  });
+}
+
+export async function remainingGameSeconds(token: string): Promise<number> {
+  const gameId = await getGameIdFromToken(token);
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM games WHERE idGame = ?",
+      [gameId],
+      (error, results) => {
+        if (error) reject(error);
+        const startedAt = results[0].startedAt;
+        const now = new Date();
+        const diff =
+          startedAt.getTime() + DEFAULT_GAME_DURATION * 1000 - now.getTime();
+        const seconds = Math.floor(diff / 1000);
+        resolve(seconds);
       }
     );
   });
