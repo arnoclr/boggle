@@ -170,7 +170,7 @@ export async function gameIsActive(token: string): Promise<boolean> {
   const gameId = await getGameIdFromToken(token);
   return new Promise((resolve, reject) => {
     connection.query(
-      "SELECT * FROM games WHERE idGame = ? AND startedAt IS NOT NULL AND endedAt IS NULL",
+      "SELECT * FROM games WHERE idGame = ? AND startedAt IS NOT NULL AND endedAt > NOW()",
       [gameId],
       (error, results) => {
         if (error) reject(error);
@@ -180,12 +180,15 @@ export async function gameIsActive(token: string): Promise<boolean> {
   });
 }
 
-export async function startGame(token: string): Promise<void> {
+export async function startGame(
+  token: string,
+  durationSeconds: number
+): Promise<void> {
   const gameId = await getGameIdFromToken(token);
   return new Promise((resolve, reject) => {
     connection.query(
-      "UPDATE games SET startedAt = NOW() WHERE idGame = ?",
-      [gameId],
+      "UPDATE games SET startedAt = NOW(), endedAt = ? WHERE idGame = ?",
+      [new Date(Date.now() + durationSeconds * 1000), gameId],
       (error, results) => {
         if (error) reject(error);
         resolve();
@@ -217,11 +220,10 @@ export async function remainingGameSeconds(token: string): Promise<number> {
       [gameId],
       (error, results) => {
         if (error) reject(error);
-        const startedAt = results[0].startedAt;
-        const now = new Date();
-        const diff =
-          startedAt.getTime() + DEFAULT_GAME_DURATION * 1000 - now.getTime();
-        const seconds = Math.floor(diff / 1000);
+        const endedAt = results[0].endedAt;
+        const seconds = Math.floor(
+          (new Date(endedAt).getTime() - Date.now()) / 1000
+        );
         resolve(seconds);
       }
     );

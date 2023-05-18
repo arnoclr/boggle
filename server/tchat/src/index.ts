@@ -68,9 +68,10 @@ server.on("connection", (socket) => {
         break;
       case "startGame":
         if (await isGameOwner(token)) {
-          await startGame(token);
+          const durationSeconds = DEFAULT_GAME_DURATION;
+          await startGame(token, durationSeconds);
           await broadcastToParty(true, token, type, {
-            durationSeconds: DEFAULT_GAME_DURATION,
+            durationSeconds: durationSeconds,
           });
         }
         break;
