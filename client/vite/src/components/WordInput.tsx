@@ -1,5 +1,6 @@
 import { createRef, useEffect } from "react";
 import "./WordInput.css";
+import { launchAnimation } from "../utils/animations";
 
 export interface WordInputProps {
   sendRealtimeEvent: (event: string, data: any) => void;
@@ -13,20 +14,21 @@ export function WordInput({ sendRealtimeEvent, ws }: WordInputProps) {
     e.preventDefault();
     const word = e.currentTarget.word.value;
     sendRealtimeEvent("submitWord", { word });
-    form.current?.reset();
   }
 
   useEffect(() => {
     ws.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
       if (data.type === "wrongWord") {
-        form.current?.classList.add("wrong");
-        setTimeout(() => {
-          form.current?.classList.remove("wrong");
-        }, 300);
+        form.current?.reset();
+        launchAnimation(form.current, "inputError", 300);
+      } else if (data.type === "submitWord") {
+        form.current?.reset();
+      } else if (data.type === "waiting") {
+        launchAnimation(form.current, "blink", 300, 0, 3);
       }
     });
-  }, [ws]);
+  }, [ws, form]);
 
   return (
     <>

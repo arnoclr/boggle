@@ -61,6 +61,13 @@ export interface startGameMessage extends BaseWebSocketMessage {
   };
 }
 
+export interface waitingMessage extends BaseWebSocketMessage {
+  type: "waiting";
+  payload: {
+    waiting: number;
+  };
+}
+
 export type WebSocketMessage =
   | ChatMessage
   | ErrorMessage
@@ -69,7 +76,8 @@ export type WebSocketMessage =
   | ConnectedUsersListMessage
   | submitWordMessage
   | wrongWordMessage
-  | startGameMessage;
+  | startGameMessage
+  | waitingMessage;
 
 export interface Player {
   idPlayer: number;
