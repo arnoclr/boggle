@@ -1,5 +1,7 @@
 <?php
 
+$webauthn = new \Davidearl\WebAuthn\WebAuthn(FRONT_END_HOST);
+
 try {
     assertParamsExists(["email"], $_POST);
 } catch (Exception $e) {
@@ -26,11 +28,20 @@ try {
         respondWithErrorJSONAndStatus("Un utilisateur avec cette adresse email existe déjà", "email_already_used");
     }
 
-    $query = $pdo->prepare("INSERT INTO players (email, name, createdAt, lastConnection, isPrivateAccount) VALUES (:email, :name, NOW(), NOW(), :isPrivateAccount)");
+    $userid = md5(time() . '-' . rand(1, 1000000000));
+
+    $passkeyRecord = (object)[
+        'name' => $email,
+        'id' => $userid,
+        'webauthnkeys' => $webauthn->cancel()
+    ];
+
+    $query = $pdo->prepare("INSERT INTO players (email, name, createdAt, lastConnection, isPrivateAccount, passkey) VALUES (:email, :name, NOW(), NOW(), :isPrivateAccount, :passkey)");
     $query->execute([
         "email" => $email,
         "name" => $playerName,
-        "isPrivateAccount" => "0"
+        "isPrivateAccount" => "0",
+        "passkey" => json_encode($passkeyRecord)
     ]);
 
     $id = $pdo->lastInsertId();

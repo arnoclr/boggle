@@ -70,7 +70,7 @@ CREATE TABLE `history` (
 CREATE TABLE `players` (
   `idPlayer` int(11) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `passkey` varchar(255) DEFAULT NULL,
+  `passkey` json DEFAULT NULL,
   `emailVerifiedLastTimeAt` date DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `profilPicUrl` varchar(255) DEFAULT NULL,
