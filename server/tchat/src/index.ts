@@ -7,7 +7,7 @@ import {
   joinGame,
   thisUserExists,
 } from "./game";
-import { getMessages } from "./message";
+import { getMessages, saveMessage } from "./message";
 
 const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
@@ -32,6 +32,7 @@ server.on("connection", (socket) => {
 
     switch (type) {
       case "chat":
+        await saveMessage(message);
         await broadcastToParty(true, token, type, {
           ...payload,
           displayName: await getUserName(token),
