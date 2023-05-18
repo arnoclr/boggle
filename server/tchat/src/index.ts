@@ -1,6 +1,7 @@
 import WebSocket from "ws";
-import { WebSocketMessage } from "./types";
+import { WebSocketMessage, startGameMessage } from "./types";
 import {
+  DEFAULT_GAME_DURATION,
   addWordToGame,
   gameIsActive,
   getAllTokensOfAPartyFromUserToken,
@@ -9,6 +10,7 @@ import {
   getUserName,
   isGameOwner,
   joinGame,
+  remainingGameSeconds,
   startGame,
   thisUserExists,
   wordIsAlreadySubmitted,
@@ -45,7 +47,12 @@ server.on("connection", (socket) => {
         });
         break;
       case "joinGame":
-        if (await joinGame(token, payload.gameId)) {
+        if (await gameIsActive(token)) {
+          await broadcastToParty(true, token, "startGame", {
+            durationSeconds: await remainingGameSeconds(token),
+          });
+          sendConnectedUsersList(token);
+        } else if (await joinGame(token, payload.gameId)) {
           sendConnectedUsersList(token);
         } else {
           connectedUsers.get(token)?.send(
@@ -63,11 +70,12 @@ server.on("connection", (socket) => {
         if (await isGameOwner(token)) {
           await startGame(token);
           await broadcastToParty(true, token, type, {
-            durationSeconds: 300,
+            durationSeconds: DEFAULT_GAME_DURATION,
           });
         }
         break;
       case "submitWord":
+        console.log(await gameIsActive(token));
         if (!(await gameIsActive(token))) return;
         const grid = await getGridString(token);
         const word = payload.word.toUpperCase() as string;
