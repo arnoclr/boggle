@@ -2,7 +2,7 @@
 
 require "app/AntiCheat.php";
 
-$get = $pdo->prepare("SELECT * FROM games WHERE publicId = :idGame");
+$get = $pdo->prepare("SELECT * FROM games WHERE publicId = :idGame AND startedAt IS NOT NULL");
 $get->execute([
     "idGame" => $_GET['gameId']
 ]);

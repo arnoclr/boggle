@@ -2,11 +2,14 @@ import WebSocket from "ws";
 import { WebSocketMessage } from "./types";
 import {
   addWordToGame,
+  gameIsActive,
   getAllTokensOfAPartyFromUserToken,
   getAllUserOfAParty,
   getGridString,
   getUserName,
+  isGameOwner,
   joinGame,
+  startGame,
   thisUserExists,
   wordIsAlreadySubmitted,
 } from "./game";
@@ -56,7 +59,16 @@ server.on("connection", (socket) => {
           );
         }
         break;
+      case "startGame":
+        if (await isGameOwner(token)) {
+          await startGame(token);
+          await broadcastToParty(true, token, type, {
+            durationSeconds: 300,
+          });
+        }
+        break;
       case "submitWord":
+        if (!(await gameIsActive(token))) return;
         const grid = await getGridString(token);
         const word = payload.word.toUpperCase() as string;
         const path = await getWordPathIfValid(word, grid);
