@@ -2,6 +2,7 @@ import { Player } from "./types";
 import { connection } from "./sql";
 
 export const DEFAULT_GAME_DURATION = 90;
+export const DEFAULT_TIMEOUT_SECONDS = 3;
 
 export async function getAllUserOfAParty(userToken: string): Promise<Player[]> {
   return new Promise((resolve, reject) => {
@@ -225,6 +226,23 @@ export async function remainingGameSeconds(token: string): Promise<number> {
           (new Date(endedAt).getTime() - Date.now()) / 1000
         );
         resolve(seconds);
+      }
+    );
+  });
+}
+
+export async function previousWordSubmittedTooRecently(
+  token: string
+): Promise<boolean> {
+  const gameId = await getGameIdFromToken(token);
+  const playerId = await getUserId(token);
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM wordsfound WHERE idGame = ? AND idPlayer = ? AND foundAt > DATE_SUB(NOW(), INTERVAL ? SECOND)",
+      [gameId, playerId, DEFAULT_TIMEOUT_SECONDS],
+      (error, results) => {
+        if (error) reject(error);
+        resolve(results.length > 0);
       }
     );
   });

@@ -10,6 +10,7 @@ import {
   getUserName,
   isGameOwner,
   joinGame,
+  previousWordSubmittedTooRecently,
   remainingGameSeconds,
   startGame,
   thisUserExists,
@@ -76,8 +77,13 @@ server.on("connection", (socket) => {
         }
         break;
       case "submitWord":
-        // TODO: timeout de 2 secondes pour éviter le spam / triche
         if (!(await gameIsActive(token))) return;
+        if (await previousWordSubmittedTooRecently(token)) {
+          broadcastToParty(true, token, "waiting", {
+            waiting: 0,
+          });
+          return;
+        }
         const grid = await getGridString(token);
         const word = payload.word.toUpperCase() as string;
         const path = await getWordPathIfValid(word, grid);
