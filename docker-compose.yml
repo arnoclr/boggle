@@ -34,6 +34,8 @@ services:
       - "5173:5173"
     volumes:
       - ./client/vite/src:/app/src
-
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
 volumes:
   db:
