@@ -29,7 +29,7 @@ export async function thisUserExists(token: string): Promise<boolean> {
       [token],
       (error, results) => {
         if (error) reject(error);
-        resolve(results.length > 0);
+        resolve(results !== undefined && results.length > 0);
       }
     );
   });
