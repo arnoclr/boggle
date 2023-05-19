@@ -10,3 +10,4 @@ const DB_HOST = "db";
 
 const FRONT_END_HOST = "localhost";
 const FRONT_END_PORT = "5173";
+const FRONT_END_PROTOCOL = "http";

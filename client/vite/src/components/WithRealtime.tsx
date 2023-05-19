@@ -6,6 +6,7 @@ import { Grid } from "./Grid";
 import { WordInput } from "./WordInput";
 import { WordsFound } from "./WordsFound";
 import Timer from "./Timer";
+import { wsUrl } from "../vars";
 
 const PLAYER_COLORS = ["red", "blue", "green", "yellow"];
 
@@ -16,9 +17,7 @@ interface Props {
 }
 
 export default function WithRealtime({ gameId }: Props) {
-  const [ws, setWebSocket] = useState<WebSocket>(
-    new WebSocket("ws://localhost:8082")
-  );
+  const [ws, setWebSocket] = useState<WebSocket>(new WebSocket(wsUrl));
   const [websocketToken, setWebsocketToken] = useState<string | null>(null);
   const [users, setUsers] = useState<string[]>([]);
   const [playerColors, setPlayerColors] = useState<PlayerColors>();
@@ -37,7 +36,7 @@ export default function WithRealtime({ gameId }: Props) {
   function tryToReconnect(): void {
     setTimeout(() => {
       console.log("try to reconnect");
-      setWebSocket(new WebSocket("ws://localhost:8082"));
+      setWebSocket(new WebSocket(wsUrl));
     }, 1000);
   }
 

@@ -1,13 +1,14 @@
 <?php
 
 require "vendor/autoload.php";
+require "env.php";
 
 session_start();
 
-header('Access-Control-Allow-Origin: http://localhost:5173');
-header('Access-Control-Allow-Credentials: true');
+$allowOrigin = FRONT_END_PROTOCOL . "://" . FRONT_END_HOST . (FRONT_END_PORT ? ":" . FRONT_END_PORT : "");
 
-require "env.php";
+header('Access-Control-Allow-Origin: ' . $allowOrigin);
+header('Access-Control-Allow-Credentials: true');
 
 $pdo = new PDO("mysql:host=" . DB_HOST . ";port=3306;dbname=" . DB_NAME, DB_USER, DB_PASSWORD);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
