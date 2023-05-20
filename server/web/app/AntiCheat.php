@@ -15,7 +15,7 @@ class AntiCheat
         imagefill($image, 0, 0, $backgroundColor);
         imagefttext($image, $fontSize, 0, 0, $fontSize, $textColor, $font, $letter);
         ob_start();
-        imagepng($image);
+        imagejpeg($image, null, 50);
         $imageData = ob_get_contents();
         ob_end_clean();
         imagedestroy($image);
@@ -24,7 +24,7 @@ class AntiCheat
 
     public function returnImageFor(String $letter, int $size = 32, int $seed = 0): void
     {
-        header("Content-type: image/png");
+        header("Content-type: image/jpeg");
         echo $this->generateImageFor($letter, $size);
     }
 }
