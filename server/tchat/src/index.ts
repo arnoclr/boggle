@@ -3,6 +3,7 @@ import { WebSocketMessage, startGameMessage } from "./types";
 import {
   DEFAULT_GAME_DURATION,
   addWordToGame,
+  gameEndAt,
   gameIsActive,
   getAllTokensOfAPartyFromUserToken,
   getAllUserOfAParty,
@@ -11,7 +12,6 @@ import {
   isGameOwner,
   joinGame,
   previousWordSubmittedTooRecently,
-  remainingGameSeconds,
   startGame,
   thisUserExists,
   wordIsAlreadySubmitted,
@@ -50,7 +50,7 @@ server.on("connection", (socket) => {
       case "joinGame":
         if (await gameIsActive(token)) {
           await broadcastToParty(true, token, "startGame", {
-            durationSeconds: await remainingGameSeconds(token),
+            endAt: await gameEndAt(token),
           });
           sendConnectedUsersList(token);
         } else if (await joinGame(token, payload.gameId)) {
@@ -72,7 +72,7 @@ server.on("connection", (socket) => {
           const durationSeconds = DEFAULT_GAME_DURATION;
           await startGame(token, durationSeconds);
           await broadcastToParty(true, token, type, {
-            durationSeconds: durationSeconds,
+            endAt: await gameEndAt(token),
           });
         }
         break;
