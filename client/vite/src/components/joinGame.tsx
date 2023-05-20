@@ -15,7 +15,14 @@ export default function JoinGame({ whenCreated }: GameJoinerProps) {
       <h1>Rejoindre une partie</h1>
       <form ref={form} onSubmit={handleSubmit}>
         <label>
-          <input type="text" name="gameId" placeholder="ID de la partie" />
+          <input
+            type="text"
+            name="gameId"
+            placeholder="ID de la partie"
+            autoComplete="off"
+            spellCheck={false}
+            autoCapitalize="characters"
+          />
         </label>
         <button type="submit">Rejoindre la partie</button>
       </form>
