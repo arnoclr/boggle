@@ -39,18 +39,19 @@ export function Grid({ gameId, ws, colors }: GridProps) {
     return apiUrl + `?action=game.getCellImage&gameId=${gameId}&cell=${i}`;
   }
 
-  function drawWord(path: number[], playerName: string) {
+  async function drawWord(path: number[], playerName: string) {
     const INDIVIDUAL_TRANSITION_DURATION = 1500;
-    const DELAY = 100;
+    await sleep(100);
     path.forEach((cell, i) => {
+      const cellGrid = document.getElementById(cellId(cell));
+      const cellPath = document.getElementById(cellPathId(cell));
+      hideElement(cellPath);
       setTimeout(async () => {
-        const cellGrid = document.getElementById(cellId(cell));
-        const cellPath = document.getElementById(cellPathId(cell));
         if (cellGrid && cellPath) {
           showElement(cellPath, cellGrid);
           await illusory(cellGrid, cellPath, {
             duration: "350ms",
-            easing: "cubic-bezier(.56,-0.27,.47,1.29)",
+            easing: "cubic-bezier(.14,1.17,.67,1.09)",
             compositeOnly: true,
           }).finished;
           hideElement(cellGrid);
@@ -58,18 +59,18 @@ export function Grid({ gameId, ws, colors }: GridProps) {
           showElement(cellPath, cellGrid);
           await illusory(cellPath, cellGrid, {
             duration: "250ms",
-            easing: "cubic-bezier(.16,.89,.47,1.29)",
+            easing: "cubic-bezier(.18,-0.3,.2,1.12)",
             compositeOnly: true,
           }).finished;
           hideElement(cellPath);
           clearStyles(cellGrid);
         }
-      }, DELAY * (i + 1));
+      }, 80 * (i + 1));
     });
     clearTimeout(closePathOverlay);
     closePathOverlay = setTimeout(() => {
       setPath([]);
-    }, INDIVIDUAL_TRANSITION_DURATION + DELAY * path.length);
+    }, INDIVIDUAL_TRANSITION_DURATION * path.length);
   }
 
   useEffect(() => {
