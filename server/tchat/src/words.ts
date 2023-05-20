@@ -43,6 +43,18 @@ export async function isWordInDictionary(word: string): Promise<boolean> {
   }
 }
 
+export async function wordScore(word: string): Promise<number> {
+  if (!isRealWord(word)) {
+    return 0;
+  }
+  try {
+    const output = await exec(`../engine/score ${word}`);
+    return parseInt(output.stdout);
+  } catch (e) {
+    return 0;
+  }
+}
+
 function isRealWord(word: string): boolean {
   const regex = /^[A-Z]+$/gi;
   return regex.test(word);

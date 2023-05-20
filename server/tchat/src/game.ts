@@ -1,5 +1,6 @@
 import { Player } from "./types";
 import { connection } from "./sql";
+import { wordScore } from "./words";
 
 export const DEFAULT_GAME_DURATION = 90;
 export const DEFAULT_TIMEOUT_SECONDS = 3;
@@ -138,10 +139,11 @@ export async function addWordToGame(
 ): Promise<boolean> {
   const gameId = await getGameIdFromToken(token);
   const playerId = await getUserId(token);
+  const score = await wordScore(word);
   return new Promise((resolve, reject) => {
     connection.query(
-      "INSERT INTO wordsfound (idGame, idPlayer, word, foundAt) VALUES (?, ?, ?, NOW())",
-      [gameId, playerId, word],
+      "INSERT INTO wordsfound (idGame, idPlayer, word, score, foundAt) VALUES (?, ?, ?, ?, NOW())",
+      [gameId, playerId, word, score],
       (error, results) => {
         if (error) reject(error);
         resolve(true);
@@ -239,6 +241,21 @@ export async function previousWordSubmittedTooRecently(
       (error, results) => {
         if (error) reject(error);
         resolve(results.length > 0);
+      }
+    );
+  });
+}
+
+export async function getScoreOf(token: string): Promise<number> {
+  const gameId = await getGameIdFromToken(token);
+  const playerId = await getUserId(token);
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT SUM(score) AS score FROM wordsfound WHERE idGame = ? AND idPlayer = ?",
+      [gameId, playerId],
+      (error, results) => {
+        if (error) reject(error);
+        resolve(results[0].score);
       }
     );
   });
