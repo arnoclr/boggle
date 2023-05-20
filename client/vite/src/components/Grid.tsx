@@ -3,7 +3,12 @@ import { apiUrl } from "../vars";
 import "./Grid.css";
 import { PlayerColors } from "./WithRealtime";
 import { illusory } from "illusory";
-import { hideElement, showElement, sleep } from "../utils/animations";
+import {
+  clearStyles,
+  hideElement,
+  showElement,
+  sleep,
+} from "../utils/animations";
 
 const GRID_SIZE = 4;
 
@@ -43,19 +48,19 @@ export function Grid({ gameId, ws, colors }: GridProps) {
         const cellPath = document.getElementById(cellPathId(cell));
         if (cellGrid && cellPath) {
           showElement(cellPath, cellGrid);
-          const { finished, cancel } = illusory(cellGrid, cellPath, {
+          await illusory(cellGrid, cellPath, {
             duration: "350ms",
             easing: "cubic-bezier(.56,-0.27,.47,1.29)",
-          });
-          await finished;
+          }).finished;
           hideElement(cellGrid);
           await sleep(INDIVIDUAL_TRANSITION_DURATION - 350 - 250);
           showElement(cellPath, cellGrid);
-          illusory(cellPath, cellGrid, {
+          await illusory(cellPath, cellGrid, {
             duration: "250ms",
             easing: "cubic-bezier(.16,.89,.47,1.29)",
-          });
+          }).finished;
           hideElement(cellPath);
+          clearStyles(cellGrid);
         }
       }, DELAY * (i + 1));
     });
