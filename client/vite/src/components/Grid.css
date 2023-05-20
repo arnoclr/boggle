@@ -6,10 +6,26 @@
     display: block;
 }
 
-.cell.selected {
+.overlay {
+    position: fixed;
+    inset: 0;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    pointer-events: none;
+}
+
+.overlay .path {
+    display: flex;
+    gap: 8px;
+    flex-flow: row gap;
+}
+
+.overlay .path .cell {
     background-color: var(--color);
 }
 
-.cell.selected img {
-    opacity: 0.8;
+.overlay .path .cell img {
+    opacity: 0.5;
 }

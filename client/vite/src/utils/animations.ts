@@ -15,3 +15,27 @@ export function launchAnimation(
   elem.style.animationIterationCount = `${repeat}`;
   elem.style.animationPlayState = "running";
 }
+
+export async function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function showElement(...elements: Array<HTMLElement | null>): void {
+  return applyStyle("visibility", "visible", ...elements);
+}
+
+export function hideElement(...elements: Array<HTMLElement | null>): void {
+  return applyStyle("visibility", "hidden", ...elements);
+}
+
+export function applyStyle(
+  property: string,
+  value: string,
+  ...elements: Array<HTMLElement | null>
+): void {
+  elements.forEach((elem) => {
+    if (!elem) return;
+    // @ts-ignore
+    elem.style[property] = value;
+  });
+}
