@@ -43,7 +43,7 @@ export default function Score({ ws, colors, connectedUsers }: ScoreProps) {
       listStyle: "none",
       padding: 0,
       margin: 0,
-      transition: "grid-template-columns 0.3s ease-in-out",
+      transition: "grid-template-columns 400ms ease-in-out 350ms",
     };
   }
 

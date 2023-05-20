@@ -39,3 +39,10 @@ export function applyStyle(
     elem.style[property] = value;
   });
 }
+
+export function clearStyles(...elements: Array<HTMLElement | null>): void {
+  elements.forEach((elem) => {
+    if (!elem) return;
+    elem.removeAttribute("style");
+  });
+}
