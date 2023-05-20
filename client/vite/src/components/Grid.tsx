@@ -51,6 +51,7 @@ export function Grid({ gameId, ws, colors }: GridProps) {
           await illusory(cellGrid, cellPath, {
             duration: "350ms",
             easing: "cubic-bezier(.56,-0.27,.47,1.29)",
+            compositeOnly: true,
           }).finished;
           hideElement(cellGrid);
           await sleep(INDIVIDUAL_TRANSITION_DURATION - 350 - 250);
@@ -58,6 +59,7 @@ export function Grid({ gameId, ws, colors }: GridProps) {
           await illusory(cellPath, cellGrid, {
             duration: "250ms",
             easing: "cubic-bezier(.16,.89,.47,1.29)",
+            compositeOnly: true,
           }).finished;
           hideElement(cellPath);
           clearStyles(cellGrid);
