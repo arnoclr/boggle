@@ -22,6 +22,7 @@ export default function WithRealtime({ gameId }: Props) {
   const [users, setUsers] = useState<string[]>([]);
   const [playerColors, setPlayerColors] = useState<PlayerColors>();
   const [gameActive, setGameActive] = useState<boolean>(false);
+  const [endAt, setEndAt] = useState<Date>(new Date());
   const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
 
   function canStartGame(): boolean {
@@ -64,7 +65,7 @@ export default function WithRealtime({ gameId }: Props) {
   useEffect(() => {
     const id = setInterval(() => {
       if (gameActive === false) return;
-      setRemainingSeconds((prev) => prev - 1);
+      setRemainingSeconds(Math.floor((endAt.getTime() - Date.now()) / 1000));
     }, 1000);
     return () => {
       clearInterval(id);
@@ -101,7 +102,7 @@ export default function WithRealtime({ gameId }: Props) {
       if (type === "startGame") {
         // TODO: recuperer le timer envoyé par le back et lancer le décompte
         setGameActive(true);
-        setRemainingSeconds(payload.durationSeconds as number);
+        setEndAt(new Date(payload.endAt));
       }
     };
 

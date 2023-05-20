@@ -112,7 +112,7 @@ export const getGameIdFromToken = async (token: string): Promise<number> => {
       [token],
       (error, results) => {
         if (error) reject(error);
-        resolve(results[0].idGame);
+        resolve(results.length > 0 && results[0].idGame);
       }
     );
   });
@@ -213,7 +213,7 @@ export async function isGameOwner(token: string): Promise<boolean> {
   });
 }
 
-export async function remainingGameSeconds(token: string): Promise<number> {
+export async function gameEndAt(token: string): Promise<Date> {
   const gameId = await getGameIdFromToken(token);
   return new Promise((resolve, reject) => {
     connection.query(
@@ -221,11 +221,7 @@ export async function remainingGameSeconds(token: string): Promise<number> {
       [gameId],
       (error, results) => {
         if (error) reject(error);
-        const endedAt = results[0].endedAt;
-        const seconds = Math.floor(
-          (new Date(endedAt).getTime() - Date.now()) / 1000
-        );
-        resolve(seconds);
+        resolve(new Date(results[0].endedAt));
       }
     );
   });

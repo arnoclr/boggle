@@ -57,7 +57,7 @@ export interface wrongWordMessage extends BaseWebSocketMessage {
 export interface startGameMessage extends BaseWebSocketMessage {
   type: "startGame";
   payload: {
-    durationSeconds: number;
+    endAt: Date;
   };
 }
 
