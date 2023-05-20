@@ -1,3 +1,10 @@
+export type PlayerName = string;
+
+export interface Score {
+  name: PlayerName;
+  score: number;
+}
+
 export interface BaseWebSocketMessage {
   type: string;
   token: string;
@@ -32,6 +39,7 @@ export interface WordFoundMessage extends BaseWebSocketMessage {
     word: string;
     displayName: string;
     path: number[];
+    scores: Score[];
   };
 }
 
