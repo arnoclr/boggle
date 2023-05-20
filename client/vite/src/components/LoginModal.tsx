@@ -26,47 +26,44 @@ export default function LoginModal() {
   const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (needToCreateAnAccount) {
-      try {
-        await callAction("createUser", toMap({ email }));
-      } catch (e) {
-        const error = e as ErrorWithStatus;
-        if (error.status === "email_already_used") {
-          setNeedToCreateAnAccount(false);
-        } else {
-          setError(error.message);
-          return;
-        }
+    try {
+      await callAction("createUser", toMap({ email }));
+    } catch (e) {
+      const error = e as ErrorWithStatus;
+      if (error.status === "email_already_used") {
+        setError(null);
+      } else {
+        setError(error.message);
+        return;
       }
     }
 
+    const response = await callAction(
+      "auth.requestChallenge",
+      toMap({ email })
+    );
     try {
-      const response = await callAction(
-        "auth.requestChallenge",
-        toMap({ email })
-      );
-      try {
-        if (response.data.type === "register") {
-          webauthnRegister(response.data.challenge, loginFromKey);
-        } else {
-          webauthnAuthenticate(response.data.challenge, loginFromKey);
-        }
-      } catch (e) {
-        await callAction("sendLoginCode", toMap({ email }));
-        setSection("code");
+      if (response.data.type === "register") {
+        webauthnRegister(response.data.challenge, loginFromKey);
+      } else {
+        webauthnAuthenticate(response.data.challenge, loginFromKey);
       }
-      setError(null);
+    } catch (e) {
+      sendLoginCode();
+    }
+    setError(null);
+  };
+
+  async function sendLoginCode(): Promise<void> {
+    try {
+      await callAction("sendLoginCode", toMap({ email }));
+      setSection("code");
     } catch (e) {
       const status = (e as ErrorWithStatus).status;
-      if (status === "email_not_found") {
-        setNeedToCreateAnAccount(true);
-        setError(null);
-      } else {
-        const message = (e as ErrorWithStatus).message;
-        setError(message);
-      }
+      const message = (e as ErrorWithStatus).message;
+      setError(message);
     }
-  };
+  }
 
   function finishLogin(): void {
     setIsLogin(true);
@@ -78,6 +75,7 @@ export default function LoginModal() {
   async function loginFromKey(success: boolean, info: string): Promise<void> {
     if (success === false) {
       setError(info);
+      sendLoginCode();
       return;
     }
     try {
