@@ -7,10 +7,17 @@ import { WordInput } from "./WordInput";
 import { WordsFound } from "./WordsFound";
 import Timer from "./Timer";
 import { wsUrl } from "../vars";
+import Score from "./Score";
 
-const PLAYER_COLORS = ["red", "blue", "green", "yellow"];
+export type PlayerName = string;
+export type CSSColor = string;
+export type PlayerColors = Map<PlayerName, CSSColor>;
+export interface PlayerScore {
+  name: PlayerName;
+  score: number;
+}
 
-export type PlayerColors = Map<string, string>;
+const PLAYER_COLORS: CSSColor[] = ["red", "blue", "green", "yellow"];
 
 interface Props {
   gameId: string;
@@ -100,7 +107,6 @@ export default function WithRealtime({ gameId }: Props) {
       }
 
       if (type === "startGame") {
-        // TODO: recuperer le timer envoyé par le back et lancer le décompte
         setGameActive(true);
         setEndAt(new Date(payload.endAt));
       }
@@ -126,6 +132,11 @@ export default function WithRealtime({ gameId }: Props) {
           <>
             {gameActive ? (
               <>
+                <Score
+                  colors={playerColors}
+                  connectedUsers={users}
+                  ws={ws}
+                ></Score>
                 <Timer remainingSeconds={remainingSeconds}></Timer>
                 <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
                 <Grid gameId={gameId} ws={ws} colors={playerColors}></Grid>
@@ -147,12 +158,12 @@ export default function WithRealtime({ gameId }: Props) {
                 <button onClick={startGame} disabled={!canStartGame()}>
                   Démarrer la partie
                 </button>
+                <ConnectedUsers
+                  users={users}
+                  colors={playerColors}
+                ></ConnectedUsers>
               </div>
             )}
-            <ConnectedUsers
-              users={users}
-              colors={playerColors}
-            ></ConnectedUsers>
           </>
         )}
     </>

@@ -1,7 +1,7 @@
-import { PlayerColors } from "./WithRealtime";
+import { PlayerColors, PlayerName } from "./WithRealtime";
 
 interface Props {
-  users: string[];
+  users: PlayerName[];
   colors: PlayerColors;
 }
 

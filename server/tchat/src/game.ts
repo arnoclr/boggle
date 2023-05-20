@@ -1,4 +1,4 @@
-import { Player } from "./types";
+import { Player, PlayerName, Score } from "./types";
 import { connection } from "./sql";
 import { wordScore } from "./words";
 
@@ -246,16 +246,19 @@ export async function previousWordSubmittedTooRecently(
   });
 }
 
-export async function getScoreOf(token: string): Promise<number> {
+export async function getScores(token: string): Promise<Score[]> {
   const gameId = await getGameIdFromToken(token);
-  const playerId = await getUserId(token);
   return new Promise((resolve, reject) => {
     connection.query(
-      "SELECT SUM(score) AS score FROM wordsfound WHERE idGame = ? AND idPlayer = ?",
-      [gameId, playerId],
+      "SELECT name, SUM(score) as score FROM wordsfound NATURAL JOIN players WHERE idGame = ? GROUP BY idPlayer",
+      [gameId],
       (error, results) => {
         if (error) reject(error);
-        resolve(results[0].score);
+        const scores: Score[] = [];
+        results.forEach((result: { name: string; score: number }) => {
+          scores.push({ name: result.name, score: result.score });
+        });
+        resolve(scores);
       }
     );
   });

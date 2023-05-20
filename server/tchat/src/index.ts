@@ -8,6 +8,7 @@ import {
   getAllTokensOfAPartyFromUserToken,
   getAllUserOfAParty,
   getGridString,
+  getScores,
   getUserName,
   isGameOwner,
   joinGame,
@@ -94,6 +95,7 @@ server.on("connection", (socket) => {
             ...payload,
             displayName: await getUserName(token),
             path,
+            scores: await getScores(token),
           });
         } else {
           connectedUsers.get(token)?.send(
