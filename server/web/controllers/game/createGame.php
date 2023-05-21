@@ -16,8 +16,26 @@ if (!isset($_SESSION['player_email'])) {
 
 $publicGameId = $rrs->rrs(5, 5);
 
-exec("../engine/grid_build ../engine/frequence.txt 4 4", $out, $ret);
-$grid = $out[0];
+function getGrid(int $size): string
+{
+    exec("../engine/grid_build.bin ../engine/grid_build/frequence.txt $size $size", $out, $ret);
+    return $out[0];
+}
+
+function getSolutionsCount(string $grid): int
+{
+    exec("../engine/solve.bin ../engine/dico.lex 3 4 4 " . $grid, $a, $b);
+    $words = array_unique(explode(" ", $a[0]));
+    return count($words);
+}
+
+$grid = getGrid(4);
+$solutionsCount = getSolutionsCount($grid);
+
+while ($solutionsCount < 15) {
+    $grid = getGrid(4);
+    $solutionsCount = getSolutionsCount($grid);
+}
 
 $ins = $pdo->prepare("INSERT INTO games (grid, createdAt, isPrivateGame, publicId) VALUES (:grid, NOW(), :isPrivateGame, :publicId)");
 $ins->execute([
