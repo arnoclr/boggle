@@ -21,11 +21,14 @@ export async function getWordPathIfInGrid(
     return false;
   }
   try {
-    const output = await exec(`../engine/grid_path ${word} 4 4 ${grid}`);
+    const output = await exec(`../engine/grid_path.bin ${word} 4 4 ${grid}`);
+    console.log(output);
     if (output.stdout !== "") {
       return output.stdout.split(" ").map((n) => parseInt(n));
     }
-  } catch (e) {}
+  } catch (e) {
+    console.log(e);
+  }
   return false;
 }
 
@@ -34,10 +37,8 @@ export async function isWordInDictionary(word: string): Promise<boolean> {
     return false;
   }
   try {
-    const output = await exec(
-      "../engine/dictionnary_lookup ../engine/fr32.lex " + word
-    );
-    return output.stdout === "found";
+    await exec("../engine/dictionnary_lookup.bin ../engine/dico.lex " + word);
+    return true;
   } catch (e) {
     return false;
   }
@@ -48,11 +49,13 @@ export async function wordScore(word: string): Promise<number> {
     return 0;
   }
   try {
-    const output = await exec(`../engine/score ${word}`);
-    return parseInt(output.stdout);
-  } catch (e) {
-    return 0;
+    await exec(
+      `../engine/score_scrabble.bin ../engine/score/lettre_attribution.txt ${word}`
+    );
+  } catch (e: any) {
+    return e.code || 0;
   }
+  return 0;
 }
 
 function isRealWord(word: string): boolean {

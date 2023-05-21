@@ -23,5 +23,5 @@ require "functions/utils.php";
 if (file_exists($controller)) {
     require $controller;
 } else {
-    require "views/404.php";
+    header("HTTP/1.0 500 Internal Server Error");
 }
