@@ -34,7 +34,6 @@ export async function getMessages(gameId: number): Promise<WebSocketMessage<any>
                     reject(error);
                 } else {
                     const messages = results as any;
-                    console.log("Messages:", messages);
                     resolve(
                         messages.map((message: any) => ({
                             type: "chat",
