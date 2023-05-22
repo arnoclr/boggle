@@ -25,7 +25,9 @@ export function WordsFound({ ws }: WordsFoundProps) {
     <>
       <ul className="wordsFound">
         {lastFoundWordsFirst().map((word) => (
-          <li key={word}>{word}</li>
+          <li style={{ textTransform: "uppercase" }} key={word}>
+            {word}
+          </li>
         ))}
       </ul>
     </>
