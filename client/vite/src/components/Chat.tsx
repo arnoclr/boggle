@@ -1,12 +1,14 @@
 import { createRef, useEffect, useState } from "react";
 import "./Chat.css";
+import { PlayerColors } from "./WithRealtime";
 
 interface Props {
   sendRealtimeEvent: (event: string, data: any) => void;
+  colors: PlayerColors;
   ws: WebSocket;
 }
 
-export default function Chat({ sendRealtimeEvent, ws }: Props) {
+export default function Chat({ sendRealtimeEvent, ws, colors }: Props) {
   const [messages, setMessages] = useState<
     { message: string; displayName: string; receivedAt: Date }[]
   >([]);
@@ -38,7 +40,10 @@ export default function Chat({ sendRealtimeEvent, ws }: Props) {
       <ul>
         {messages.map((entry) => (
           <li key={+entry.receivedAt}>
-            <i>{entry.displayName}</i> {entry.message}
+            <i style={{ color: colors.get(entry.displayName) }}>
+              {entry.displayName}
+            </i>{" "}
+            {entry.message}
           </li>
         ))}
       </ul>

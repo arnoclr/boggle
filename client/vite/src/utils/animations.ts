@@ -46,3 +46,13 @@ export function clearStyles(...elements: Array<HTMLElement | null>): void {
     elem.removeAttribute("style");
   });
 }
+
+export type Position = { x: number; y: number };
+
+export function getAbsoluteBoundsOf(element: HTMLElement): Position {
+  const rect = element.getBoundingClientRect();
+  return {
+    x: rect.left + window.scrollX,
+    y: rect.top + window.scrollY,
+  };
+}
