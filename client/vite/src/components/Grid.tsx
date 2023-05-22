@@ -2,13 +2,6 @@ import { useEffect, useState } from "react";
 import { apiUrl } from "../vars";
 import "./Grid.css";
 import { PlayerColors } from "./WithRealtime";
-import { illusory } from "illusory";
-import {
-  clearStyles,
-  hideElement,
-  showElement,
-  sleep,
-} from "../utils/animations";
 
 const GRID_SIZE = 4;
 
@@ -18,10 +11,12 @@ export interface GridProps {
   colors: PlayerColors;
 }
 
+export type Cell = number;
+export type Path = Cell[];
+
 export function Grid({ gameId, ws, colors }: GridProps) {
-  const [path, setPath] = useState<number[]>([]);
-  const [wordColor, setWordColor] = useState<string>("");
-  let closePathOverlay: number = 0;
+  const [pathsToDisplay, setPathsToDisplay] = useState<Path[]>([]);
+  const [currentPath, setCurrentPath] = useState<Path>();
 
   function cellNumber(row: number, col: number) {
     return row * GRID_SIZE + col;
@@ -31,46 +26,8 @@ export function Grid({ gameId, ws, colors }: GridProps) {
     return `cell-${cell}`;
   }
 
-  function cellPathId(cell: number) {
-    return `path-${cell}`;
-  }
-
   function getCellImage(i: number) {
     return apiUrl + `?action=game.getCellImage&gameId=${gameId}&cell=${i}`;
-  }
-
-  async function drawWord(path: number[], playerName: string) {
-    const INDIVIDUAL_TRANSITION_DURATION = 1500;
-    await sleep(100);
-    path.forEach((cell, i) => {
-      const cellGrid = document.getElementById(cellId(cell));
-      const cellPath = document.getElementById(cellPathId(cell));
-      hideElement(cellPath);
-      setTimeout(async () => {
-        if (cellGrid && cellPath) {
-          showElement(cellPath, cellGrid);
-          await illusory(cellGrid, cellPath, {
-            duration: "350ms",
-            easing: "cubic-bezier(.14,1.17,.67,1.09)",
-            compositeOnly: true,
-          }).finished;
-          hideElement(cellGrid);
-          await sleep(INDIVIDUAL_TRANSITION_DURATION - 350 - 250);
-          showElement(cellPath, cellGrid);
-          await illusory(cellPath, cellGrid, {
-            duration: "250ms",
-            easing: "cubic-bezier(.18,-0.3,.2,1.12)",
-            compositeOnly: true,
-          }).finished;
-          hideElement(cellPath);
-          clearStyles(cellGrid);
-        }
-      }, 80 * (i + 1));
-    });
-    clearTimeout(closePathOverlay);
-    closePathOverlay = setTimeout(() => {
-      setPath([]);
-    }, INDIVIDUAL_TRANSITION_DURATION * path.length);
   }
 
   useEffect(() => {
@@ -78,12 +35,32 @@ export function Grid({ gameId, ws, colors }: GridProps) {
       const data = JSON.parse(event.data);
       if (data.type === "wordFound") {
         const { path, displayName } = data.payload;
-        setPath(path.filter((cell: number) => cell !== null));
-        setWordColor(colors.get(displayName)!);
-        drawWord(path, displayName);
+        setPathsToDisplay((paths) => [...paths, path]);
       }
     });
   }, [ws, colors]);
+
+  function isSamePath(path1: Path | undefined, path2: Path | undefined) {
+    if (!path1 || !path2) return false;
+    return path1.toString() === path2.toString();
+  }
+
+  useEffect(() => {
+    let timer: number;
+
+    if (pathsToDisplay.length > 0 && isSamePath(currentPath, [])) {
+      setCurrentPath(pathsToDisplay[0]);
+      setPathsToDisplay((prevQueue) => prevQueue.slice(1));
+    } else if (!isSamePath(currentPath, [])) {
+      timer = setTimeout(() => {
+        setCurrentPath([]);
+      }, 1000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [currentPath, pathsToDisplay]);
 
   return (
     <>
@@ -91,27 +68,18 @@ export function Grid({ gameId, ws, colors }: GridProps) {
         {[...Array(GRID_SIZE)].map((_, i) => (
           <div className="row" key={i}>
             {[...Array(GRID_SIZE)].map((_, j) => (
-              <div key={j} className="cell" id={cellId(cellNumber(i, j))}>
+              <div
+                key={j}
+                className="cell"
+                id={cellId(cellNumber(i, j))}
+                aria-active={currentPath?.includes(cellNumber(i, j))}
+              >
                 <img src={getCellImage(cellNumber(i, j))} alt="" />
               </div>
             ))}
           </div>
         ))}
       </div>
-      {path.length > 0 && (
-        <div
-          className="overlay"
-          style={{ "--color": wordColor } as React.CSSProperties}
-        >
-          <div className="path">
-            {path.map((cell) => (
-              <div key={cell} className="cell" id={cellPathId(cell)}>
-                <img width={32} height={32} src={getCellImage(cell)} alt="" />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </>
   );
 }
