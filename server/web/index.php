@@ -5,7 +5,10 @@ require "env.php";
 
 session_start();
 
-$allowOrigin = FRONT_END_PROTOCOL . "://" . FRONT_END_HOST . (FRONT_END_PORT ? ":" . FRONT_END_PORT : "");
+$onlineUrl = FRONT_END_PROTOCOL . "://" . FRONT_END_HOST . (FRONT_END_PORT ? ":" . FRONT_END_PORT : "");
+$authorizedOrigins = [$onlineUrl, "http://localhost:5173"];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? "";
+$allowOrigin = in_array($origin, $authorizedOrigins) ? $origin : $onlineUrl;
 
 header('Access-Control-Allow-Origin: ' . $allowOrigin);
 header('Access-Control-Allow-Credentials: true');
