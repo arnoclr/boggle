@@ -2,6 +2,7 @@ import { createRef, useEffect, useState } from "react";
 import { ErrorWithStatus, callAction, toMap } from "../utils/req";
 import { webauthnRegister } from "../utils/webauthnRegister";
 import { webauthnAuthenticate } from "../utils/webauthnAuthenticate";
+import "./LoginModal.css";
 
 export default function LoginModal() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
@@ -10,6 +11,7 @@ export default function LoginModal() {
   const [section, setSection] = useState<"email" | "code">("email");
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const dialog = createRef<HTMLDialogElement>();
 
@@ -25,6 +27,7 @@ export default function LoginModal() {
 
   const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       await callAction("createUser", toMap({ email }));
@@ -62,6 +65,8 @@ export default function LoginModal() {
       const status = (e as ErrorWithStatus).status;
       const message = (e as ErrorWithStatus).message;
       setError(message);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -91,6 +96,7 @@ export default function LoginModal() {
 
   const handleCodeSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     const code = e.currentTarget.code.value;
 
     try {
@@ -99,13 +105,21 @@ export default function LoginModal() {
     } catch (e) {
       const message = (e as ErrorWithStatus).message;
       setError(message);
+    } finally {
+      setLoading(false);
     }
   };
 
+  function resetFlow() {
+    setSection("email");
+    setError(null);
+  }
+
   return (
-    <dialog ref={dialog}>
+    <dialog ref={dialog} className="loginModal">
+      <h1>Connexion</h1>
       {section === "email" && (
-        <form onSubmit={handleEmailSubmit}>
+        <form aria-busy={loading} onSubmit={handleEmailSubmit}>
           <label>
             <span>Adresse E-mail</span>
             <input
@@ -130,11 +144,11 @@ export default function LoginModal() {
       )}
 
       {section === "code" && (
-        <form onSubmit={handleCodeSubmit}>
-          <button onClick={() => setSection("email")}>
-            Changer d'adresse E-mail
-          </button>
-          <br />
+        <form aria-busy={loading} onSubmit={handleCodeSubmit}>
+          <p>
+            Nous n'avons pas réussi à vous authentifier avec passkey. Vous avez
+            reçu un code par e-mail.
+          </p>
           <label>
             <span>Code à usage unique</span>
             <input
@@ -149,11 +163,16 @@ export default function LoginModal() {
             />
           </label>
           <br />
-          <button>Valider</button>
+          <nav>
+            <button className="secondary" onClick={resetFlow}>
+              Annuler
+            </button>
+            <button>Valider</button>
+          </nav>
         </form>
       )}
 
-      {error && <p>{error}</p>}
+      {error && <p className="error">{error}</p>}
     </dialog>
   );
 }

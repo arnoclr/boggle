@@ -32,15 +32,17 @@ export function WordInput({ sendRealtimeEvent, ws }: WordInputProps) {
 
   return (
     <>
-      <form ref={form} onSubmit={handleSubmit}>
-        <input
-          style={{ textTransform: "uppercase" }}
-          type="text"
-          placeholder="Mot"
-          name="word"
-          pattern="[A-Za-z]{1,}"
-        />
-        <button>Soumettre</button>
+      <form className="wordInput" ref={form} onSubmit={handleSubmit}>
+        <nav>
+          <input
+            style={{ textTransform: "uppercase" }}
+            type="text"
+            placeholder="Mot"
+            name="word"
+            pattern="[A-Za-z]{1,}"
+          />
+          <button>Soumettre</button>
+        </nav>
       </form>
     </>
   );

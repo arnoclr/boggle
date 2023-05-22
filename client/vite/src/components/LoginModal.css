@@ -1,0 +1,11 @@
+.loginModal {
+    border: 5px solid #222;
+    outline: 30px solid #111;
+    box-sizing: content-box;
+    max-width: 500px;
+}
+
+.loginModal::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+}

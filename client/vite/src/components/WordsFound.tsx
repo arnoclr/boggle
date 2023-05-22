@@ -7,6 +7,10 @@ export interface WordsFoundProps {
 export function WordsFound({ ws }: WordsFoundProps) {
   const [wordsFound, setWordsFound] = useState<string[]>([]);
 
+  function lastFoundWordsFirst() {
+    return [...wordsFound].reverse();
+  }
+
   useEffect(() => {
     ws.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
@@ -19,8 +23,8 @@ export function WordsFound({ ws }: WordsFoundProps) {
 
   return (
     <>
-      <ul>
-        {wordsFound.map((word) => (
+      <ul className="wordsFound">
+        {lastFoundWordsFirst().map((word) => (
           <li key={word}>{word}</li>
         ))}
       </ul>

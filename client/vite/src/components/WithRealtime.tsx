@@ -8,6 +8,7 @@ import { WordsFound } from "./WordsFound";
 import Timer from "./Timer";
 import { wsUrl } from "../vars";
 import Score from "./Score";
+import "./WithRealtime.css";
 
 export type PlayerName = string;
 export type CSSColor = string;
@@ -138,18 +139,22 @@ export default function WithRealtime({ gameId }: Props) {
                   ws={ws}
                 ></Score>
                 <Timer remainingSeconds={remainingSeconds}></Timer>
-                <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
-                <Grid gameId={gameId} ws={ws} colors={playerColors}></Grid>
-                {remainingSeconds > 0 && (
-                  <WordInput
-                    sendRealtimeEvent={sendRealtimeEvent}
-                    ws={ws}
-                  ></WordInput>
-                )}
-                <WordsFound ws={ws}></WordsFound>
+                <div className="gridContainer">
+                  <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
+                  <div className="gridContainerGrid">
+                    <Grid gameId={gameId} ws={ws} colors={playerColors}></Grid>
+                    {remainingSeconds > 0 && (
+                      <WordInput
+                        sendRealtimeEvent={sendRealtimeEvent}
+                        ws={ws}
+                      ></WordInput>
+                    )}
+                  </div>
+                  <WordsFound ws={ws}></WordsFound>
+                </div>
               </>
             ) : (
-              <div>
+              <div className="padding">
                 <p>
                   Partie :{" "}
                   <span style={{ textTransform: "uppercase" }}>{gameId}</span>
