@@ -15,10 +15,16 @@
     gap: var(--gap);
 }
 
-.cell img {
-    display: block;
+.cell {
+    width: 64px;
+    height: 64px;
+    background-color: #3772cc;
 }
 
-.cell[aria-active=true] {
-    opacity: 0.3;
+.cell img {
+    position: absolute;
+    transition-property: top, left;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(.2, .96, .65, 1.08);
+    display: block;
 }

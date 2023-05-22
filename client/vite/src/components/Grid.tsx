@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { apiUrl } from "../vars";
 import "./Grid.css";
 import { PlayerColors } from "./WithRealtime";
+import { Position, getAbsoluteBoundsOf } from "../utils/animations";
 
 const GRID_SIZE = 4;
 
@@ -30,6 +31,56 @@ export function Grid({ gameId, ws, colors }: GridProps) {
     return apiUrl + `?action=game.getCellImage&gameId=${gameId}&cell=${i}`;
   }
 
+  function computeDefaultCellsPosition(): Position[] {
+    const r: Position[] = [];
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach((cell) => {
+      r.push(getAbsoluteBoundsOf(cell as HTMLDivElement));
+    });
+    return r;
+  }
+
+  const defaultCellsPosition = computeDefaultCellsPosition();
+
+  function cellPositionInPath(
+    cell: number,
+    path: Path,
+    cellSize: number
+  ): Position {
+    if (path.includes(cell) === false) {
+      return defaultCellsPosition[cell];
+    }
+    const PADDING = 12;
+    const GAP = 8;
+    const index = path.indexOf(cell);
+    const y = PADDING;
+    const x = PADDING + index * GAP + index * cellSize;
+    return { x, y };
+  }
+
+  function cellPosition(cell: number): Position | undefined {
+    const cellElement = document.getElementById(cellId(cell));
+    if (!cellElement) return defaultCellsPosition[cell];
+
+    const cellSize = cellElement.getBoundingClientRect().width;
+
+    if (currentPath === undefined) return defaultCellsPosition[cell];
+    return cellPositionInPath(cell, currentPath, cellSize);
+  }
+
+  function cellStyle(cell: number) {
+    const position = cellPosition(cell);
+    // if (cell === 0) {
+    //   // console.log(currentPath, pathsToDisplay);
+    //   console.log(position);
+    // }
+    if (!position) return {};
+    return {
+      left: `${position.x}px`,
+      top: `${position.y}px`,
+    };
+  }
+
   useEffect(() => {
     ws.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
@@ -40,21 +91,16 @@ export function Grid({ gameId, ws, colors }: GridProps) {
     });
   }, [ws, colors]);
 
-  function isSamePath(path1: Path | undefined, path2: Path | undefined) {
-    if (!path1 || !path2) return false;
-    return path1.toString() === path2.toString();
-  }
-
   useEffect(() => {
     let timer: number;
 
-    if (pathsToDisplay.length > 0 && isSamePath(currentPath, [])) {
+    if (pathsToDisplay.length > 0 && currentPath === undefined) {
       setCurrentPath(pathsToDisplay[0]);
       setPathsToDisplay((prevQueue) => prevQueue.slice(1));
-    } else if (!isSamePath(currentPath, [])) {
+    } else if (currentPath !== undefined) {
       timer = setTimeout(() => {
-        setCurrentPath([]);
-      }, 1000);
+        setCurrentPath(undefined);
+      }, 800);
     }
 
     return () => {
@@ -64,17 +110,23 @@ export function Grid({ gameId, ws, colors }: GridProps) {
 
   return (
     <>
+      {/* {defaultCellsPosition.map((position, i) => (
+        <span>
+          x: {position.x}, y: {position.y}
+        </span>
+      ))} */}
       <div className="grid">
         {[...Array(GRID_SIZE)].map((_, i) => (
           <div className="row" key={i}>
             {[...Array(GRID_SIZE)].map((_, j) => (
-              <div
-                key={j}
-                className="cell"
-                id={cellId(cellNumber(i, j))}
-                aria-active={currentPath?.includes(cellNumber(i, j))}
-              >
-                <img src={getCellImage(cellNumber(i, j))} alt="" />
+              <div key={j} className="cell" id={cellId(cellNumber(i, j))}>
+                <img
+                  width={64}
+                  height={64}
+                  style={cellStyle(cellNumber(i, j))}
+                  src={getCellImage(cellNumber(i, j))}
+                  alt=""
+                />
               </div>
             ))}
           </div>

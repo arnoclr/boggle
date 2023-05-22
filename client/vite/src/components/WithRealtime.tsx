@@ -140,7 +140,11 @@ export default function WithRealtime({ gameId }: Props) {
                 ></Score>
                 <Timer remainingSeconds={remainingSeconds}></Timer>
                 <div className="gridContainer">
-                  <Chat sendRealtimeEvent={sendRealtimeEvent} ws={ws}></Chat>
+                  <Chat
+                    sendRealtimeEvent={sendRealtimeEvent}
+                    ws={ws}
+                    colors={playerColors}
+                  ></Chat>
                   <div className="gridContainerGrid">
                     <Grid gameId={gameId} ws={ws} colors={playerColors}></Grid>
                     {remainingSeconds > 0 && (
