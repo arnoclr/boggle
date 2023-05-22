@@ -1,6 +1,6 @@
 <?php
 
-$webauthn = new \Davidearl\WebAuthn\WebAuthn(FRONT_END_HOST);
+$webauthn = new \Davidearl\WebAuthn\WebAuthn($allowOriginHostname);
 
 try {
     assertParamsExists(["response"], $_POST);
