@@ -1,11 +1,10 @@
-import { createRef, useEffect, useState } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import { ErrorWithStatus, callAction, toMap } from "../utils/req";
 import { webauthnRegister } from "../utils/webauthnRegister";
 import { webauthnAuthenticate } from "../utils/webauthnAuthenticate";
 import "./LoginModal.css";
 
 export default function LoginModal() {
-  const [isLogin, setIsLogin] = useState<boolean>(false);
   const [needToCreateAnAccount, setNeedToCreateAnAccount] =
     useState<boolean>(false);
   const [section, setSection] = useState<"email" | "code">("email");
@@ -13,15 +12,15 @@ export default function LoginModal() {
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const dialog = createRef<HTMLDialogElement>();
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
-  const isDialogOpen = (): boolean => !!dialog.current?.open;
+  const isDialogOpen = (): boolean => !!dialogRef.current?.open;
 
   useEffect(() => {
     callAction("amIConnected", toMap({})).then((res) => {
       isDialogOpen() === false &&
         res.data.connected === false &&
-        dialog.current?.showModal();
+        dialogRef.current?.showModal();
     });
   }, []);
 
@@ -71,9 +70,8 @@ export default function LoginModal() {
   }
 
   function finishLogin(): void {
-    setIsLogin(true);
     if (isDialogOpen()) {
-      dialog.current?.close();
+      dialogRef.current?.close();
     }
   }
 
@@ -116,8 +114,13 @@ export default function LoginModal() {
   }
 
   return (
-    <dialog ref={dialog} className="loginModal">
-      <h1>Connexion</h1>
+    <dialog ref={dialogRef} className="loginModal">
+      <h1>Bienvenue sur Boggle</h1>
+      <p>Avant de commencer, vous devrez vous créer un compte.</p>
+      <p>
+        Vous pouvez saisir votre e-mail pour que nous puissions vous en créer
+        un, ou pour vous connecter à votre compte si vous en avez déja un.
+      </p>
       {section === "email" && (
         <form aria-busy={loading} onSubmit={handleEmailSubmit}>
           <label>
