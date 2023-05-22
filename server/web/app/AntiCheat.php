@@ -5,8 +5,8 @@ class AntiCheat
     public function generateImageFor(String $letters, int $size = 32, int $seed = 0): string
     {
         $image = imagecreatetruecolor($size, $size);
-        $backgroundColor = imagecolorallocate($image, 255, 255, 255);
-        $textColor = imagecolorallocate($image, 0, 0, 0);
+        $backgroundColor = imagecolorallocate($image, 253, 244, 235);
+        $textColor = imagecolorallocate($image, 56, 88, 111);
         $availableFontVariants = ["Xed", "Noise"];
         $availableOrientations = [-90, 0, 90];
         $seed += ord($letters);

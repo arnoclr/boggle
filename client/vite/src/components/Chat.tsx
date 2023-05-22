@@ -1,4 +1,5 @@
 import { createRef, useEffect, useState } from "react";
+import "./Chat.css";
 
 interface Props {
   sendRealtimeEvent: (event: string, data: any) => void;
@@ -33,7 +34,7 @@ export default function Chat({ sendRealtimeEvent, ws }: Props) {
   }, [ws]);
 
   return (
-    <>
+    <div className="chat">
       <ul>
         {messages.map((entry) => (
           <li key={+entry.receivedAt}>
@@ -41,10 +42,15 @@ export default function Chat({ sendRealtimeEvent, ws }: Props) {
           </li>
         ))}
       </ul>
+      <br />
       <form onSubmit={handleSubmit} ref={form}>
-        <input type="text" name="message" placeholder="Message chat" />
-        <button type="submit">Envoyer</button>
+        <nav>
+          <input type="text" name="message" placeholder="Message chat" />
+          <button className="secondary" type="submit">
+            Envoyer
+          </button>
+        </nav>
       </form>
-    </>
+    </div>
   );
 }

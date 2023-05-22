@@ -1,5 +1,18 @@
+.grid {
+    --gap: .5rem;
+    padding: var(--gap);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    background-color: #1f519b;
+    border: 30px solid #2871E2;
+    outline: 5px solid #3679dd;
+    width: fit-content;
+}
+
 .row {
     display: flex;
+    gap: var(--gap);
 }
 
 .cell img {

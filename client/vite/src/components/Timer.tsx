@@ -11,14 +11,14 @@ export default function Timer({ remainingSeconds }: TimerProps) {
   }
 
   return remainingSeconds > 0 ? (
-    <div className="timer">
+    <div className="timer padding-left">
       <span className="minutes">{withLeadingsZeroes(minutes)}</span>
-      <span className="separator">:</span>
+      <span className="separator blinking">:</span>
       <span className="seconds">{withLeadingsZeroes(seconds)}</span>
     </div>
   ) : (
     <>
-      <p>Partie terminée</p>
+      <p className="padding-left">Partie terminée</p>
     </>
   );
 }

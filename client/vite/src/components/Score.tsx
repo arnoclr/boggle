@@ -71,7 +71,7 @@ export default function Score({ ws, colors, connectedUsers }: ScoreProps) {
     <ul style={scoresCSS()}>
       {scoreList().map(({ name, score, isConnected }) => (
         <li key={name} style={scoreCSS(name)}>
-          <span>{name}</span>
+          <span style={{ whiteSpace: "nowrap" }}>{name}</span>
           <span>{score}</span>
         </li>
       ))}

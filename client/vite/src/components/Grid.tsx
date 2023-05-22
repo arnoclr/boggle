@@ -87,7 +87,7 @@ export function Grid({ gameId, ws, colors }: GridProps) {
 
   return (
     <>
-      <div>
+      <div className="grid">
         {[...Array(GRID_SIZE)].map((_, i) => (
           <div className="row" key={i}>
             {[...Array(GRID_SIZE)].map((_, j) => (
