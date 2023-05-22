@@ -20,12 +20,13 @@ export function WordInput({ sendRealtimeEvent, ws }: WordInputProps) {
     ws.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
       if (data.type === "wrongWord") {
-        form.current?.reset();
         launchAnimation(form.current, "inputError", 300);
-      } else if (data.type === "wordFound") {
-        form.current?.reset();
       } else if (data.type === "waiting") {
         launchAnimation(form.current, "blink", 300, 0, 3);
+      }
+
+      if (data.type === "clearInput") {
+        form.current?.reset();
       }
     });
   }, [ws, form]);

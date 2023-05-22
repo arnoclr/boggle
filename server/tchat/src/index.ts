@@ -57,15 +57,10 @@ server.on("connection", (socket) => {
         } else if (await joinGame(token, payload.gameId)) {
           sendConnectedUsersList(token);
         } else {
-          connectedUsers.get(token)?.send(
-            JSON.stringify({
-              type: "error",
-              payload: {
-                code: "joinGameFailed",
-                message: "Impossible de rejoindre la partie",
-              },
-            })
-          );
+          await sendTo(token, "error", {
+            code: "joinGameFailed",
+            message: "Impossible de rejoindre la partie",
+          });
         }
         break;
       case "startGame":
@@ -80,14 +75,7 @@ server.on("connection", (socket) => {
       case "submitWord":
         if (!(await gameIsActive(token))) return;
         if (await previousWordSubmittedTooRecently(token)) {
-          connectedUsers.get(token)?.send(
-            JSON.stringify({
-              type: "waiting",
-              payload: {
-                waiting: 0,
-              },
-            })
-          );
+          await sendTo(token, "waiting", null);
           return;
         }
         const grid = await getGridString(token);
@@ -103,13 +91,9 @@ server.on("connection", (socket) => {
             scores: await getScores(token),
           });
         } else {
-          connectedUsers.get(token)?.send(
-            JSON.stringify({
-              type: "wrongWord",
-              payload: null,
-            })
-          );
+          await sendTo(token, "wrongWord", null);
         }
+        await sendTo(token, "clearInput", null);
       default:
         break;
     }
@@ -142,6 +126,17 @@ async function broadcastToParty(
       socket.send(JSON.stringify({ type, payload }));
     }
   });
+}
+
+async function sendTo(
+  token: string,
+  type: string,
+  payload: WebSocketMessage["payload"]
+): Promise<void> {
+  const socket = connectedUsers.get(token);
+  if (socket) {
+    socket.send(JSON.stringify({ type, payload }));
+  }
 }
 
 async function sendConnectedUsersList(userToken: string): Promise<void> {
