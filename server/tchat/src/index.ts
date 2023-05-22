@@ -80,9 +80,14 @@ server.on("connection", (socket) => {
       case "submitWord":
         if (!(await gameIsActive(token))) return;
         if (await previousWordSubmittedTooRecently(token)) {
-          broadcastToParty(true, token, "waiting", {
-            waiting: 0,
-          });
+          connectedUsers.get(token)?.send(
+            JSON.stringify({
+              type: "waiting",
+              payload: {
+                waiting: 0,
+              },
+            })
+          );
           return;
         }
         const grid = await getGridString(token);
