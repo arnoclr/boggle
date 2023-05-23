@@ -105,6 +105,10 @@ input:checked+span {
     color: #eee;
 }
 
+a {
+    color: rgb(114, 114, 235);
+}
+
 nav {
     display: flex;
     align-items: center;

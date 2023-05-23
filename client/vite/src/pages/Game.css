@@ -1,6 +1,14 @@
 .selection {
     margin: auto;
     max-width: 800px;
+    height: 100%;
+    display: grid;
+    place-items: center;
+}
+
+.selection h1 {
+    color: rgb(253, 244, 235);
+    font-size: 1.2rem;
 }
 
 .choices {

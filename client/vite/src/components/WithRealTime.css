@@ -10,6 +10,30 @@
     gap: 1rem;
 }
 
+.wordsFound {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.wordsFound .Word {
+    animation: appear 0.5s ease-out;
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+
+    80% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 @media (max-width: 800px) {
     .gridContainer {
         flex-direction: column-reverse;
@@ -21,4 +45,14 @@
         overflow-x: auto;
         max-width: 100%;
     }
+
+    .wordsFound .Word {
+        outline: 4px solid #eee;
+        outline-offset: 6px;
+    }
+}
+
+.waitingRoom {
+    display: flex;
+    gap: 1rem;
 }

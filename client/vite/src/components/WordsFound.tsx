@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Word from "./Word";
 
 export interface WordsFoundProps {
   ws: WebSocket;
@@ -23,13 +24,11 @@ export function WordsFound({ ws }: WordsFoundProps) {
 
   return (
     <>
-      <ul className="wordsFound">
+      <div className="wordsFound">
         {lastFoundWordsFirst().map((word) => (
-          <li style={{ textTransform: "uppercase" }} key={word}>
-            {word}
-          </li>
+          <Word word={word} key={word}></Word>
         ))}
-      </ul>
+      </div>
     </>
   );
 }
