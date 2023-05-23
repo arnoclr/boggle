@@ -23,8 +23,13 @@
 
 .cell img {
     position: absolute;
-    transition-property: top, left;
+    outline: 0px solid #ddd;
+    transition-property: top, left, outline;
     transition-duration: 0.3s;
     transition-timing-function: cubic-bezier(.2, .96, .65, 1.08);
     display: block;
+}
+
+.cell img[aria-active=true] {
+    outline: 8px solid #ddd;
 }
