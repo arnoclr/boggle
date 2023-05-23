@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { apiUrl } from "../vars";
 import "./Grid.css";
 import { PlayerColors } from "./WithRealtime";
@@ -18,6 +18,7 @@ export type Path = Cell[];
 export function Grid({ gameId, ws, colors }: GridProps) {
   const [pathsToDisplay, setPathsToDisplay] = useState<Path[]>([]);
   const [currentPath, setCurrentPath] = useState<Path>();
+  const gridRef = useRef<HTMLDivElement>(null);
 
   function cellNumber(row: number, col: number) {
     return row * GRID_SIZE + col;
@@ -47,14 +48,15 @@ export function Grid({ gameId, ws, colors }: GridProps) {
     path: Path,
     cellSize: number
   ): Position {
-    if (path.includes(cell) === false) {
+    if (path.includes(cell) === false || gridRef.current === null) {
       return defaultCellsPosition[cell];
     }
+    const gridBounds = getAbsoluteBoundsOf(gridRef.current);
     const PADDING = 12;
     const GAP = 8;
     const index = path.indexOf(cell);
-    const y = PADDING;
-    const x = PADDING + index * GAP + index * cellSize;
+    const y = gridBounds.y + PADDING - cellSize;
+    const x = gridBounds.x + PADDING + index * GAP + index * cellSize;
     return { x, y };
   }
 
@@ -70,10 +72,6 @@ export function Grid({ gameId, ws, colors }: GridProps) {
 
   function cellStyle(cell: number) {
     const position = cellPosition(cell);
-    // if (cell === 0) {
-    //   // console.log(currentPath, pathsToDisplay);
-    //   console.log(position);
-    // }
     if (!position) return {};
     return {
       left: `${position.x}px`,
@@ -110,12 +108,7 @@ export function Grid({ gameId, ws, colors }: GridProps) {
 
   return (
     <>
-      {/* {defaultCellsPosition.map((position, i) => (
-        <span>
-          x: {position.x}, y: {position.y}
-        </span>
-      ))} */}
-      <div className="grid">
+      <div className="grid" ref={gridRef}>
         {[...Array(GRID_SIZE)].map((_, i) => (
           <div className="row" key={i}>
             {[...Array(GRID_SIZE)].map((_, j) => (
@@ -125,6 +118,7 @@ export function Grid({ gameId, ws, colors }: GridProps) {
                   height={64}
                   style={cellStyle(cellNumber(i, j))}
                   src={getCellImage(cellNumber(i, j))}
+                  aria-active={currentPath?.includes(cellNumber(i, j))}
                   alt=""
                 />
               </div>
