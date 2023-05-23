@@ -7,7 +7,7 @@ interface Props {
 
 export default function ConnectedUsers({ users, colors }: Props) {
   return (
-    <>
+    <div>
       <p>Utilisateurs connectés</p>
       <ul>
         {users.map((user) => (
@@ -16,6 +16,6 @@ export default function ConnectedUsers({ users, colors }: Props) {
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }

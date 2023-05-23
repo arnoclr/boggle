@@ -9,6 +9,7 @@ import Timer from "./Timer";
 import { wsUrl } from "../vars";
 import Score from "./Score";
 import "./WithRealtime.css";
+import Navbar from "./Navbar";
 
 export type PlayerName = string;
 export type CSSColor = string;
@@ -159,18 +160,25 @@ export default function WithRealtime({ gameId }: Props) {
               </>
             ) : (
               <div className="padding">
-                <p>
-                  Partie :{" "}
-                  <span style={{ textTransform: "uppercase" }}>{gameId}</span>
-                </p>
-                <p>Attente d'autres joueurs ...</p>
-                <button onClick={startGame} disabled={!canStartGame()}>
-                  Démarrer la partie
-                </button>
-                <ConnectedUsers
-                  users={users}
-                  colors={playerColors}
-                ></ConnectedUsers>
+                <Navbar></Navbar>
+                <div className="waitingRoom">
+                  <div>
+                    <p>
+                      Partie :{" "}
+                      <span style={{ textTransform: "uppercase" }}>
+                        {gameId}
+                      </span>
+                    </p>
+                    <p>Attente d'autres joueurs ...</p>
+                    <button onClick={startGame} disabled={!canStartGame()}>
+                      Démarrer la partie
+                    </button>
+                  </div>
+                  <ConnectedUsers
+                    users={users}
+                    colors={playerColors}
+                  ></ConnectedUsers>
+                </div>
               </div>
             )}
           </>

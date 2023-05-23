@@ -48,11 +48,15 @@ export function clearStyles(...elements: Array<HTMLElement | null>): void {
 }
 
 export type Position = { x: number; y: number };
+export type Size = { width: number; height: number };
+export type Bounds = Position & Size;
 
-export function getAbsoluteBoundsOf(element: HTMLElement): Position {
+export function getAbsoluteBoundsOf(element: HTMLElement): Bounds {
   const rect = element.getBoundingClientRect();
   return {
     x: rect.left + window.scrollX,
     y: rect.top + window.scrollY,
+    width: rect.width,
+    height: rect.height,
   };
 }
