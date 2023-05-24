@@ -19,7 +19,7 @@ if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
 }
 
 try {
-    $playerName = "." . $rrs->rrs(7, 7);
+    $playerName = $rrs->rrs(7, 7) . ".";
 
     $query = $pdo->prepare("SELECT * FROM players WHERE email = :email");
     $query->execute([
