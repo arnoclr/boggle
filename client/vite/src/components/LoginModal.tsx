@@ -3,13 +3,22 @@ import { ErrorWithStatus, callAction, toMap } from "../utils/req";
 import { webauthnRegister } from "../utils/webauthnRegister";
 import { webauthnAuthenticate } from "../utils/webauthnAuthenticate";
 import "./LoginModal.css";
+import { addInList, addInListIfNotPresent, getList } from "../utils/storage";
+
+export interface Account {
+  email: string;
+  authMethod: "password" | "webauthn";
+}
 
 export default function LoginModal() {
-  const [section, setSection] = useState<"email" | "code" | "name">("email");
+  const [section, setSection] = useState<
+    "email" | "code" | "name" | "accountSelection"
+  >("email");
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [defaultUserName, setDefaultUserName] = useState<string | null>(null);
+  const [previousAccounts, setPreviousAccounts] = useState<Account[]>([]);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -17,6 +26,7 @@ export default function LoginModal() {
 
   function checkLoginStatus() {
     setLoading(true);
+    setPreviousAccounts(getList("previousAccounts"));
     callAction("amIConnected", toMap({}))
       .then((res) => {
         const reasonToOpenModal =
@@ -97,6 +107,17 @@ export default function LoginModal() {
     }
   }
 
+  function saveCurrentAuthInLocalStorage(
+    email: string | null,
+    authMethod: Account["authMethod"]
+  ): void {
+    email &&
+      addInListIfNotPresent<Account>("previousAccounts", {
+        email,
+        authMethod,
+      });
+  }
+
   async function loginFromKey(success: boolean, info: string): Promise<void> {
     if (success === false) {
       setError(info);
@@ -108,6 +129,7 @@ export default function LoginModal() {
         "auth.submitChallengeResponse",
         toMap({ response: info })
       );
+      saveCurrentAuthInLocalStorage(email, "webauthn");
       finishLogin();
     } catch (e) {
       setError((e as ErrorWithStatus).message);
@@ -121,6 +143,7 @@ export default function LoginModal() {
 
     try {
       await callAction("loginFromCode", toMap({ code, email }));
+      saveCurrentAuthInLocalStorage(email, "password");
       finishLogin();
     } catch (e) {
       const message = (e as ErrorWithStatus).message;
@@ -157,12 +180,18 @@ export default function LoginModal() {
       {section === "email" && (
         <form aria-busy={loading} onSubmit={handleEmailSubmit}>
           <h1>Bienvenue sur Boggle</h1>
-          <p>Avant de commencer, vous devrez vous créer un compte.</p>
-          <p>
-            Vous pouvez saisir votre e-mail pour que nous puissions vous en
-            créer un, ou pour vous connecter à votre compte si vous en avez déja
-            un.
-          </p>
+          {previousAccounts.length === 0 ? (
+            <>
+              <p>Avant de commencer, vous devrez vous créer un compte.</p>
+              <p>
+                Vous pouvez saisir votre e-mail pour que nous puissions vous en
+                créer un, ou pour vous connecter à votre compte si vous en avez
+                déja un.
+              </p>
+            </>
+          ) : (
+            <p>Ou utiliser une adresse différente</p>
+          )}
           <label>
             <span>Adresse E-mail</span>
             <input
