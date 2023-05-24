@@ -13,7 +13,8 @@
     box-sizing: border-box;
 }
 
-*:focus-visible {
+*:focus-visible,
+input[role=switch]:focus-visible::before {
     outline: 4px dotted #eee;
 }
 
@@ -191,6 +192,7 @@ input[role=switch] {
     outline: none;
     height: 32px;
     width: 62px;
+    cursor: pointer;
 }
 
 input[role=switch]::before {
@@ -216,7 +218,7 @@ input[role=switch]::after {
     height: 20px;
     border: 3px solid #777;
     background-color: #222;
-    transition: left 0.2s ease-in-out;
+    transition: left 0.25s cubic-bezier(.14, 1.54, .16, .91);
 }
 
 input[role=switch]:checked::before {
@@ -229,6 +231,17 @@ input[role=switch]:checked::after {
     left: 33px;
     border: 3px solid #fff;
     background-color: #ddd;
+}
+
+input[role=switch]:disabled::before {
+    background-color: #555;
+    border-color: #666;
+    outline-color: #666;
+}
+
+input[role=switch]:disabled::after {
+    background-color: #666;
+    border-color: #777;
 }
 
 ul {
