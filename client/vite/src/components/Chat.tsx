@@ -50,7 +50,12 @@ export default function Chat({ sendRealtimeEvent, ws, colors }: Props) {
       <br />
       <form onSubmit={handleSubmit} ref={form}>
         <nav>
-          <input type="text" name="message" placeholder="Message chat" />
+          <input
+            type="text"
+            name="message"
+            placeholder="Message chat"
+            required
+          />
           <button className="secondary" type="submit">
             Envoyer
           </button>
