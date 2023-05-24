@@ -1,27 +1,36 @@
-import { createRef, useEffect, useRef, useState } from "react";
+import { FormEvent, createRef, useEffect, useRef, useState } from "react";
 import { ErrorWithStatus, callAction, toMap } from "../utils/req";
 import { webauthnRegister } from "../utils/webauthnRegister";
 import { webauthnAuthenticate } from "../utils/webauthnAuthenticate";
 import "./LoginModal.css";
 
 export default function LoginModal() {
-  const [needToCreateAnAccount, setNeedToCreateAnAccount] =
-    useState<boolean>(false);
-  const [section, setSection] = useState<"email" | "code">("email");
+  const [section, setSection] = useState<"email" | "code" | "name">("email");
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [defaultUserName, setDefaultUserName] = useState<string | null>(null);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const isDialogOpen = (): boolean => !!dialogRef.current?.open;
 
-  useEffect(() => {
+  function checkLoginStatus() {
     callAction("amIConnected", toMap({})).then((res) => {
+      const reasonToOpenModal =
+        res.data.connected === false || res.data.suggestNameChange;
       isDialogOpen() === false &&
-        res.data.connected === false &&
+        reasonToOpenModal &&
         dialogRef.current?.showModal();
+      if (res.data.suggestNameChange) {
+        setSection("name");
+        setDefaultUserName(res.data.currentName);
+      }
     });
+  }
+
+  useEffect(() => {
+    checkLoginStatus();
   }, []);
 
   const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -108,6 +117,23 @@ export default function LoginModal() {
     }
   };
 
+  async function handleNameSubmit(
+    e: FormEvent<HTMLFormElement>
+  ): Promise<void> {
+    e.preventDefault();
+    const name = e.currentTarget.playerNameInput.value;
+    const isPrivateAccount = e.currentTarget.profileVisibility.checked;
+    try {
+      await callAction(
+        "users.updateInformations",
+        toMap({ name, isPrivateAccount })
+      );
+      finishLogin();
+    } catch (e) {
+      setError((e as ErrorWithStatus).message);
+    }
+  }
+
   function resetFlow() {
     setSection("email");
     setError(null);
@@ -115,14 +141,15 @@ export default function LoginModal() {
 
   return (
     <dialog ref={dialogRef} className="loginModal">
-      <h1>Bienvenue sur Boggle</h1>
-      <p>Avant de commencer, vous devrez vous créer un compte.</p>
-      <p>
-        Vous pouvez saisir votre e-mail pour que nous puissions vous en créer
-        un, ou pour vous connecter à votre compte si vous en avez déja un.
-      </p>
       {section === "email" && (
         <form aria-busy={loading} onSubmit={handleEmailSubmit}>
+          <h1>Bienvenue sur Boggle</h1>
+          <p>Avant de commencer, vous devrez vous créer un compte.</p>
+          <p>
+            Vous pouvez saisir votre e-mail pour que nous puissions vous en
+            créer un, ou pour vous connecter à votre compte si vous en avez déja
+            un.
+          </p>
           <label>
             <span>Adresse E-mail</span>
             <input
@@ -133,14 +160,9 @@ export default function LoginModal() {
               name="email"
               autoComplete="email"
               required
+              autoFocus
             />
           </label>
-          {needToCreateAnAccount && (
-            <p>
-              Vous n'avez pas de compte, cliquez sur le bouton ci-dessous pour
-              en créer un
-            </p>
-          )}
           <br />
           <button>Suivant</button>
         </form>
@@ -148,6 +170,7 @@ export default function LoginModal() {
 
       {section === "code" && (
         <form aria-busy={loading} onSubmit={handleCodeSubmit}>
+          <h1>Valider le code</h1>
           <p>
             Nous n'avons pas réussi à vous authentifier avec passkey. Vous avez
             reçu un code par e-mail.
@@ -163,12 +186,51 @@ export default function LoginModal() {
               autoComplete="one-time-code"
               pattern="[0-9]*"
               required
+              autoFocus
             />
           </label>
           <br />
           <nav>
             <button className="secondary" onClick={resetFlow}>
               Annuler
+            </button>
+            <button>Valider</button>
+          </nav>
+        </form>
+      )}
+
+      {section === "name" && defaultUserName && (
+        <form aria-busy={loading} onSubmit={handleNameSubmit}>
+          <h1>Votre profil</h1>
+          <p>
+            Nous avons choisi pour vous un nom d'utilisateur, mais vous pouvez
+            prendre le temps d'en choisir un autre.
+          </p>
+          <label>
+            <span>Pseudo</span>
+            <input
+              id="playerNameInput"
+              type="text"
+              defaultValue={defaultUserName}
+              required
+              autoFocus
+            />
+          </label>
+          <label>
+            <span>Compte privé</span>
+            <input name="profileVisibility" type="checkbox" role="switch" />
+          </label>
+          <br />
+          <small>
+            En passant votre compte en privé, les autres joueurs ne pourront pas
+            voir votre page de profil, qui référence votre historique de parties
+            et les stats de victoire. En revanche, les joueurs continueront de
+            voir votre nom dans les parties auxquelles vous jouez.
+          </small>
+          <br />
+          <nav>
+            <button className="secondary" onClick={resetFlow}>
+              Plus tard
             </button>
             <button>Valider</button>
           </nav>

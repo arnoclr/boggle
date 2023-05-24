@@ -1,6 +1,6 @@
 <?php
 
-function assertParamsExists($requiredParams, $method)
+function assertParamsExists(array $requiredParams, array $method): void
 {
     foreach ($requiredParams as $param) {
         if (!isset($method[$param])) {
@@ -9,14 +9,14 @@ function assertParamsExists($requiredParams, $method)
     }
 }
 
-function respondWithJSON($data)
+function respondWithJSON($data): void
 {
     header('Content-Type: application/json');
     echo json_encode($data);
     exit;
 }
 
-function respondWithErrorJSON($message)
+function respondWithErrorJSON(string $message): void
 {
     respondWithJSON([
         "success" => false,
@@ -24,7 +24,7 @@ function respondWithErrorJSON($message)
     ]);
 }
 
-function respondWithSuccessJSON($data)
+function respondWithSuccessJSON($data): void
 {
     respondWithJSON([
         "success" => true,
@@ -32,13 +32,20 @@ function respondWithSuccessJSON($data)
     ]);
 }
 
-function respondWithErrorJSONAndStatus($message, $status)
+function respondWithErrorJSONAndStatus(string $message, string $status): void
 {
     respondWithJSON([
         "success" => false,
         "error" => $message,
         "status" => $status
     ]);
+}
+
+function assertUserIsConnected(): void
+{
+    if (!isset($_SESSION['player_email'])) {
+        throw new Exception("Vous devez être connecté pour effectuer cette action");
+    }
 }
 
 function sendEmail($to, $subject, $HTML)
