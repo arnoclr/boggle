@@ -50,7 +50,10 @@ export default function AccountsSelector({
             </span>
           </button>
           <button
-            onClick={() => onAccountDeleted(account)}
+            onClick={() =>
+              window.confirm("Retirer le compte de la liste ?") &&
+              onAccountDeleted(account)
+            }
             type="button"
             title="Retirer de la liste de connexion rapide (ne supprime pas le compte)"
           >
