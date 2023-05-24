@@ -3,7 +3,7 @@
 $stmt = $pdo->prepare("SELECT * FROM players WHERE email = :email AND name LIKE :name");
 $stmt->execute([
     "email" => $_SESSION['player_email'],
-    "name" => ".%"
+    "name" => "%."
 ]);
 
 $playerWithDefaultName = $stmt->fetch();
