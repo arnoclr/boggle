@@ -6,12 +6,9 @@ $rrs = new RandomReadableString();
 
 try {
     assertParamsExists(["isPrivateGame"], $_POST);
+    assertUserIsConnected();
 } catch (Exception $e) {
     respondWithErrorJSON($e->getMessage());
-}
-
-if (!isset($_SESSION['player_email'])) {
-    respondWithErrorJSON("Vous n'êtes pas connecté");
 }
 
 $publicGameId = $rrs->rrs(5, 5);

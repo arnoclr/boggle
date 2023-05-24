@@ -78,7 +78,9 @@ CREATE TABLE `players` (
 `createdAt` timestamp NOT NULL,
 `lastConnection` timestamp NOT NULL,
 `isPrivateAccount` tinyint(1) NOT NULL,
-`websocketToken` varchar(255) DEFAULT NULL
+`websocketToken` varchar(255) DEFAULT NULL,
+UNIQUE (`name`),
+UNIQUE (`email`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 -- --------------------------------------------------------
 --
