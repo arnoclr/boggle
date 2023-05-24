@@ -16,17 +16,26 @@ export default function LoginModal() {
   const isDialogOpen = (): boolean => !!dialogRef.current?.open;
 
   function checkLoginStatus() {
-    callAction("amIConnected", toMap({})).then((res) => {
-      const reasonToOpenModal =
-        res.data.connected === false || res.data.suggestNameChange;
-      isDialogOpen() === false &&
-        reasonToOpenModal &&
-        dialogRef.current?.showModal();
-      if (res.data.suggestNameChange) {
-        setSection("name");
-        setDefaultUserName(res.data.currentName);
-      }
-    });
+    setLoading(true);
+    callAction("amIConnected", toMap({}))
+      .then((res) => {
+        const reasonToOpenModal =
+          res.data.connected === false || res.data.suggestNameChange;
+        isDialogOpen() === false &&
+          reasonToOpenModal &&
+          dialogRef.current?.showModal();
+        if (res.data.suggestNameChange) {
+          setSection("name");
+          setDefaultUserName(res.data.currentName);
+        }
+
+        if (reasonToOpenModal === false) {
+          closeModal();
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   useEffect(() => {
@@ -79,6 +88,10 @@ export default function LoginModal() {
   }
 
   function finishLogin(): void {
+    checkLoginStatus();
+  }
+
+  function closeModal(): void {
     if (isDialogOpen()) {
       dialogRef.current?.close();
     }
@@ -191,7 +204,7 @@ export default function LoginModal() {
           </label>
           <br />
           <nav>
-            <button className="secondary" onClick={resetFlow}>
+            <button type="button" className="secondary" onClick={resetFlow}>
               Annuler
             </button>
             <button>Valider</button>
@@ -212,9 +225,14 @@ export default function LoginModal() {
               id="playerNameInput"
               type="text"
               defaultValue={defaultUserName}
+              pattern="[a-zA-Z0-9_-]*"
               required
               autoFocus
             />
+            <small>
+              Lettres majuscules et minuscules autorisées, ainsi que les
+              chiffres et certains caractères spéciaux comme _ et -
+            </small>
           </label>
           <label>
             <span>Compte privé</span>
@@ -229,7 +247,7 @@ export default function LoginModal() {
           </small>
           <br />
           <nav>
-            <button className="secondary" onClick={resetFlow}>
+            <button type="button" className="secondary" onClick={closeModal}>
               Plus tard
             </button>
             <button>Valider</button>
