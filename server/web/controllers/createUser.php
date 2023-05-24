@@ -1,5 +1,9 @@
 <?php
 
+require "lib/readableRandomString.php";
+
+$rrs = new RandomReadableString();
+
 $webauthn = new \Davidearl\WebAuthn\WebAuthn(FRONT_END_HOST);
 
 try {
@@ -15,7 +19,7 @@ if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
 }
 
 try {
-    $playerName = "user-" . random_int(1000, 9999);
+    $playerName = "." . $rrs->rrs(7, 7);
 
     $query = $pdo->prepare("SELECT * FROM players WHERE email = :email");
     $query->execute([
