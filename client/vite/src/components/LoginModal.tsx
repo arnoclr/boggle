@@ -3,7 +3,13 @@ import { ErrorWithStatus, callAction, toMap } from "../utils/req";
 import { webauthnRegister } from "../utils/webauthnRegister";
 import { webauthnAuthenticate } from "../utils/webauthnAuthenticate";
 import "./LoginModal.css";
-import { addInList, addInListIfNotPresent, getList } from "../utils/storage";
+import {
+  addInList,
+  addInListIfNotPresent,
+  getList,
+  removeFromList,
+} from "../utils/storage";
+import AccountsSelector from "./AccountsSelector";
 
 export interface Account {
   email: string;
@@ -24,9 +30,13 @@ export default function LoginModal() {
 
   const isDialogOpen = (): boolean => !!dialogRef.current?.open;
 
+  function synchronizeAccounts() {
+    setPreviousAccounts(getList("previousAccounts"));
+  }
+
   function checkLoginStatus() {
     setLoading(true);
-    setPreviousAccounts(getList("previousAccounts"));
+    synchronizeAccounts();
     callAction("amIConnected", toMap({}))
       .then((res) => {
         const reasonToOpenModal =
@@ -54,10 +64,14 @@ export default function LoginModal() {
 
   const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    loginWithEmail();
+  };
+
+  async function loginWithEmail(providedEmail?: string): Promise<void> {
     setLoading(true);
 
     try {
-      await callAction("createUser", toMap({ email }));
+      await callAction("createUser", toMap({ email: providedEmail || email }));
     } catch (e) {
       const error = e as ErrorWithStatus;
       if (error.status === "email_already_used") {
@@ -66,11 +80,14 @@ export default function LoginModal() {
         setError(error.message);
         return;
       }
+    } finally {
+      setLoading(false);
     }
 
+    setLoading(true);
     const response = await callAction(
       "auth.requestChallenge",
-      toMap({ email })
+      toMap({ email: providedEmail || email })
     );
     try {
       if (response.data.type === "register") {
@@ -82,9 +99,10 @@ export default function LoginModal() {
       sendLoginCode();
     }
     setError(null);
-  };
+  }
 
   async function sendLoginCode(): Promise<void> {
+    setLoading(true);
     try {
       await callAction("sendLoginCode", toMap({ email }));
       setSection("code");
@@ -116,6 +134,15 @@ export default function LoginModal() {
         email,
         authMethod,
       });
+  }
+
+  function onAccountSelected(account: Account): void {
+    loginWithEmail(account.email);
+  }
+
+  function onAccountDeleted(account: Account): void {
+    removeFromList("previousAccounts", account);
+    synchronizeAccounts();
   }
 
   async function loginFromKey(success: boolean, info: string): Promise<void> {
@@ -190,7 +217,15 @@ export default function LoginModal() {
               </p>
             </>
           ) : (
-            <p>Ou utiliser une adresse différente</p>
+            <>
+              <p>Choisir un compte</p>
+              <AccountsSelector
+                onAccountDeleted={onAccountDeleted}
+                onAccountSelected={onAccountSelected}
+                accounts={previousAccounts}
+              ></AccountsSelector>
+              <p>Ou utiliser une adresse différente</p>
+            </>
           )}
           <label>
             <span>Adresse E-mail</span>
@@ -198,6 +233,7 @@ export default function LoginModal() {
               onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setEmail(e.target.value)
               }
+              value={email || ""}
               type="email"
               name="email"
               autoComplete="email"
