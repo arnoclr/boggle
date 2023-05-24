@@ -64,14 +64,18 @@ export default function LoginModal() {
 
   const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    loginWithEmail();
+    setEmail(e.currentTarget.email.value);
   };
 
-  async function loginWithEmail(providedEmail?: string): Promise<void> {
+  useEffect(() => {
+    email && loginWithEmail();
+  }, [email]);
+
+  async function loginWithEmail(): Promise<void> {
     setLoading(true);
 
     try {
-      await callAction("createUser", toMap({ email: providedEmail || email }));
+      await callAction("createUser", toMap({ email }));
     } catch (e) {
       const error = e as ErrorWithStatus;
       if (error.status === "email_already_used") {
@@ -87,7 +91,7 @@ export default function LoginModal() {
     setLoading(true);
     const response = await callAction(
       "auth.requestChallenge",
-      toMap({ email: providedEmail || email })
+      toMap({ email })
     );
     try {
       if (response.data.type === "register") {
@@ -137,7 +141,7 @@ export default function LoginModal() {
   }
 
   function onAccountSelected(account: Account): void {
-    loginWithEmail(account.email);
+    setEmail(account.email);
   }
 
   function onAccountDeleted(account: Account): void {
@@ -230,10 +234,6 @@ export default function LoginModal() {
           <label>
             <span>Adresse E-mail</span>
             <input
-              onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value)
-              }
-              value={email || ""}
               type="email"
               name="email"
               autoComplete="email"
