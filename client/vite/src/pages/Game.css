@@ -15,7 +15,8 @@
     margin-top: 70px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    outline: 30px solid #222;
+    outline: 30px solid #111;
+    background-color: #111;
 }
 
 .choices>div {

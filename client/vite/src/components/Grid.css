@@ -32,5 +32,6 @@
 
 .cell img[aria-active=true] {
     outline: 8px solid #ddd;
-    transform: scale(0.75);
+    transform: scale(0.62);
+    transform-origin: top left;
 }

@@ -55,4 +55,6 @@
 .waitingRoom {
     display: flex;
     gap: 1rem;
+    background-color: #000000;
+    width: fit-content;
 }

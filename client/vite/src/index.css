@@ -29,6 +29,14 @@ html {
 
 body {
     font-family: Body, fantasy;
+    background-color: #000000;
+    opacity: 1;
+    background-image: linear-gradient(to right, #1a1a1a, #1a1a1a 3px, #000000 3px, #000000);
+    background-size: 6px 100%;
+}
+
+.margin-auto {
+    margin: auto;
 }
 
 .padding {
