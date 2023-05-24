@@ -1,4 +1,15 @@
+import { callAction } from "../utils/req";
+
 export default function Footer() {
+  async function logout() {
+    try {
+      await callAction("logout", new Map());
+      window.location.reload();
+    } catch (e: any) {
+      alert("Erreur lors de la déconnexion. " + e.message || "");
+    }
+  }
+
   return (
     <footer
       style={{
@@ -14,6 +25,9 @@ export default function Footer() {
       </span>
       <a target="_blank" href="https://github.com/arnoclr/boggle">
         Github
+      </a>
+      <a href="javascript:void(0);" onClick={logout}>
+        Déconnexion
       </a>
     </footer>
   );
