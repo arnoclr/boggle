@@ -19,7 +19,7 @@ export interface PlayerScore {
   score: number;
 }
 
-const PLAYER_COLORS: CSSColor[] = ["red", "blue", "green", "yellow"];
+const PLAYER_COLORS: CSSColor[] = ["#E40027", "#E88823", "#264BCC", "#2AA146"];
 
 interface Props {
   gameId: string;

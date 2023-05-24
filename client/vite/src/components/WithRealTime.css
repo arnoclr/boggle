@@ -43,12 +43,13 @@
         display: flex;
         flex-direction: row;
         overflow-x: auto;
-        max-width: 100%;
+        max-width: 100vw;
     }
 
     .wordsFound .Word {
         outline: 4px solid #eee;
         outline-offset: 6px;
+        transform: scale(0.7);
     }
 }
 
