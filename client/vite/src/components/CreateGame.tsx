@@ -1,5 +1,5 @@
 import { createRef, useState } from "react";
-import { callAction, toMap } from "../utils/req";
+import { ErrorWithStatus, callAction, toMap } from "../utils/req";
 
 export interface GameJoinerProps {
   whenCreated: (gameId: string) => void;
@@ -21,7 +21,10 @@ export default function CreateGame({ whenCreated }: GameJoinerProps) {
       const gameId = response.data.publicGameId;
       whenCreated(gameId);
     } catch (e) {
-      console.error(e);
+      const { message, status } = e as ErrorWithStatus;
+      if (status === "already_in_game") {
+        whenCreated(message);
+      }
     } finally {
       setIsLoading(false);
     }
