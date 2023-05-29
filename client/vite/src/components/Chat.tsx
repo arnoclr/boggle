@@ -1,11 +1,14 @@
 import { createRef, useEffect, useState } from "react";
+import "./Chat.css";
+import { PlayerColors } from "./WithRealtime";
 
 interface Props {
   sendRealtimeEvent: (event: string, data: any) => void;
+  colors: PlayerColors;
   ws: WebSocket;
 }
 
-export default function Chat({ sendRealtimeEvent, ws }: Props) {
+export default function Chat({ sendRealtimeEvent, ws, colors }: Props) {
   const [messages, setMessages] = useState<
     { message: string; displayName: string; receivedAt: Date }[]
   >([]);
@@ -33,18 +36,26 @@ export default function Chat({ sendRealtimeEvent, ws }: Props) {
   }, [ws]);
 
   return (
-    <>
+    <div className="chat">
       <ul>
         {messages.map((entry) => (
           <li key={+entry.receivedAt}>
-            <i>{entry.displayName}</i> {entry.message}
+            <i style={{ color: colors.get(entry.displayName) }}>
+              {entry.displayName}
+            </i>{" "}
+            {entry.message}
           </li>
         ))}
       </ul>
+      <br />
       <form onSubmit={handleSubmit} ref={form}>
-        <input type="text" name="message" />
-        <button type="submit">Envoyer</button>
+        <nav>
+          <input type="text" name="message" placeholder="Message chat" />
+          <button className="secondary" type="submit">
+            Envoyer
+          </button>
+        </nav>
       </form>
-    </>
+    </div>
   );
 }

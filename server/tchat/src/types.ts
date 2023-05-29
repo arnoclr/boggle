@@ -1,31 +1,91 @@
-export interface WebSocketMessage<T extends Payload> {
-  type: T["type"];
-  token: string;
-  payload: T;
+export type PlayerName = string;
+
+export interface Score {
+  name: PlayerName;
+  score: number;
 }
 
-interface BasePayload {
+export interface BaseWebSocketMessage {
   type: string;
+  token: string;
 }
 
-export interface ChatPayload extends BasePayload {
+export interface ChatMessage extends BaseWebSocketMessage {
   type: "chat";
-  message: string;
-  displayName: string;
+  payload: {
+    message: string;
+    displayName: string;
+  };
 }
 
-export interface ErrorPayload extends BasePayload {
+export interface ErrorMessage extends BaseWebSocketMessage {
   type: "error";
-  code: string;
-  message: string;
+  payload: {
+    code: string;
+    message: string;
+  };
 }
 
-export interface JoinGamePayload extends BasePayload {
+export interface JoinGameMessage extends BaseWebSocketMessage {
   type: "joinGame";
-  publicGameId: string;
+  payload: {
+    gameId: string;
+  };
 }
 
-type Payload = ChatPayload | ErrorPayload | JoinGamePayload;
+export interface WordFoundMessage extends BaseWebSocketMessage {
+  type: "wordFound";
+  payload: {
+    word: string;
+    displayName: string;
+    path: number[];
+    scores: Score[];
+  };
+}
+
+export interface ConnectedUsersListMessage extends BaseWebSocketMessage {
+  type: "users";
+  payload: {
+    users: { name: string }[];
+  };
+}
+
+export interface submitWordMessage extends BaseWebSocketMessage {
+  type: "submitWord";
+  payload: {
+    word: string;
+  };
+}
+
+export interface wrongWordMessage extends BaseWebSocketMessage {
+  type: "wrongWord";
+  payload: null;
+}
+
+export interface startGameMessage extends BaseWebSocketMessage {
+  type: "startGame";
+  payload: {
+    endAt: Date;
+  };
+}
+
+export interface waitingMessage extends BaseWebSocketMessage {
+  type: "waiting";
+  payload: {
+    waiting: number;
+  };
+}
+
+export type WebSocketMessage =
+  | ChatMessage
+  | ErrorMessage
+  | JoinGameMessage
+  | WordFoundMessage
+  | ConnectedUsersListMessage
+  | submitWordMessage
+  | wrongWordMessage
+  | startGameMessage
+  | waitingMessage;
 
 export interface Player {
   idPlayer: number;

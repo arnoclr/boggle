@@ -70,7 +70,7 @@ CREATE TABLE `history` (
 CREATE TABLE `players` (
   `idPlayer` int(11) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `passkey` varchar(255) DEFAULT NULL,
+  `passkey` json DEFAULT NULL,
   `emailVerifiedLastTimeAt` date DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `profilPicUrl` varchar(255) DEFAULT NULL,
@@ -87,6 +87,8 @@ CREATE TABLE `wordsfound` (
   `idWord` int(11) NOT NULL,
   `idGame` int(11) NOT NULL,
   `idPlayer` int(11) NOT NULL,
+  `word` varchar(255) NOT NULL,
+  `score` tinyint(3) unsigned NOT NULL,
   `foundAt` timestamp NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 --

@@ -1,4 +1,4 @@
-import { createRef } from "react";
+import { createRef, useState } from "react";
 import { callAction, toMap } from "../utils/req";
 
 export interface GameJoinerProps {
@@ -7,9 +7,11 @@ export interface GameJoinerProps {
 
 export default function CreateGame({ whenCreated }: GameJoinerProps) {
   const form = createRef<HTMLFormElement>();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setIsLoading(true);
     const isPrivateGame = form.current?.publicStatus.value === "private";
     try {
       const response = await callAction(
@@ -20,13 +22,15 @@ export default function CreateGame({ whenCreated }: GameJoinerProps) {
       whenCreated(gameId);
     } catch (e) {
       console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
     <div>
-      <h1>Créer une partie</h1>
-      <form ref={form} onSubmit={handleSubmit}>
+      <p>Si vous souhaitez créer une nouvelle partie</p>
+      <form aria-busy={isLoading} ref={form} onSubmit={handleSubmit}>
         <label>
           <input
             type="radio"
@@ -40,6 +44,7 @@ export default function CreateGame({ whenCreated }: GameJoinerProps) {
           <input type="radio" name="publicStatus" value="private" />
           <span>Partie privée</span>
         </label>
+        <br />
         <button type="submit">Créer la partie</button>
       </form>
     </div>

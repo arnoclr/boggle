@@ -1,16 +1,21 @@
+import { PlayerColors, PlayerName } from "./WithRealtime";
+
 interface Props {
-  users: string[];
+  users: PlayerName[];
+  colors: PlayerColors;
 }
 
-export default function ConnectedUsers({ users }: Props) {
+export default function ConnectedUsers({ users, colors }: Props) {
   return (
-    <>
+    <div>
       <p>Utilisateurs connectés</p>
       <ul>
         {users.map((user) => (
-          <li key={user}>{user}</li>
+          <li key={user} style={{ color: colors.get(user) }}>
+            {user}
+          </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }

@@ -1,11 +1,16 @@
 version: "3.9"
 services:
   nodejs:
-    build: server/tchat
+    build:
+      context: server
+      dockerfile: tchat/Dockerfile
     ports:
       - "8082:8082"
     volumes:
       - ./server/tchat/src:/app/src
+      - ./server/tchat/public:/app/public
+    depends_on:
+      - db
   db:
     image: mariadb:10
     environment:
@@ -26,12 +31,17 @@ services:
       - "8081:80"
     volumes:
       - ./server/web:/var/www/html
+      - /var/www/html/vendor
+    depends_on:
+      - db
   vite:
     build: client/vite
     ports:
       - "5173:5173"
     volumes:
       - ./client/vite/src:/app/src
-
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
 volumes:
   db:

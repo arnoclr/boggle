@@ -1,13 +1,24 @@
 import WebSocket from "ws";
-import { WebSocketMessage } from "./types";
+import { WebSocketMessage, startGameMessage } from "./types";
 import {
+  DEFAULT_GAME_DURATION,
+  addWordToGame,
+  gameEndAt,
+  gameIsActive,
   getAllTokensOfAPartyFromUserToken,
   getAllUserOfAParty,
+  getGridString,
+  getScores,
   getUserName,
+  isGameOwner,
   joinGame,
+  previousWordSubmittedTooRecently,
+  startGame,
   thisUserExists,
+  wordIsAlreadySubmitted,
 } from "./game";
 import { getMessages, saveMessage } from "./message";
+import { getWordPathIfValid } from "./words";
 
 const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
@@ -21,7 +32,8 @@ server.on("connection", (socket) => {
   socket.on("message", async (message) => {
     const { type, token, payload } = JSON.parse(
       message.toString()
-    ) as WebSocketMessage<any>;
+    ) as WebSocketMessage;
+
     if ((await thisUserExists(token)) === false) {
       socket.close();
       return;
@@ -39,22 +51,53 @@ server.on("connection", (socket) => {
         });
         break;
       case "joinGame":
-        if (await joinGame(token, payload.gameId)) {
+        if (await gameIsActive(token)) {
+          await broadcastToParty(true, token, "startGame", {
+            endAt: await gameEndAt(token),
+          });
+          sendConnectedUsersList(token);
+        } else if (await joinGame(token, payload.gameId)) {
           sendConnectedUsersList(token);
           const messages = await getMessages(payload.gameId);
           socket.send(JSON.stringify({ type: "messages", payload: messages }));
         } else {
-          connectedUsers.get(token)?.send(
-            JSON.stringify({
-              type: "error",
-              payload: {
-                code: "joinGameFailed",
-                message: "Impossible de rejoindre la partie",
-              },
-            })
-          );
+          await sendTo(token, "error", {
+            code: "joinGameFailed",
+            message: "Impossible de rejoindre la partie",
+          });
         }
         break;
+      case "startGame":
+        if (await isGameOwner(token)) {
+          const durationSeconds = DEFAULT_GAME_DURATION;
+          await startGame(token, durationSeconds);
+          await broadcastToParty(true, token, type, {
+            endAt: await gameEndAt(token),
+          });
+        }
+        break;
+      case "submitWord":
+        if (!(await gameIsActive(token))) return;
+        if (await previousWordSubmittedTooRecently(token)) {
+          await sendTo(token, "waiting", null);
+          return;
+        }
+        const grid = await getGridString(token);
+        const word = payload.word.toUpperCase() as string;
+        const path = await getWordPathIfValid(word, grid);
+        const alreadyFound = await wordIsAlreadySubmitted(token, word);
+        if (path !== false && alreadyFound === false) {
+          await addWordToGame(token, word);
+          await broadcastToParty(true, token, "wordFound", {
+            ...payload,
+            displayName: await getUserName(token),
+            path,
+            scores: await getScores(token),
+          });
+        } else {
+          await sendTo(token, "wrongWord", null);
+        }
+        await sendTo(token, "clearInput", null);
       default:
         break;
     }
@@ -75,7 +118,7 @@ async function broadcastToParty(
   includeSender: boolean,
   userToken: string,
   type: string,
-  payload: any
+  payload: WebSocketMessage["payload"]
 ) {
   const tokens = await getAllTokensOfAPartyFromUserToken(userToken);
   tokens.forEach((token) => {
@@ -87,6 +130,17 @@ async function broadcastToParty(
       socket.send(JSON.stringify({ type, payload }));
     }
   });
+}
+
+async function sendTo(
+  token: string,
+  type: string,
+  payload: WebSocketMessage["payload"]
+): Promise<void> {
+  const socket = connectedUsers.get(token);
+  if (socket) {
+    socket.send(JSON.stringify({ type, payload }));
+  }
 }
 
 async function sendConnectedUsersList(userToken: string): Promise<void> {
