@@ -58,7 +58,9 @@ server.on("connection", (socket) => {
           sendConnectedUsersList(token);
         } else if (await joinGame(token, payload.gameId)) {
           sendConnectedUsersList(token);
-          const messages = await getMessages(payload.gameId);
+          
+          const id: number = +payload.gameId;
+          const messages = await getMessages(id);
           socket.send(JSON.stringify({ type: "messages", payload: messages }));
         } else {
           await sendTo(token, "error", {
