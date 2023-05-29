@@ -25,71 +25,72 @@ SET time_zone = "+00:00";
 -- Structure de la table `chat`
 --
 CREATE TABLE `chat` (
-  `idMessage` int(11) NOT NULL,
-  `message` varchar(255) NOT NULL,
-  `idPlayer` int(11) NOT NULL,
-  `idGame` int(11) NOT NULL,
-  `sendAt` timestamp NOT NULL
+`idMessage` int(11) NOT NULL,
+`message` varchar(255) NOT NULL,
+`idPlayer` int(11) NOT NULL,
+`idGame` int(11) NOT NULL,
+`sendAt` timestamp NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 -- --------------------------------------------------------
 --
 -- Structure de la table `games`
 --
 CREATE TABLE `games` (
-  `idGame` int(11) NOT NULL,
-  `grid` varchar(255) NOT NULL,
-  `createdAt` timestamp NOT NULL,
-  `startedAt` timestamp NULL DEFAULT NULL,
-  `endedAt` timestamp NULL DEFAULT NULL,
-  `isPrivateGame` tinyint(1) NOT NULL,
-  `publicId` varchar(255) NOT NULL
+`idGame` int(11) NOT NULL,
+`grid` varchar(255) NOT NULL,
+`createdAt` timestamp NOT NULL,
+`startedAt` timestamp NULL DEFAULT NULL,
+`endedAt` timestamp NULL DEFAULT NULL,
+`isPrivateGame` tinyint(1) NOT NULL,
+`publicId` varchar(255) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 -- --------------------------------------------------------
 --
 -- Structure de la table `gamesplayers`
 --
 CREATE TABLE `gamesplayers` (
-  `idPlayer` int(11) NOT NULL,
-  `idGame` int(11) NOT NULL
+`idPlayer` int(11) NOT NULL,
+`idGame` int(11) NOT NULL,
+UNIQUE KEY `unique_key` (`idPlayer`, `idGame`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 -- --------------------------------------------------------
 --
 -- Structure de la table `history`
 --
 CREATE TABLE `history` (
-  `idHistory` int(11) NOT NULL,
-  `idGame` int(11) NOT NULL,
-  `idPlayer` int(11) NOT NULL,
-  `score` int(11) NOT NULL,
-  `hasWin` tinyint(1) NOT NULL
+`idHistory` int(11) NOT NULL,
+`idGame` int(11) NOT NULL,
+`idPlayer` int(11) NOT NULL,
+`score` int(11) NOT NULL,
+`hasWin` tinyint(1) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 -- --------------------------------------------------------
 --
 -- Structure de la table `players`
 --
 CREATE TABLE `players` (
-  `idPlayer` int(11) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `passkey` json DEFAULT NULL,
-  `emailVerifiedLastTimeAt` date DEFAULT NULL,
-  `name` varchar(255) NOT NULL,
-  `profilPicUrl` varchar(255) DEFAULT NULL,
-  `createdAt` timestamp NOT NULL,
-  `lastConnection` timestamp NOT NULL,
-  `isPrivateAccount` tinyint(1) NOT NULL,
-  `websocketToken` varchar(255) DEFAULT NULL
+`idPlayer` int(11) NOT NULL,
+`email` varchar(255) DEFAULT NULL,
+`passkey` json DEFAULT NULL,
+`emailVerifiedLastTimeAt` date DEFAULT NULL,
+`name` varchar(255) NOT NULL,
+`profilPicUrl` varchar(255) DEFAULT NULL,
+`createdAt` timestamp NOT NULL,
+`lastConnection` timestamp NOT NULL,
+`isPrivateAccount` tinyint(1) NOT NULL,
+`websocketToken` varchar(255) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 -- --------------------------------------------------------
 --
 -- Structure de la table `wordsfound`
 --
 CREATE TABLE `wordsfound` (
-  `idWord` int(11) NOT NULL,
-  `idGame` int(11) NOT NULL,
-  `idPlayer` int(11) NOT NULL,
-  `word` varchar(255) NOT NULL,
-  `score` tinyint(3) unsigned NOT NULL,
-  `foundAt` timestamp NOT NULL
+`idWord` int(11) NOT NULL,
+`idGame` int(11) NOT NULL,
+`idPlayer` int(11) NOT NULL,
+`word` varchar(255) NOT NULL,
+`score` tinyint(3) unsigned NOT NULL,
+`foundAt` timestamp NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 --
 -- Index pour les tables déchargées

@@ -4,6 +4,7 @@ import CreateGame from "../components/CreateGame";
 import JoinGame from "../components/joinGame";
 import "./Game.css";
 import Navbar from "../components/Navbar";
+import GamesList from "../components/GamesList";
 
 export default function Game() {
   const [inGame, setInGame] = useState<false | string>(false);
@@ -25,6 +26,7 @@ export default function Game() {
               <CreateGame whenCreated={whenCreated}></CreateGame>
               <JoinGame whenCreated={whenCreated}></JoinGame>
             </div>
+            <GamesList whenCreated={whenCreated}></GamesList>
           </div>
         </div>
       )}
