@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ago } from "../utils/time";
 import { callAction } from "../utils/req";
 
@@ -20,7 +20,9 @@ export default function GamesList({ whenCreated }: GamesListProps) {
     setGames(res.data);
   }
 
-  fetchGames();
+  useEffect(() => {
+    fetchGames();
+  }, []);
 
   return (
     <ul>
