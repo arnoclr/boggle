@@ -1,5 +1,5 @@
 import { Player, PlayerName, Score } from "./types";
-import { connection } from "./sql";
+import { connection, query } from "./sql";
 import { wordScore } from "./words";
 
 export const DEFAULT_GAME_DURATION = 90;
@@ -27,16 +27,15 @@ export async function getAllTokensOfAPartyFromUserToken(
 }
 
 export async function thisUserExists(token: string): Promise<boolean> {
-  return new Promise((resolve, reject) => {
-    connection.query(
+  try {
+    const results = await query(
       "SELECT * FROM players WHERE websocketToken = ?",
-      [token],
-      (error, results) => {
-        if (error) reject(error);
-        resolve(results.length > 0);
-      }
+      [token]
     );
-  });
+    return results && results.length > 0;
+  } catch (e) {
+    return false;
+  }
 }
 
 export async function getUserName(token: string): Promise<string> {

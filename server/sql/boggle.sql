@@ -51,7 +51,7 @@ CREATE TABLE `games` (
 CREATE TABLE `gamesplayers` (
 `idPlayer` int(11) NOT NULL,
 `idGame` int(11) NOT NULL,
-`joinedAt` timestamp NOT NULL
+UNIQUE KEY `unique_key` (`idPlayer`, `idGame`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 -- --------------------------------------------------------
 --
