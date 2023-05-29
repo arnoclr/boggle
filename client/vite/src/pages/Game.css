@@ -13,6 +13,7 @@
 
 .choices {
     margin-top: 70px;
+    margin-bottom: 50px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     outline: 30px solid #111;
