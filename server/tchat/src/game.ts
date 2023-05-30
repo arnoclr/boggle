@@ -26,6 +26,16 @@ export async function getAllTokensOfAPartyFromUserToken(
   );
 }
 
+export async function removePlayerFromGame(token: string): Promise<void> {
+  // remove user by its token in all games with a startedAt is NULL
+  await query(
+    `DELETE FROM gamesplayers 
+    WHERE idPlayer = (SELECT idPlayer FROM players WHERE websocketToken = ?) 
+    AND idGame IN (SELECT idGame FROM games WHERE startedAt IS NULL)`,
+    [token]
+  );
+}
+
 export async function thisUserExists(token: string): Promise<boolean> {
   try {
     const results = await query(
@@ -180,6 +190,14 @@ export async function gameIsActive(token: string): Promise<boolean> {
       }
     );
   });
+}
+
+export async function gameHasStarted(gameId: number): Promise<boolean> {
+  const results = await query(
+    "SELECT * FROM games WHERE idGame = ? AND startedAt IS NOT NULL",
+    [gameId]
+  );
+  return results.length > 0;
 }
 
 export async function startGame(
