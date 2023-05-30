@@ -11,6 +11,17 @@ try {
     respondWithErrorJSON($e->getMessage());
 }
 
+$stmt = $pdo->prepare("SELECT g.publicId FROM players p JOIN gamesplayers gp ON p.idPlayer = gp.idPlayer JOIN games g ON gp.idGame = g.idGame WHERE p.email = :email AND g.endedAt > NOW() LIMIT 1;");
+$stmt->execute([
+    "email" => $_SESSION['player_email']
+]);
+
+$lastGame = $stmt->fetch();
+
+if ($lastGame) {
+    respondWithErrorJSONAndStatus($lastGame->publicId, "already_in_game");
+}
+
 $publicGameId = $rrs->rrs(5, 5);
 
 function getGrid(int $size): string
