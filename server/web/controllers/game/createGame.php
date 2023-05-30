@@ -6,12 +6,9 @@ $rrs = new RandomReadableString();
 
 try {
     assertParamsExists(["isPrivateGame"], $_POST);
+    assertUserIsConnected();
 } catch (Exception $e) {
     respondWithErrorJSON($e->getMessage());
-}
-
-if (!isset($_SESSION['player_email'])) {
-    respondWithErrorJSON("Vous n'êtes pas connecté");
 }
 
 $stmt = $pdo->prepare("SELECT g.publicId FROM players p JOIN gamesplayers gp ON p.idPlayer = gp.idPlayer JOIN games g ON gp.idGame = g.idGame WHERE p.email = :email AND g.endedAt > NOW() LIMIT 1;");

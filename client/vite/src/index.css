@@ -13,7 +13,8 @@
     box-sizing: border-box;
 }
 
-*:focus-visible {
+*:focus-visible,
+input[role=switch]:focus-visible::before {
     outline: 4px dotted #eee;
 }
 
@@ -50,6 +51,12 @@ h4,
 h5,
 h6 {
     font-family: Headline, fantasy;
+}
+
+small {
+    display: block;
+    font-size: 9px;
+    line-height: 12px;
 }
 
 button {
@@ -175,6 +182,66 @@ input[type="radio"]::after {
 
 input[type=radio]:checked::after {
     background-color: #aaa;
+}
+
+input[role=switch] {
+    position: relative;
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    height: 32px;
+    width: 62px;
+    cursor: pointer;
+}
+
+input[role=switch]::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 56px;
+    height: 26px;
+    border: 3px solid #444;
+    outline: 3px solid #555;
+    background-color: #444;
+}
+
+input[role=switch]::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #777;
+    background-color: #222;
+    transition: left 0.25s cubic-bezier(.14, 1.54, .16, .91);
+}
+
+input[role=switch]:checked::before {
+    background-color: #ac3416;
+    border-color: #ac3416;
+    outline-color: #FB4213;
+}
+
+input[role=switch]:checked::after {
+    left: 33px;
+    border: 3px solid #fff;
+    background-color: #ddd;
+}
+
+input[role=switch]:disabled::before {
+    background-color: #555;
+    border-color: #666;
+    outline-color: #666;
+}
+
+input[role=switch]:disabled::after {
+    background-color: #666;
+    border-color: #777;
 }
 
 ul {
