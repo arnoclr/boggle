@@ -1,39 +1,31 @@
 <?php
 
-require "app/AntiCheat.php";
+require "vendor/autoload.php";
+require "env.php";
 
-const GRID_SIZE = 4;
+session_start();
 
-exec("cd ../engine && ./grid_build frequence.txt 4 4", $gridString, $ret);
-$grid = explode(" ", $gridString[0]);
+$onlineUrl = FRONT_END_PROTOCOL . "://" . FRONT_END_HOST . (FRONT_END_PORT ? ":" . FRONT_END_PORT : "");
+$authorizedOrigins = [$onlineUrl, "http://localhost:5173"];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? "";
+$allowOrigin = in_array($origin, $authorizedOrigins) ? $origin : $onlineUrl;
+$allowOriginHostname = parse_url($allowOrigin, PHP_URL_HOST);
 
-$antiCheat = new AntiCheat();
+header('Access-Control-Allow-Origin: ' . $allowOrigin);
+header('Access-Control-Allow-Credentials: true');
 
-$submittedWord = strtoupper($_GET['word'] ?? "bonjour");
-
-// TODO: Accept only words
-exec("cd ../engine && ./dictionnary_lookup fr32.lex $submittedWord", $out, $ret);
-
-$displayResult = "";
-switch ($out[0]) {
-    case "found":
-        $displayResult = "Le mot $submittedWord est valide";
-        break;
-    case "prefix":
-        $displayResult = "Le mot $submittedWord est un préfixe valide";
-        break;
-    default:
-        $displayResult = "Le mot $submittedWord n'est pas valide";
-        break;
-}
-
-
-require "views/home.php";
-
-
-// TODO: retirer le test et mettre la connexion à part
-$pdo = new PDO("mysql:host=db;port=3306;dbname=boggle", "boggle", "password");
-
+$pdo = new PDO("mysql:host=" . DB_HOST . ";port=3306;dbname=" . DB_NAME, DB_USER, DB_PASSWORD);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 
-$players = $pdo->query("SELECT * FROM players")->fetchAll();
+$action = $_GET['action'] ?? "";
+
+$controller = "controllers" . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, explode(".", $action)) . ".php";
+
+require "functions/utils.php";
+
+if (file_exists($controller)) {
+    require $controller;
+} else {
+    header("HTTP/1.0 500 Internal Server Error");
+}

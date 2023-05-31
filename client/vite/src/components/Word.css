@@ -1,0 +1,15 @@
+.Word {
+    display: flex;
+    gap: 6px;
+}
+
+.Word .letter {
+    max-width: 64px;
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    background-color: rgb(253, 244, 235);
+    color: rgb(56, 88, 111);
+    font-size: 48px;
+    line-height: 48px;
+}

@@ -1,0 +1,13 @@
+.chat {
+    position: relative;
+    min-width: 340px;
+    max-width: 340px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.chat form {
+    position: sticky;
+    bottom: 0;
+    background-color: #111;
+}

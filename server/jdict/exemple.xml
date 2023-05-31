@@ -1,0 +1,897 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xml:lang="fr">
+  <siteinfo>
+    <sitename>Wiktionnaire</sitename>
+    <dbname>frwiktionary</dbname>
+    <base>https://fr.wiktionary.org/wiki/Wiktionnaire:Page_d%E2%80%99accueil</base>
+    <generator>MediaWiki 1.40.0-wmf.14</generator>
+    <case>case-sensitive</case>
+    <namespaces>
+      <namespace key="-2" case="case-sensitive">Média</namespace>
+      <namespace key="-1" case="first-letter">Spécial</namespace>
+      <namespace key="0" case="case-sensitive" />
+      <namespace key="1" case="case-sensitive">Discussion</namespace>
+      <namespace key="2" case="first-letter">Utilisateur</namespace>
+      <namespace key="3" case="first-letter">Discussion utilisateur</namespace>
+      <namespace key="4" case="case-sensitive">Wiktionnaire</namespace>
+      <namespace key="5" case="case-sensitive">Discussion Wiktionnaire</namespace>
+      <namespace key="6" case="case-sensitive">Fichier</namespace>
+      <namespace key="7" case="case-sensitive">Discussion fichier</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">Discussion MediaWiki</namespace>
+      <namespace key="10" case="case-sensitive">Modèle</namespace>
+      <namespace key="11" case="case-sensitive">Discussion modèle</namespace>
+      <namespace key="12" case="case-sensitive">Aide</namespace>
+      <namespace key="13" case="case-sensitive">Discussion aide</namespace>
+      <namespace key="14" case="case-sensitive">Catégorie</namespace>
+      <namespace key="15" case="case-sensitive">Discussion catégorie</namespace>
+      <namespace key="100" case="case-sensitive">Annexe</namespace>
+      <namespace key="101" case="case-sensitive">Discussion Annexe</namespace>
+      <namespace key="102" case="case-sensitive">Transwiki</namespace>
+      <namespace key="103" case="case-sensitive">Discussion Transwiki</namespace>
+      <namespace key="104" case="case-sensitive">Portail</namespace>
+      <namespace key="105" case="case-sensitive">Discussion Portail</namespace>
+      <namespace key="106" case="case-sensitive">Thésaurus</namespace>
+      <namespace key="107" case="case-sensitive">Discussion Thésaurus</namespace>
+      <namespace key="108" case="case-sensitive">Projet</namespace>
+      <namespace key="109" case="case-sensitive">Discussion Projet</namespace>
+      <namespace key="110" case="case-sensitive">Reconstruction</namespace>
+      <namespace key="111" case="case-sensitive">Discussion Reconstruction</namespace>
+      <namespace key="112" case="case-sensitive">Tutoriel</namespace>
+      <namespace key="113" case="case-sensitive">Discussion Tutoriel</namespace>
+      <namespace key="114" case="case-sensitive">Rime</namespace>
+      <namespace key="115" case="case-sensitive">Discussion Rime</namespace>
+      <namespace key="116" case="case-sensitive">Conjugaison</namespace>
+      <namespace key="117" case="case-sensitive">Discussion Conjugaison</namespace>
+      <namespace key="118" case="case-sensitive">Racine</namespace>
+      <namespace key="119" case="case-sensitive">Discussion Racine</namespace>
+      <namespace key="710" case="case-sensitive">TimedText</namespace>
+      <namespace key="711" case="case-sensitive">TimedText talk</namespace>
+      <namespace key="828" case="case-sensitive">Module</namespace>
+      <namespace key="829" case="case-sensitive">Discussion module</namespace>
+      <namespace key="1198" case="case-sensitive">Translations</namespace>
+      <namespace key="1199" case="case-sensitive">Translations talk</namespace>
+      <namespace key="2300" case="case-sensitive">Gadget</namespace>
+      <namespace key="2301" case="case-sensitive">Discussion gadget</namespace>
+      <namespace key="2302" case="case-sensitive">Définition de gadget</namespace>
+      <namespace key="2303" case="case-sensitive">Discussion définition de gadget</namespace>
+      <namespace key="2600" case="first-letter">Sujet</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>MediaWiki:Disclaimerpage</title>
+    <ns>8</ns>
+    <id>5</id>
+    <revision>
+      <id>33010</id>
+      <timestamp>2004-03-22T10:45:53Z</timestamp>
+      <contributor>
+        <username>Ryo</username>
+        <id>2</id>
+      </contributor>
+      <minor />
+      <comment>lien</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="20" xml:space="preserve">Wiktionnaire:Licence</text>
+      <sha1>50c9dhfttl1fmv39lt913isakbqi0kg</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>MediaWiki:Showhideminor</title>
+    <ns>8</ns>
+    <id>11</id>
+    <revision>
+      <id>510140</id>
+      <parentid>411319</parentid>
+      <timestamp>2006-03-07T22:18:18Z</timestamp>
+      <contributor>
+        <username>Moyogo</username>
+        <id>413</id>
+      </contributor>
+      <comment>-espace</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="120" xml:space="preserve">$1 modifications mineures | $2 robots | $3 utilisateurs enregistrés&lt;!-- | $4 patrolled edits --&gt; | $5 mes contributions</text>
+      <sha1>jtng03p6jsoijbw6cx0bz90hp9qa4pa</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>MediaWiki:Sitetitle</title>
+    <ns>8</ns>
+    <id>12</id>
+    <revision>
+      <id>403956</id>
+      <parentid>33016</parentid>
+      <timestamp>2006-02-13T09:08:31Z</timestamp>
+      <contributor>
+        <username>Kipmaster</username>
+        <id>214</id>
+      </contributor>
+      <comment>changement de titre pour meilleur référencement dans les moteurs de recherche</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="46" xml:space="preserve">Wiktionnaire : dictionnaire libre et universel</text>
+      <sha1>40helna9646ffk0utvwm8bkdlzi1eck</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>lire</title>
+    <ns>0</ns>
+    <id>13</id>
+    <revision>
+      <id>31117406</id>
+      <parentid>31065624</parentid>
+      <timestamp>2022-12-11T00:08:09Z</timestamp>
+      <contributor>
+        <username>JackBot</username>
+        <id>12968</id>
+      </contributor>
+      <minor />
+      <comment>[[Wiktionnaire:Structure des articles|Autoformatage]]</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="17655" xml:space="preserve">{{voir/lire}}
+
+== {{langue|fr}} ==
+=== {{S|étymologie}} ===
+: {{laé|fr|verb}} Du {{étyl|la|fr|mot=lego|dif=lĕgĕre|sens=''id.''}}, proprement « recueillir »
+: {{laé|fr|nom}} De l’{{étyl|it|fr|mot=lira}}, du {{étyl|la|fr|libra}} (« [[livre]] », le poids).
+
+=== {{S|verbe|fr}} ===
+[[File:Reading Jane Eyre.jpg|thumb|Jeune fille qui '''lit'''. (1)]]
+[[File:USMC-120302-M-PG598-001.jpg|thumb|Une adulte '''lit''' une histoire à un groupe d'enfants. (6)]]
+'''lire''' {{pron|liʁ|fr}} {{conjugaison|fr|grp=3}}
+# [[interpréter|Interpréter]] des [[information]]s écrites sous forme de [[mot]]s ou de [[dessin]]s sur un [[support]].
+#* {{exemple|lang=fr|On '''lit''' ce livre absolument comme au bord de la cascade on entendrait, rêveur, le gazouillement des eaux.|source={{w|Jules Michelet}}, ''Du prêtre, de la femme, de la famille'', 3{{e}} éd., Hachette &amp; Paulin, 1845, page 133}}
+#* {{exemple|lang=fr|[…] ; je me souviens d’avoir '''lu''' autrefois, dans un manuel de Paul Bert, que le principe fondamental de la morale s’appuie sur les enseignements de Zoroastre et sur la Constitution de l’an III ; […].|source={{w|Georges Sorel}}, ''Réflexions sur la violence'', chapitre VII, ''La morale des producteurs'', 1908, page 315}}
+#* ''[…], mais vous comprenez bien qu’on ne donne pas une égale attention à tout ce qu’on '''lit''' ou qu’on parcourt dans les colonnes des journaux […].'' {{source|{{w|Louis Pergaud}}, ''[[s:Un point d’histoire|Un point d’histoire]]'', dans ''{{w|Les Rustiques, nouvelles villageoises}}'', 1921}}
+#* ''Une auto qui venait en sens inverse éclaira un instant la borne kilométrique et Joseph Mittel se pencha juste à temps pour '''lire''' :'' Forges-les-Eaux, 2 km. {{source|{{w|Georges Simenon}}, ''[[w:Long Cours (roman)|Long cours]]'', Éditions Gallimard, 1936, chapitre 1}}
+#* '' Il était célèbre par une obstination admirable à apprendre à écrire et à '''lire''' ; le résultat ne fut pas étonnant ; il faut croire qu’il est bien difficile d’apprendre à '''lire''' ; […].'' {{source|[[w:Alain (philosophe)|Alain]], ''Souvenirs de guerre'', page 75, Hartmann, 1937}}
+#* ''Mais '''lire''', c’est surtout entrer en soi-même, apprendre à se considérer comme un monde de signes, de messages codés, de rébus.'' {{source|Philippe Sollers, ''Éloge de l’infini'', Gallimard, page 619}}
+# [[suivre|Suivre]] des [[yeux]] ce qui est [[écrit]] ou [[imprimer|imprimé]], [[avec]] la [[connaissance]] des sons que les [[lettre]]s [[figurent]] ; [[soit]] en ne [[proférer|proférant]] pas les mots, soit en les proférant à [[haut]]e [[voix]].
+#* ''Ce qui m’étonne, c’est que le propriétaire dudit bouquin ne semble pas le '''lire''' de droite à gauche. Est-ce qu’il ne serait pas imprimé en caractères chinois ?'' {{source|{{Citation/Jules Verne/Claudius Bombarnac/1892|6}}}}
+#* ''Devenue totalement sourde, cette cagole de Catherine ne leur prêtait nulle attention. Un mince sourire flottait sur son visage et elle '''lisait'''.'' {{source|Maurice Lemoine, ''Les cités interdites'', Éditions de l'Encre, 1987, page 129}}
+# [[prendre connaissance|Prendre connaissance]] et [[comprendre]] un texte écrit.
+#* ''Il est de jeunes écrivains qui ne '''lisent''' pas Hugo. C’est pourquoi ils ont tant de certitudes heureuses et atteignent promptement au talent.'' {{source|{{Citation/Victor Méric/Les Compagnons de l’Escopette/1930|67}}}}
+#* ''J’'''ai''' beaucoup '''lu''' sur Péguy, ce fils de rempailleuse de chaises devenu Normalien, dreyfusard acharné, socialiste de sang et de flammes, polémiste frontal.'' {{source|François-Xavier Putallaz, ‎Nicolas Buttet et ‎Pascal Décaillet, ''Coups de griffe: chroniques des Temps qui courent'', Éditions Saint-Augustin, 2006, page 219}}
+#* ''Il est vrai qu'il paraît inutile d'apprendre ce qui est écrit dans les livres puisque ça y est, encore faut il pouvoir l'y trouver et donc de savoir '''lire''', privilège maintenant réservé à une frange minoritaire de la population qui a la chance de naître dans une famille […], ayant le souci et la patience d'apprendre la lecture à sa progéniture.'' {{source|Jean-Claude Besso, ''Les Commentaires du docteur Agasse'', Société des Écrivains, 2010, page 55}}
+# [[comprendre|Comprendre]] ce qui est écrit ou imprimé dans une [[langue]] [[étranger|étrangère]].
+#* ''Il ne parle pas l’anglais, mais il le '''lit''' avec assez de facilité.''
+# {{lexique|musique|fr}} {{par analogie|fr}} Parcourir des yeux une musique notée, avec la connaissance des sons que les notes figurent et des diverses modifications que ces sons doivent recevoir.
+#* ''Une recette, c’est comme une partition. La musicienne '''lit''' les notes qui se présentent à elle et, simultanément, elle en entend la mélodie : les voir c’est les entendre, avant même de les jouer.'' {{source|{{w|Françoise Vergès}}, ''À vos mangues !'', traduction de Dominique Malaquais, dans ''Politique africaine'', 2005/4, n° 100, p. 319}}
+# [[prononcer|Prononcer]] à haute [[voix]], avec l’[[intonation]] voulue, ce qui est écrit ou imprimé.
+#* ''Il '''lit''' bien, il '''lit''' mal.''
+#* ''Il '''lit''' distinctement.''
+#* ''Il ne sait pas '''lire'''.''
+#* ''Il nous a '''lu''' un long discours.''
+#* ''Je vais vous '''lire''' mes vers.''
+#* ''Ce prince avait l’habitude de se faire '''lire''' quelque bon livre pendant ses repas.''
+# S’[[instruire]], s’[[amuser]], s’[[informer]], etc. par la lecture.
+#* '''''Lire''' un volume de vers, un roman, un billet, une lettre, la messe, une dépêche chiffrée.''
+#* {{absolument}} ''Il passe son temps à '''lire'''.''
+#* {{absolument}} '''''Lire''' n'est pas du temps pris à la vie : c'est vivre plus.'' {{source|Dominique Lebel, ''L'entre-deux-mondes'', Montréal, Boréal, 2019, page 109}}
+#* {{figuré|fr}} ''C’est un ouvrage qu’on ne peut '''lire''','' se dit d’un ouvrage ennuyeux, ou mal écrit, ou surtout licencieux.
+#* {{figuré|fr}} {{familier|fr}} ''Ce livre, cet ouvrage se laisse '''lire''','' On le lit sans fatigue, sans ennui.
+# Se dit encore en parlant de quelque [[livre]] qu’un [[professeur]] [[expliquer|explique]] ou fait expliquer à ses [[auditeur]]s et qu’il prend pour [[sujet]] des [[leçon]]s qu’il [[leur]] [[donne]].
+#* ''Notre professeur nous '''lisait''' Homère.''
+# {{figuré|fr}} Comprendre par l'observation un sens caché qui est au-delà des apparences.
+#* ''L’ivresse se '''lisait''' dans ses yeux, une ivresse crâne et satisfaite qui lui arrachait quelquefois de gros rires.'' {{source|{{Citation/Francis Carco/Messieurs les vrais de vrai/1927}}}}
+#* ''A quoi songes-tu donc ? s’informa la maîtresse du logis, surprise de l’inattention qu’elle '''lisait''' dans les yeux de l’artiste. Tu n’as pas de contrariétés.'' {{source|{{Citation/Francis Carco/L’Homme de minuit/1938}}}}
+#* ''De temps à autre, elle regardera dehors et fera la lippe. Je '''lirai''' dans ses yeux ce que je '''lis''' dans les yeux de tous. L'ennui.'' {{source|Marcel Godin, ''Ce maudit soleil'', Éditions Robert Laffont, 1965, chapitre 1}}
+#* ''Je la regardais — minutes silencieuses où l'on n'entendait que le tic-tac de l'horloge accrochée au mur — et j'essayais de '''lire''' dans son visage muet, mais rien d'elle ne m'était familier.'' {{source|{{w|Stefan Zweig}}, ''La peur'', traduit de l'allemand par Alzir Hella, éditions Grasset, 1935, 2002}}
+#* ''Après tout, si on peut '''lire''' un dessin, '''lire''' les lignes de la main, '''lire''' dans le ciel le mauvais temps qui se prépare, ou '''lire''' les pensées dans le visage du renfrogné qui n'a pas ouvert la bouche, pourquoi ne pourrait-on apprendre à '''lire''' ce qui n'est écrit qu'entre les lignes?'' {{source|{{w|Antonine Maillet}}, ''Clin d’œil au Temps qui passe'', Leméac, 2019, page 159}}
+
+==== {{S|dérivés}} ====
+{{(}}
+* [[délire]] ''(verbe)''
+* [[entrelire]]
+* [[lire-écrire]]
+* [[lire en diagonale]]
+* [[lire en quelqu’un comme dans un livre ouvert ]]
+* [[lire entre les lignes]]
+* [[lire sur les lèvres]]
+* [[lisage]]
+* [[liseur]]
+* [[liseuse]]
+* [[relire]]
+{{)}}
+
+==== {{S|traductions}} ====
+{{trad-début|Interpréter des informations écrites.}}
+* {{T|de}} : {{trad+|de|lesen}}
+* {{T|en}} : {{trad+|en|read}}
+* {{T|ar}} : {{trad+|ar|قَرَأَ|m|tr=qara-a}}
+* {{T|az}} : {{trad+|az|oxumaq}}
+* {{T|ba}} : {{trad|ba|уҡыу}}
+* {{T|eu}} : {{trad-|eu|irakurri}}
+* {{T|ca}} : {{trad+|ca|llegir}}
+* {{T|zh}} : {{trad+|zh|读|tr=dú|tradi=讀}}, {{trad+|zh|看|tr=kàn}}
+* {{T|ko}} : {{trad+|ko|읽다|tr=ikda}}
+* {{T|ht}} : {{trad|ht|li}}
+* {{T|es}} : {{trad+|es|leer}}
+* {{T|eo}} : {{trad+|eo|legi}}
+* {{T|fi}} : {{trad+|fi|lukea}}
+* {{T|gag}} : {{trad|gag|okumaa}}
+* {{T|gallo}} : {{trad|gallo|leirr}}
+* {{T|sah}} : {{trad|sah|аах}}
+* {{T|is}} : {{trad+|is|lesa}}
+* {{T|it}} : {{trad+|it|leggere}}
+* {{T|ja}} : {{trad+|ja|読む|tr=yomu}}
+* {{T|krc}} : {{trad|krc|окъургъа}}
+* {{T|kk}} : {{trad+|kk|оқу|tr=oquw}}
+* {{T|kjh}} : {{trad|kjh|хығырарға}}
+* {{T|ky}} : {{trad+|ky|окуу}}
+* {{T|kum}} : {{trad|kum|охумакъ}}
+* {{T|mk}} : {{trad-|mk|чита|tr=tschita}}
+* {{T|mta}} : {{trad|mta|basa}}
+* {{T|mnb}} : {{trad|mnb|basa}}
+* {{T|nl}} : {{trad+|nl|lezen}}
+* {{T|normand}} : {{trad|normand|luire}}, {{trad|normand|luure}}
+* {{T|no}} : {{trad+|no|lese}}
+* {{T|oc}} : {{trad+|oc|legir}}
+* {{T|plodarisch}} : {{trad|plodarisch|lesn}}
+* {{T|pl}} : {{trad+|pl|czytać}}
+* {{T|pt}} : {{trad+|pt|ler}}
+* {{T|ru}} : {{trad+|ru|читать}}
+* {{T|sk}} : {{trad+|sk|čítať}}
+* {{T|tt}} : {{trad-|tt|уку}}
+* {{T|cv}} : {{trad|cv|вула}}
+* {{T|tourangeau}} : {{trad|tourangeau|lisi}}, {{trad|tourangeau|li}}
+* {{T|tk}} : {{trad-|tk|okamak}}
+* {{T|vi}} : {{trad+|vi|đọc}}
+{{trad-fin}}
+
+{{trad-début|Suivre des yeux ce qui est écrit ou imprimé.}}
+* {{T|de}} : {{trad+|de|lesen}}
+* {{T|en}} : {{trad+|en|read}}
+* {{T|ar}} : {{trad+|ar|قَرَأَ|m|tr=qara-a}}
+* {{T|eu}} : {{trad-|eu|irakurri}}
+* {{T|ca}} : {{trad+|ca|llegir}}
+* {{T|es}} : {{trad+|es|leer}}
+* {{T|fi}} : {{trad+|fi|lukea}}
+* {{T|gallo}} : {{trad|gallo|leirr}}
+* {{T|it}} : {{trad+|it|leggere}}
+* {{T|kk}} : {{trad+|kk|оқу|tr=oquw}}
+* {{T|mk}} : {{trad-|mk|чита|tr=tschita}}
+* {{T|nl}} : {{trad+|nl|lezen}}
+* {{T|normand}} : {{trad|normand|luure}}
+* {{T|plodarisch}} : {{trad|plodarisch|lesn}}
+* {{T|ru}} : {{trad+|ru|читать}}
+{{trad-fin}}
+
+{{trad-début|Prendre connaissance et comprendre un texte écrit.}}
+* {{T|de}} : {{trad+|de|lesen}}
+* {{T|en}} : {{trad+|en|read}}
+* {{T|ar}} : {{trad+|ar|قَرَأَ|m|tr=qara-a}}
+* {{T|eu}} : {{trad-|eu|irakurri}}
+* {{T|ca}} : {{trad+|ca|llegir}}
+* {{T|es}} : {{trad+|es|leer}}
+* {{T|fi}} : {{trad+|fi|lukea}}
+* {{T|gallo}} : {{trad|gallo|leirr}}
+* {{T|it}} : {{trad+|it|leggere}}
+* {{T|nl}} : {{trad+|nl|lezen}}
+* {{T|pl}} : {{trad+|pl|przeczytać}}
+* {{T|ru}} : {{trad+|ru|читать}}
+{{trad-fin}}
+
+{{trad-début|Comprendre ce qui est écrit ou imprimé dans une langue étrangère.}}
+* {{T|de}} : {{trad+|de|lesen}}
+* {{T|en}} : {{trad+|en|read}}
+* {{T|ar}} : {{trad+|ar|قَرَأَ|m|tr=qara-a}}
+* {{T|es}} : {{trad+|es|leer}}
+* {{T|it}} : {{trad+|it|leggere}}
+* {{T|mk}} : {{trad-|mk|чита|tr=tschita}}
+* {{T|nl}} : {{trad+|nl|lezen}}
+* {{T|pl}} : {{trad+|pl|odczytać}}
+* {{T|ru}} : {{trad+|ru|читать}}
+{{trad-fin}}
+
+{{trad-début|(Musique) (Par analogie) Parcourir des yeux une musique notée.}}
+* {{T|de}} : {{trad+|de|lesen}}
+* {{T|en}} : {{trad+|en|read}}
+* {{T|ar}} : {{trad+|ar|قَرَأَ|m|tr=qara-a}}
+* {{T|ca}} : {{trad+|ca|llegir}}
+* {{T|es}} : {{trad+|es|leer}}
+* {{T|it}} : {{trad+|it|leggere}}
+* {{T|ja}} : {{trad+|ja|読む|tr=yomu}}
+* {{T|nl}} : {{trad+|nl|lezen}}
+* {{T|ru}} : {{trad+|ru|читать}}
+{{trad-fin}}
+
+{{trad-début|Prononcer à haute voix, avec l’intonation voulue, ce qui est écrit ou imprimé.}}
+* {{T|de}} : {{trad+|de|lesen}}
+* {{T|en}} : {{trad+|en|read}}
+* {{T|ar}} : {{trad+|ar|قَرَأَ|m|tr=qara-a}}
+* {{T|ca}} : {{trad+|ca|llegir}}
+* {{T|es}} : {{trad+|es|leer}}
+* {{T|it}} : {{trad+|it|leggere}}
+* {{T|ja}} : {{trad+|ja|読む|tr=yomu}}, {{trad-|ja|朗読する|tr=rōdoku suru}}
+* {{T|mk}} : {{trad-|mk|чита|tr=tschita}}
+* {{T|nl}} : {{trad+|nl|voorlezen}}, {{trad+|nl|oplezen}}
+* {{T|ru}} : {{trad+|ru|читать}}
+{{trad-fin}}
+
+{{trad-début|S’instruire, s’amuser, s’informer, etc. par la lecture.}}
+* {{T|de}} : {{trad+|de|lesen}}
+* {{T|en}} : {{trad+|en|read}}
+* {{T|ar}} : {{trad+|ar|قَرَأَ|m|tr=qara-a}}
+* {{T|ca}} : {{trad+|ca|llegir}}
+* {{T|ko}} : {{trad+|ko|읽다|tr=ikda}}, {{trad+|ko|독서하다|tradi=讀書하다|tr=dokseohada}}
+* {{T|es}} : {{trad+|es|leer}}
+* {{T|it}} : {{trad+|it|leggere}}
+* {{T|ja}} : {{trad+|ja|読む|tr=yomu}}, {{trad-|ja|読書する|tr=dokusho suru}}
+* {{T|mk}} : {{trad-|mk|чита|tr=tschita}}
+* {{T|nl}} : {{trad+|nl|lezen}}
+* {{T|ru}} : {{trad+|ru|читать}}
+{{trad-fin}}
+
+{{trad-début|Expliquer un livre pris pour sujet de leçons.}}
+* {{T|de}} : {{trad+|de|lesen}}
+* {{T|en}} : {{trad+|en|read}}
+* {{T|ar}} : {{trad+|ar|قَرَأَ|m|tr=qara-a}}
+* {{T|ca}} : {{trad+|ca|llegir}}
+* {{T|es}} : {{trad+|es|leer}}
+* {{T|it}} : {{trad+|it|leggere}}
+* {{T|mk}} : {{trad-|mk|чита|tr=tschita}}
+{{trad-fin}}
+
+{{trad-début|(Figuré) Pénétrer quelque chose d’obscur ou de caché.}}
+* {{T|de}} : {{trad+|de|lesen}}
+* {{T|en}} : {{trad+|en|read}}
+* {{T|ar}} : {{trad+|ar|قَرَأَ|m|tr=qara-a}}
+* {{T|ca}} : {{trad+|ca|llegir}}
+* {{T|es}} : {{trad+|es|leer}}
+* {{T|it}} : {{trad+|it|leggere}}
+* {{T|mk}} : {{trad-|mk|чита|tr=tschita}}
+* {{T|nl}} : {{trad+|nl|lezen}}
+{{trad-fin}}
+
+===== {{S|traductions à trier}} =====
+{{trad-début}}
+* {{T|ab}} : {{trad-|ab|аҧхьара}}
+* {{T|ady}} : {{trad|ady|еджэн}}
+* {{T|bs}} : {{trad-|bs|čitati}}
+* {{T|ca}} : {{trad+|ca|llegir}}
+* {{T|hr}} : {{trad+|hr|čitati}}
+* {{T|créole guadeloupéen}} : {{trad|créole guadeloupéen|li}}
+* {{T|eo}} : {{trad+|eo|legi}}
+* {{T|fi}} : {{trad+|fi|lukea}}
+* {{T|gd}} : {{trad-|gd|leugh}}
+* {{T|ga}} : {{trad-|ga|léigh}}
+* {{T|gn}} : {{trad-|gn|moñeʼẽ}}
+* {{T|he}} : {{trad-|he|לקרוא}} (laqarava)
+* {{T|hu}} : {{trad+|hu|olvas}}
+* {{T|io}} : {{trad+|io|lektar}}
+* {{T|id}} : {{trad+|id|baca}}, {{trad+|id|membaca}}
+* {{T|ia}} : {{trad-|ia|leger}}
+* {{T|iu}} : {{trad-|iu|ᐅᖃᓕᒫᖅ-|R=[[uqalimaaq-]]}}
+* {{T|kl}} : {{trad-|kl|atuarneq}}
+* {{T|ki}} : {{trad|ki|gũthoma}}
+* {{T|rw}} : {{trad-|rw|soma}}
+* {{T|ku}} : {{trad+|ku|xwendin}}
+* {{T|ltg}} : {{trad|ltg|skaiteit}}
+* {{T|la}} : {{trad+|la|lego}} (infinitif : ''{{lien|legere|la}}'')
+* {{T|lv}} : {{trad+|lv|lasīt}}
+* {{T|lt}} : {{trad+|lt|skaityti}}
+* {{T|nl}} : {{trad+|nl|lezen}}
+* {{T|normand}} : {{trad|normand|luure}}
+* {{T|oc}} : {{trad+|oc|legir}}
+* {{T|pt}} : {{trad+|pt|ler}}
+* {{T|ro}} : {{trad+|ro|citi}}
+* {{T|ru}} : {{trad+|ru|читать}} (tchitat') ''imperf'', {{trad+|ru|прочитать}} (protchitat') ''perf''
+* {{T|se}} : {{trad|se|lohkat}}
+* {{T|sr}} : {{trad+|sr|читати}} (tchitati)
+* {{T|sk}} : {{trad+|sk|čítať}}
+* {{T|ses}} : {{trad|ses|cew}}
+* {{T|sv}} : {{trad+|sv|läsa}}
+* {{T|tl}} : {{trad+|tl|basa}}
+* {{T|cs}} : {{trad+|cs|číst}}
+* {{T|tr}} : {{trad+|tr|okumak}}
+* {{T|vi}} : {{trad+|vi|đọc}}
+{{trad-fin}}
+
+=== {{S|nom|fr}} ===
+{{fr-rég|liʁ}}
+'''lire''' {{pron|liʁ|fr}} {{f}}
+# [[monnaie|Monnaie]] utilisée en [[Italie]] avant l’usage de l’[[euro]]. Son symbole est '''[[₤]]''' (Unicode U+20A4).
+#* ''Un euro vaut environ 1936 '''lires'''.''
+# Monnaie de la [[Turquie]].
+
+==== {{S|méronymes}} ====
+; Lire italienne
+* [[centime]] ''({{lien|centimiso|it}})'' : 1 ITL = 100 ct
+; Lire turque
+* [[kuruş]] : 1 TLY = 100 kuruş
+
+==== {{S|synonymes}} ====
+; Lire turque
+* [[livre]] turque
+
+==== {{S|traductions}} ====
+{{trad-début|Monnaie}}
+* {{T|en}} : {{trad+|en|lira}}
+* {{T|ar}} : {{trad-|ar|لِيرَة|f|tr=līra}}
+* {{T|zh}} : {{trad+|zh|里拉|tr=lǐlā}}
+* {{T|ko}} : {{trad+|ko|리라|tr=rira}}
+* {{T|ht}} : {{trad|ht|li}}
+* {{T|ja}} : {{trad-|ja|リラ|tr=rira}}
+{{trad-fin}}
+
+=== {{S|prononciation}} ===
+* {{écouter|lang=fr|France &lt;!-- précisez svp la ville ou la région --&gt;|liʁ|audio=Fr-lire.ogg}}
+* {{écouter|lang=fr|France (Brétigny-sur-Orge)||audio=LL-Q150 (fra)-Pamputt-lire.wav}}
+* {{écouter|lang=fr|Suisse (canton du Valais)||audio=LL-Q150 (fra)-DSwissK-lire.wav}}
+* {{écouter|lang=fr|France (Toulouse)||audio=LL-Q150 (fra)-Lepticed7-lire.wav}}
+* {{écouter|lang=fr|France (Vosges)||audio=LL-Q150 (fra)-LoquaxFR-lire.wav}}
+* {{écouter|lang=fr|France (Lyon)||audio=LL-Q150 (fra)-WikiLucas00-lire.wav}}
+* {{écouter|lang=fr|France (Vosges)||audio=LL-Q150 (fra)-Poslovitch-lire.wav}}
+* {{écouter|lang=fr|France (Cesseras)||audio=LL-Q150 (fra)-Guilhelma-lire.wav}}
+
+==== {{S|homophones|fr}} ====
+* [[lyre]]
+
+=== {{S|anagrammes}} ===
+{{voir anagrammes|fr}}
+
+=== {{S|voir aussi}} ===
+* {{WP}}
+
+[[Catégorie:Monnaies en français]]
+
+== {{langue|fro}} ==
+=== {{S|étymologie}} ===
+: Du {{étyl|la|fro|mot=lyra}}.
+
+=== {{S|nom|fro}} ===
+'''lire''' {{pron|liʁ|fro}}
+# [[lyre#fr|Lyre]].
+#* {{exemple|lang=fro|De vièle sot et de rote,&lt;br&gt;De '''lire''' et de satérion,&lt;br&gt;De harpe sot et de choron,&lt;br&gt;[...]|source={{w|Wace}}, ''Roman de Brut'', 1155}}
+
+[[Catégorie:Instruments de musique en ancien français]]
+
+== {{langue|af}} ==
+=== {{S|étymologie}} ===
+: {{ébauche-étym|af}}
+
+=== {{S|nom|af}} ===
+'''lire''' {{pron||af}}
+# [[lire#fr-nom|Lire]].
+
+== {{langue|it}} ==
+=== {{S|nom|it|flexion}} ===
+{{it-flexion|ˈli.r|f=ae|ˈli.r}}
+'''lire''' {{pron|ˈli.re|it}} {{f}}
+# ''Pluriel de ''{{lien|lira|it}}.</text>
+      <sha1>nchognu70fu8mh3kpwoo0ee0m10eryl</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>plage</title>
+    <ns>0</ns>
+    <id>292</id>
+    <revision>
+      <id>31145200</id>
+      <parentid>31144968</parentid>
+      <timestamp>2022-12-12T11:03:24Z</timestamp>
+      <contributor>
+        <username>Thomas.maeder</username>
+        <id>4857</id>
+      </contributor>
+      <comment>Correspondance illustration (plage de brasure) &lt;=&gt; définition ; réarrangé les définitions avec les &quot;physiques&quot; en premier, suivies des &quot;numériques&quot; ; fusionné deux définitions identiques (plage de tableur) ; section de traduction pour chaque définition.</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="11992" xml:space="preserve">{{voir/plage}}
+
+== {{langue|fr}} ==
+=== {{S|étymologie}} ===
+: (Au sens d’étendue de terre, rive sablonneuse) Du {{étyl|la|fr|mot=plaga|sens=large étendue, région}}.
+: (Pour tous les autres sens : plage de musique, de valeurs, etc) De l’{{étyl|it|fr|mot=piaggia}}, lui-même du {{étyl|grc|fr|πλάγιος|plágios|oblique, qui n’est pas en ligne droite}}.
+
+=== {{S|nom|fr}} ===
+{{fr-rég|plaʒ}}
+[[Image:Plage toulon.JPG|thumb|Une '''plage'''. (1)]]
+[[Image:Vinyl_albums.jpg|thumb|'''Plages''' de disque microsillon. (2)]]
+[[Image:Aupcb.jpg|thumb|Vue d’une portion de '''plage''' de circuit imprimé. (4)]]
+'''plage''' {{pron|plaʒ|fr}} {{f}}
+# [[étendue|Étendue]] de [[sable]] ou de [[galet]]s bordant un plan d’[[eau]].
+#* ''Sur une '''plage''' de sable noir volcanique, des brisants déferlaient avec bruit.'' {{source|{{w|Alain Gerbault}}, ''À la poursuite du soleil'', tome 1 : ''De New-York à Tahiti'', 1929}}
+#* ''À partir du mois de juin, la '''plage''', aujourd’hui disparue, se couvrait de tentes pour la saison des bains de mer.'' {{source|{{w|Frédéric Weisgerber}}, ''Au seuil du Maroc Moderne'', Institut des Hautes Études Marocaines, Rabat : Les éditions de la porte, 1947, page 19}}
+#* ''La '''plage''' microtidale d’Agay, située sur la commune de Saint-Raphaël (83), présente une forme en arc de cercle sur un kilomètre.'' {{source|''La gestion du trait de côte'', Ministère de l'écologie, de l'énergie, du développement durable et de la mer (France), 2010, page 208}}
+# Chacun des [[morceau|morceaux]] enregistrés sur un [[disque]] [[vinyle]] ou un [[CD]].
+#* ''Les '''plages''' des disques étaient séparée par des intervalles silencieux et se repéraient par un aspect plus sombre.''
+#* ''Il enregistrera avec Dizzy Gillespie, Max Roach, Fats Navarro ou Milt Jackson des '''plages''' qui attestent de son désir de moderniser son phrasé, d’ouvrir ses horizons et d’apprendre de cette nouvelle génération ce que l’ancienne ne peut plus lui apporter.'' {{source|{{w|Laurent de Wilde}}, ''Monk'', 1996, collection Folio, page 182}}
+# Partie plane située à l’arrière d’une [[voiture]] et couvrant la [[malle]] arrière.
+#* '''''Plage''' arrière de voiture.''
+# {{lexique|électronique|fr}} Zone sur un circuit dédiée aux [[contact]]s et aux autres types d’[[interconnexion]] électrique (brasure, câblage filaire, etc.).
+#* ''Un motif de '''plage''' d’accueil de composant monté en surface sur le circuit imprimé doit être soigneusement étudié, afin d’éviter d’importants problèmes lors de l’opération de soudage.'' {{source|Éric Cadalen, ''Conception des Circuits Imprimés Rigides'', {{w|Éditions techniques de l'ingénieur}}, 2005, page 13}}
+# {{lexique|mathématiques|fr}} Partie d’un tout constituant un sous-ensemble cohérent et contigu.
+#* ''Une '''plage''' de valeurs.''
+#* ''Il est souvent présent pendant cette '''plage''' horaire.''
+# {{lexique|informatique|fr}} {{ellipse|fr}} Groupe d’[[adresse IP|adresses IP]] consécutives.
+#* ''La première, 10.0.0.0/8 (voir encadré page 130), est une '''plage''' de classe A (contenant 2&lt;sup&gt;24&lt;/sup&gt; adresses IP).'' {{source|1=[//books.google.fr/books?id=16kqNL9nn1cC&amp;pg=PA192&amp;dq=%22plage%22+ip&amp;hl=fr&amp;sa=X&amp;ei=J4TQT8qiMqfY2gWmy5i_DA&amp;ved=0CEsQ6AEwATgK#v=onepage&amp;q=%22plage%22%20ip&amp;f=false ''Debian Etch: GNU/Linux - Page 192'', Raphaël Hertzog, Roland Mas, Nat Makarévitch - 2011]}}
+# {{par extension}} {{lexique|informatique|fr}} Dans un [[tableur]], [[objet]] correspondant à un [[ensemble]] de [[cellule|cellules]], formant une [[zone]] [[rectangulaire]] d’une [[feuille de calcul]]. {{note}} Il existe aussi des ''plages 3D'' ayant une [[extension]] sur plusieurs [[feuilles de calcul|feuille de calcul]] d’un même [[classeur]].
+
+==== {{S|synonymes}} ====
+''Étendue de sable ou de galets (1) :''
+* [[grève]]
+
+==== {{S|dérivés}} ====
+{{(}}
+* [[club de plage]]
+* [[handiplage]]
+* [[handball de plage]]
+* [[harcèlement de plage]]
+* [[plage audio]]
+* [[plage d’accueil]]
+* [[plage d’entrée]] {{info lex|électronique|métrologie}}
+* [[plage de mesure]] {{info lex|métrologie}}
+* [[plage horaire]]
+* [[plager]]
+* [[plageage]]
+* [[plagiste]]
+{{)}}
+
+==== {{S|dérivés autres langues}} ====
+* {{L|sk}} : [[pláž]]
+* {{L|cs}} : [[pláž]]
+
+==== {{S|holonymes}} ====
+* [[berge]]
+* [[rivage]]
+* [[rive]]
+
+==== {{S|vocabulaire}} ====
+* {{Thésaurus|fr|plage}}
+
+==== {{S|traductions}} ====
+{{trad-début|Étendue de sable ou de galets|1}}
+* {{T|ab}} : {{trad-|ab|аплиаж|tr=(ā-ṗliāž)}}
+* {{T|af}} : {{trad+|af|strand}}
+* {{T|sq}} : {{trad+|sq|plazh}}
+* {{T|de}} : {{trad+|de|Strand|m}}
+* {{T|en}} : {{trad+|en|beach}}
+* {{T|ar}} : {{trad+|ar|شاطئ|m}}
+* {{T|an}} : {{trad-|an|placha}}, {{trad-|an|playa}}
+* {{T|eu}} : {{trad+|eu|hondartza}}
+* {{T|be}} : {{trad-|be|пляж|tr=[plʲaʂ]}}
+* {{T|br}} : {{trad+|br|traezhenn}}
+* {{T|bg}} : {{trad+|bg|плаж|R=plazh}}
+* {{T|ca}} : {{trad+|ca|platja}}
+* {{T|oka}} : {{trad|oka|yaʕcín}}
+* {{T|ko}} : {{trad+|ko|해변|R=haebyeon}}
+* {{T|hr}} : {{trad-|hr|plaža}}
+* {{T|da}} : {{trad+|da|strand}}
+* {{T|es}} : {{trad+|es|playa|f}}
+* {{T|et}} : {{trad-|et|mererand}}
+* {{T|fo}} : {{trad-|fo|sandstrond}}
+* {{T|gd}} : {{trad-|gd|tràigh}}
+* {{T|ga}} : {{trad-|ga|trá}}
+* {{T|gl}} : {{trad+|gl|praia}}
+* {{T|cy}} : {{trad+|cy|traeth}}
+* {{T|ka}} : {{trad-|ka|პლაჟი|R=plazhi}}
+* {{T|el}} : {{trad+|el|αμμουδιά|R=ammoudía}}, {{trad+|el|παραλία|R=paralía}}
+* {{T|he}} : {{trad+|he|חוף|m|R=khof}}
+* {{T|hu}} : {{trad+|hu|part}}, {{trad+|hu|strand}}
+* {{T|io}} : {{trad+|io|plajo}}
+* {{T|id}} : {{trad+|id|pantai}}
+* {{T|it}} : {{trad+|it|spiaggia|f}}
+* {{T|ja}} : {{trad+|ja|砂浜|R=sunahama}}, {{trad+|ja|浜|R=hama}}
+* {{T|la}} : {{trad+|la|litus}}, {{trad+|la|acta}}
+* {{T|lv}} : {{trad-|lv|pludmale}}
+* {{T|lt}} : {{trad-|lt|paplūdimys}}, {{trad-|lt|pliažas}}
+* {{T|mk}} : {{trad-|mk|плажа|tr=(plaža)}}
+* {{T|ms}} : {{trad+|ms|pantai}}
+* {{T|mg}} : {{trad+|mg|torapasika}}
+* {{T|nl}} : {{trad+|nl|strand|n}}
+* {{T|no}} : {{trad+|no|strand}}
+* {{T|myp}} : {{trad|myp|tahoasi}}
+* {{T|pl}} : {{trad+|pl|plaża}}
+* {{T|pt}} : {{trad+|pt|praia|f}}
+* {{T|ro}} : {{trad+|ro|plajă}}
+* {{T|ru}} : {{trad+|ru|пляж|R=plyazh}}
+* {{T|se}} : {{trad|se|sáttogáddi}} (de sable)
+* {{T|sr}} : {{trad+|sr|плажа|R=plaža}}
+* {{T|zdj}} : {{trad|zdj|mtsanga}}, {{trad|zdj|mpvwa}}
+* {{T|scn}} : {{trad+|scn|pilaia|f}}
+* {{T|sk}} : {{trad-|sk|pláž}}
+* {{T|sl}} : {{trad+|sl|plaža}}
+* {{T|sv}} : {{trad+|sv|strand}}
+* {{T|cs}} : {{trad+|cs|pláž}}
+* {{T|tr}} : {{trad+|tr|kumsal}}, {{trad+|tr|plaj}}
+* {{T|tk}} : {{trad-|tk|plýaž}}
+* {{T|uk}} : {{trad-|uk|пляж|R=plyazh}}
+* {{T|wls}} : {{trad|wls|mata’one}}
+* {{T|wa}} : {{trad+|wa|pladje|f}}
+{{trad-fin}}
+{{trad-début|Musique : morceau enregistré|2}}
+* {{T|en}} : {{trad+|en|track}}
+{{trad-fin}}
+{{trad-début|Automobile : zone plane pour le chargement|3}}
+{{trad-fin}}
+{{trad-début|Électronique : zone de contact ou de report de composants|4}}
+* {{T|en}} : {{trad+|en|pad}}
+* {{T|de}} : {{trad+|de|Anschlussfläche|f}}, {{trad+|de|Pad|n}}
+{{trad-fin}}
+{{trad-début|Mathématiques : étendue limitée par deux valeurs|5}}
+* {{T|en}} : {{trad+|en|range}}
+* {{T|it}} : {{trad+|it|stringa|f}}, {{trad+|it|sottoinsieme|m}}
+* {{T|nl}} : {{trad+|nl|scala}}
+* {{T|pl}} : {{trad+|pl|zakres}}
+{{trad-fin}}
+{{trad-début|Informatique : succession d’adresses IP|6}}
+* {{T|en}} : {{trad+|en|range}}
+{{trad-fin}}
+{{trad-début|Informatique : zone rectangulaire de sélection dans une feuille de calcul d’un tableur|7}}
+* {{T|en}} : {{trad+|en|range}}
+{{trad-fin}}
+
+===== {{S|traductions à trier}} =====
+{{trad-début}}
+* {{T|eo|trier}} : {{trad-|eo|plaĝo}}
+* {{T|el|trier}} : {{trad+|el|ακρογιαλιά|R=akrogialiá}}
+* {{T|haw|trier}} : {{trad|haw|kahakai}}
+* {{T|id|trier}} : {{trad+|id|pantai}}
+* {{T|is|trier}} : {{trad+|is|fjara}}, {{trad+|is|strönd}}
+* {{T|ja|trier}} : {{trad+|ja|砂浜}} ; {{trad+|ja|すなはま|R=sunahama}}
+* {{T|la|trier}} : {{trad+|la|acta}}, {{trad-|la|arena}}
+* {{T|ms|trier}} : {{trad+|ms|pantai}}
+* {{T|nl|trier}} : {{trad+|nl|vlak|n}}
+* {{T|oc|trier}} : {{trad+|oc|plaja|f}}
+* {{T|pap|trier}} : {{trad|pap|playa}}
+* {{T|srn|trier}} : {{trad|srn|sekanti}}
+* {{T|tl|trier}} : {{trad-|tl|apláya}}; {{trad-|tl|baybáy}}; {{trad-|tl|dalámpasígan}}, {{trad-|tl|aplaya}}
+* {{T|vi|trier}} : {{trad+|vi|bãi}} {{trad+|vi|biển}}
+* {{T|zu|trier}} : {{trad+|zu|ibhishi}}, {{trad+|zu|ilibhishi}}
+{{trad-fin}}
+
+=== {{S|verbe|fr|flexion}} ===
+{{fr-verbe-flexion|plager|ind.p.1s=oui|ind.p.3s=oui|sub.p.1s=oui|sub.p.3s=oui|imp.p.2s=oui}}
+'''plage''' {{pron|plaʒ|fr}}
+# ''Première personne du singulier de l’indicatif présent de'' [[plager]].
+# ''Troisième personne du singulier de l’indicatif présent de'' [[plager]].
+# ''Première personne du singulier du subjonctif présent de'' [[plager]].
+# ''Troisième personne du singulier du subjonctif présent de'' [[plager]].
+# ''Deuxième personne du singulier de l’impératif présent de'' [[plager]].
+
+=== {{S|prononciation}} ===
+* {{écouter|lang=fr|France|plaʒ|audio=Fr-plage.ogg}}
+* {{écouter|lang=fr|France (Muntzenheim)||audio=LL-Q150 (fra)-0x010C-plage.wav}}
+* {{écouter|lang=fr|France (Vosges)||audio=LL-Q150 (fra)-LoquaxFR-plage.wav}}
+* {{écouter|lang=fr|France (Toulouse)||audio=LL-Q150 (fra)-Lepticed7-plage.wav}}
+* {{écouter|lang=fr|||audio=LL-Q150 (fra)-Nicolas Lopez de Silanes WMFr-plage.wav}}
+* {{écouter|lang=fr|France (Vosges)||audio=LL-Q150 (fra)-Poslovitch-plage.wav}}
+
+=== {{S|anagrammes}} ===
+{{voir anagrammes|fr}}
+
+=== {{S|voir aussi}} ===
+* {{WP}}
+
+=== {{S|références}} ===
+* {{Import:DAF8}}
+
+== {{langue|fro}} ==
+=== {{S|étymologie}} ===
+: {{date|lang=fro}} {{ébauche-étym|fro}}
+
+=== {{S|nom|fro}} ===
+'''plage''' {{pron||fro}} {{m}}
+# {{variante de|plege|fro}}.
+#* ''Je suy '''plages''' por lui'' {{source|Charte de 1276, disponible en ligne dans le ''Dictionnaire de l’ancienne langue'' ci-dessous, tome 6, page 211}}&lt;!-- Je présume que « suy » est le verbe suivre. Sinon, je ne comprends pas du tout. Renard Migrant--&gt;
+
+=== {{S|références}} ===
+* {{R:Godefroy|plege}}
+
+== {{langue|de}} ==
+=== {{S|verbe|de|flexion}} ===
+'''plage''' {{pron|ˈplaːɡə|de}}
+# ''Deuxième personne du singulier de l’impératif présent de'' {{lien|plagen|de}}.
+# ''Première personne du singulier du présent de l’indicatif de'' {{lien|plagen|de}}.
+# ''Première personne du singulier du subjonctif présent I de'' {{lien|plagen|de}}.
+# ''Troisième personne du singulier du subjonctif présent I de'' {{lien|plagen|de}}.
+
+=== {{S|prononciation}} ===
+* {{écouter|Berlin|ˈplaːɡə|lang=de|audio=De-plage.ogg}}
+
+== {{langue|da}} ==
+=== {{S|étymologie}} ===
+: {{ébauche-étym|da}}
+
+=== {{S|nom|da}} ===
+{{da-nom-c-er|rac=plag}}
+'''plage''' {{pron|plaːɡə|da}} {{c}}
+# [[peine#fr|Peine]], [[ennui]], [[tourment]], [[tracas]].
+#* ''Ukrudtet i vores have er den rene '''plage'''. Det plager os siden vi plantede roserne.''
+#*: Les mauvaises herbes dans notre jardin sont une vraie nuisance. Elles nous tracassent depuis que nous avons planté les roses.
+#* ''Vores børn er den rene '''plage'''. De plager os altid med at vi skal have en have.''
+#*: Nos enfants sont un vrai tracas. Ils nous harcèlent toujours comme quoi nous devrions avoir un jardin.
+
+=== {{S|verbe|da}} ===
+'''plage''' {{pron|plaːɡə|da}}
+# [[tracasser|Tracasser]], [[harceler]], [[indigner]], [[agacer]].
+#* ''Obelix '''plager''' Asterix så længe indtil han indvilger og de går sammen på vildsvinjagt.''
+#*: Obélix harcèle Astérix aussi longtemps que nécessaire pour qu'il accepte, et ils vont ensemble à la chasse au sanglier.
+#* ''Vores børn er den rene plage. De '''plager''' os altid med at vi skal have en have.''
+#*: Nos enfants sont un vrai tracas. Ils nous harcèlent toujours comme quoi nous devrions avoir un jardin.
+
+==== {{S|dérivés}} ====
+* [[plageånd]]</text>
+      <sha1>n9794w4f34r444nooxhs8qqxqep5rn2</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>accueil</title>
+    <ns>0</ns>
+    <id>1</id>
+    <revision>
+      <id>31119606</id>
+      <parentid>31100161</parentid>
+      <timestamp>2022-12-11T02:25:16Z</timestamp>
+      <contributor>
+        <username>JackBot</username>
+        <id>12968</id>
+      </contributor>
+      <minor />
+      <comment>[[Wiktionnaire:Structure des articles|Autoformatage]]</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="7123" xml:space="preserve">{{voir|Accueil}}
+
+== {{langue|fr}} ==
+=== {{S|étymologie}} ===
+: {{refnec|lang=fr|{{siècle|XII}} {{déverbal|de=accueillir|lang=fr|m=1}}.}}
+
+=== {{S|nom|fr}} ===
+{{fr-rég|a.kœj}}
+[[Fichier:De balie van de Kamer van Koophandel, Nassauplein 4. NL-HlmNHA 54014414.JPG|vignette|L''''accueil''' d'une chambre de commerce aux Pays-Bas. (2)]]
+[[Fichier:Wikipedia2013.jpg|vignette|Page d’'''accueil''' de Wikipedia en vietnamien. (4)]]
+'''accueil''' {{pron|a.kœj|fr}} {{m}}
+# [[cérémonie|Cérémonie]] ou [[prestation]] réservée à un nouvel [[arrivant]], consistant généralement à lui [[souhaiter]] la [[bienvenue]] et à l’aider dans son [[intégration]] ou ses [[démarche]]s.
+#* {{exemple|Nous réservâmes aux nouveaux venus un '''accueil''' qui fut cordial et empressé, mais le temps n’était pas aux effusions et d’un commun avis, il fallait agir vite.|lang=fr|source={{w|Jean-Baptiste Charcot}}, ''Dans la mer du Groenland'', 1928}}
+#* {{exemple|lang=fr|Partout elle avait trouvé bon '''accueil''', prompt assentiment, mais elle se propose d’aller plus outre.|source={{Citation/Jean Rogissart/Passantes d’Octobre/1958}}}}
+#* {{exemple|lang=fr|Notre hôte, absent au moment de notre arrivée, ne tarde pas à paraître et me fait l’'''accueil''' auquel je m'attendais de sa part.|source={{w|Frédéric Weisgerber}}, ''Trois mois de campagne au Maroc : étude géographique de la région parcourue'', Paris : Ernest Leroux, 1904, page 38}}
+# [[lieu|Lieu]] où sont accueillies les [[personne]]s.
+#* {{exemple|lang=fr|À l’'''accueil''', ils t’expliqueront comment aller à son bureau.}}
+# {{vieilli|fr}} Fait d’[[accueillir]] ou [[héberger]].
+#* {{exemple|lang=fr|Le Maire rappelle au conseil municipal que l’'''accueil''' périscolaire aura lieu à la rentrée de septembre 2008–2009 dans la salle de réunions et le petit local attenant.|source=[[Le Chesne]], Conseil municipal du 27 juin 2008}}
+# [[page|Page]] d’[[accès]] ou d’accueil (lieu ci-dessus) à un site [[web]].
+# Manière dont une [[œuvre]] a été acceptée lors de sa sortie par le [[public]] et les [[critique]]s.
+
+==== {{S|dérivés}} ====
+{{(}}
+* [[accueil de loisirs]]
+* [[agent d’accueil]]
+* [[émission d’accueil]]
+* [[faire bon accueil]]
+* [[faire mauvais accueil]]
+* [[famille d’accueil]]
+* [[page d’accueil]]
+* [[plage d’accueil]]
+* [[station d’accueil]]
+{{)}}
+
+==== {{S|apparentés}} ====
+* [[accueillir]]
+* [[accueillant]]
+
+==== {{S|synonymes}} ====
+* [[home]] ''(site web)'' ''{{anglicisme|nocat=1}}
+* [[main page]] ''(site web)'' {{anglicisme|nocat=1}}
+* [[page d’accueil]] ''(site web)''
+
+==== {{S|traductions}} ====
+{{trad-début|Cérémonie|1}}
+* {{T|de}} : {{trad+|de|Aufnahme|f}}, {{trad+|de|Empfang|m}}
+* {{T|en}} : {{trad+|en|welcome}} {{vieilli|nocat=1}}, {{trad+|en|reception}}, {{trad+|en|acceptance}}
+* {{T|ary}} : {{trad|ary|إستقبال}}
+* {{T|hr}} : {{trad-|hr|prijam}}, {{trad-|hr|prijem}}, {{trad-|hr|doček}}
+* {{T|it}} : {{trad+|it|accoglienza|f}}
+* {{T|avk}} : {{trad|avk|emudera}}
+* {{T|mg}} : {{trad+|mg|fandraisana}}
+* {{T|cmn}} : {{trad+|zh|迎接|tr=yíngjiē|tradi=迎接}}, {{trad+|zh|接待|tr=jiēdài}}
+* {{T|nl}} : {{trad+|nl|onthaal|n}}, {{trad+|nl|ontvangst|f}}
+* {{T|oc}} : {{trad+|oc|acuèlh}}
+* {{T|pt}} : {{trad+|pt|recepção|f}}, {{trad+|pt|acolhida|f}}
+* {{T|ro}} : {{trad+|ro|primire|f}}, {{trad-|ro|întampinare}}
+* {{T|ru}} : {{trad+|ru|приветствие|tr=privetstviye}}
+* {{T|sc}} : {{trad-|sc|accoglientzia|f}}
+* {{T|sv}} : {{trad+|sv|mottagande}}
+* {{T|ta}} : {{trad+|ta|வரவேற்பு|R=varavēṟpu}}
+{{trad-fin}}
+
+{{trad-début|Lieu|2}}
+* {{T|af}} : {{trad+|af|tuiste}}
+* {{T|de}} : {{trad+|de|Empfang|m}}, {{trad+|de|Rezeption|f}}, {{trad+|de|Empfangsbüro|n}}
+* {{T|en}} : {{trad+|en|reception}} (''desk'' = d’une société), {{trad+|en|courtesy}} (''counter, booth, desk'') {{États-Unis|nocat=1}}, {{trad+|en|customer service}} (''desk, booth, center'') {{États-Unis|nocat=1}}
+* {{T|hr}} : {{trad-|hr|recepcija}}
+* {{T|da}} : {{trad+|da|reception|c}}
+* {{T|es}} : {{trad+|es|recepción}}
+* {{T|avk}} : {{trad|avk|emudexo}}
+* {{T|cmn}} : {{trad-|zh|接待处|tr=jiēdàichù|tradi=接待處}}, {{trad+|zh|柜台|tr=guìtái|tradi=櫃檯}}, {{trad+|zh|前台|tr=qiántái|tradi=前臺}}
+* {{T|nl}} : {{trad+|nl|onthaal|n}}, {{trad+|nl|balie|f}}, {{trad+|nl|receptie|f}}
+* {{T|pt}} : {{trad+|pt|recepção}}
+* {{T|ru}} : {{trad+|ru|приём}}
+* {{T|sv}} : {{trad+|sv|mottagande}}
+{{trad-fin}}
+
+{{trad-début|Fait d’accueillir|3}}
+* {{T|af}} : {{trad-|af|aanvaarding}}
+* {{T|de}} : {{trad+|de|Aufnahme|f}}, {{trad+|de|Unterbringung|f}}, {{trad+|de|Beherbergung|f}}
+* {{T|en}} : {{trad+|en|reception}}
+* {{T|az}} : {{trad+|az|qəbul}}
+* {{T|eu}} : {{trad+|eu|harrera}}
+* {{T|hr}} : {{trad-|hr|prihvat}}
+* {{T|it}} : {{trad+|it|accoglienza|f}}
+* {{T|avk}} : {{trad|avk|emudera}}
+* {{T|cmn}} : {{trad+|zh|接待|tr=jiēdài}}
+* {{T|nl}} : {{trad+|nl|onthaal|n}}, {{trad+|nl|ontvangst|m}}
+* {{T|pln}} : {{trad|pln|atendimiento}}
+* {{T|pt}} : {{trad+|pt|recepção}}
+* {{T|ro}} : {{trad-|ro|a întampina}}, {{trad-|ro|a primi}}
+* {{T|cs}} : {{trad-|cs|hoštění}}, {{trad+|cs|pohoštění}}
+{{cf|lang=fr|accueillir}}
+{{trad-fin}}
+
+===== {{S|traductions à trier}} =====
+{{trad-début}}
+* {{T|af|trier}} : {{trad-|af|ontvangs}}, {{trad-|af|tuis}}
+* {{T|de|trier}} : {{trad+|de|Empfang|m}}, {{trad+|de|Annahme}}, {{trad+|de|Aufnahme}}, {{trad+|de|Zusage}}, {{trad-|de|Entgegennahme}}, {{trad+|de|Akzept}}
+* {{T|ca|trier}} : {{trad-|ca|acollença}}, {{trad+|ca|acollida}}, {{trad+|ca|acolliment}}, {{trad+|ca|acull}}
+* {{T|ht|trier}} : {{trad|ht|bèlantre}}
+* {{T|es|trier}} : {{trad+|es|acogida}}, {{trad+|es|aceptación}}, {{trad+|es|admisión}}
+* {{T|eo|trier}} : {{trad-|eo|bonvenon}}, {{trad-|eo|akcepto}}
+* {{T|fi|trier}} : {{trad+|fi|hyväksyminen}}
+* {{T|fy|trier}} : {{trad-|fy|oanfurdigjen}}
+* {{T|hu|trier}} : {{trad+|hu|elfogadás}}
+* {{T|id|trier}} : {{trad+|id|sambutan}}, {{trad+|id|rumah}}
+* {{T|it|trier}} : {{trad+|it|accoglienza}}, {{trad+|it|accoglimento}}
+* {{T|la|trier}} : {{trad-|la|acceptatio}}
+* {{T|ms|trier}} : {{trad-|ms|penerimaan}}
+* {{T|mg}} : {{trad+|mg|fandraisana}}
+* {{T|nl|trier}} : {{trad+|nl|ontvangst}}, {{trad+|nl|acceptatie}}, {{trad+|nl|aanneming}}, {{trad+|nl|aanvaarding}}
+* {{T|oc|trier}} : {{trad+|oc|acuèlh}}
+* {{T|pcd|trier}} : {{trad|pcd|aceùy}}
+* {{T|pt|trier}} : {{trad+|pt|bem-vindo}}, {{trad+|pt|aceitação}}, {{trad+|pt|acolhida}}, {{trad+|pt|acolhimento}}, {{trad+|pt|admissão}}
+* {{T|scn}} : {{trad-|scn|accogghimentu|m}}, {{trad-|scn|accoglimentu|m}}, {{trad-|scn|accugghimentu|m}}
+{{trad-fin}}
+
+=== {{S|prononciation}} ===
+* {{pron-rimes|a.kœj|fr}}
+* {{pron|a.kœj|fr}}
+** {{écouter|lang=fr|France (Paris)|titre=un accueil|ɛ̃.n‿a.kœj|audio=Fr-accueil.ogg}}
+** {{écouter|lang=fr|France (Vosges)|a.kœj|audio=LL-Q150 (fra)-LoquaxFR-accueil.wav}}
+
+=== {{S|anagrammes}} ===
+{{voir anagrammes|fr}}
+
+=== {{S|voir aussi}} ===
+* {{WP}}
+
+=== {{S|références}} ===
+* {{R:TLFi}}
+* {{Import:DAF8}}
+* Petit Robert 1, dictionnaire de la langue française,1990.</text>
+      <sha1>hen3dmk7b9wl5vnr1n5fy64rfgqjhod</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>MediaWiki:Disclaimers</title>
+    <ns>8</ns>
+    <id>4</id>
+    <revision>
+      <id>33009</id>
+      <parentid>1</parentid>
+      <timestamp>2004-03-22T10:45:00Z</timestamp>
+      <contributor>
+        <username>Ryo</username>
+        <id>2</id>
+      </contributor>
+      <minor />
+      <comment>=&gt; vrai texte</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="7" xml:space="preserve">Licence</text>
+      <sha1>ts7k1locwimgdrphdsb5mhqksh3rh7g</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,69 +1,259 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+@font-face {
+    font-family: Headline;
+    /* src: url("fonts/m41.TTF"); */
+    src: url("fonts/Pixel Sans Serif.ttf");
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+@font-face {
+    font-family: Body;
+    src: url("fonts/Pixel Sans Serif.ttf");
 }
-a:hover {
-  color: #535bf2;
+
+* {
+    box-sizing: border-box;
+}
+
+*:focus-visible,
+input[role=switch]:focus-visible::before {
+    outline: 4px dotted #eee;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    color-scheme: dark;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+    font-family: Body, fantasy;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.padding {
+    padding: 2rem;
+}
+
+.padding-left {
+    padding-left: 2rem;
+}
+
+.padding-right {
+    padding-right: 2rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: Headline, fantasy;
+}
+
+small {
+    display: block;
+    font-size: 9px;
+    line-height: 12px;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+    font-family: Body, fantasy;
+    background-color: #FB4213;
+    border: 2px solid #ac3416;
+    padding: .3rem 1rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: white;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+button.secondary {
+    background-color: #555;
+    border: 2px solid #666;
+}
+
+button:disabled {
+    opacity: 0.2;
+}
+
+input {
+    width: 100%;
+    background-color: rgba(150, 150, 150, 0.3);
+    border: 4px solid #555;
+    padding: 0 1rem;
+    height: 42px;
+    font-size: 1.2rem;
+    font-family: Body, fantasy;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+label:has(input[type=radio]) {
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+label+label {
+    margin-top: 20px;
+}
+
+label span {
+    color: #888;
+}
+
+input:checked+span {
+    color: #eee;
+}
+
+a {
+    color: rgb(114, 114, 235);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+nav button {
+    height: 100%;
+}
+
+span,
+p {
+    color: #eee;
+}
+
+form[aria-busy=true] {
+    opacity: 0.5;
+    cursor: wait;
+    animation: blink 1s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.blinking {
+    animation: blink 1s ease-in-out infinite;
+}
+
+p.error {
+    color: red;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+input[type=radio] {
+    appearance: none;
+    position: relative;
+    min-height: 32px;
+    min-width: 32px;
+    max-height: 32px;
+    max-width: 32px;
+    cursor: pointer;
+}
+
+input[type="radio"]::after {
+    content: "";
+    display: block;
+    position: absolute;
+    inset: 0;
+    border: 3px solid #444;
+    outline: 3px solid #555;
+    background-color: #444;
+}
+
+input[type=radio]:checked::after {
+    background-color: #aaa;
+}
+
+input[role=switch] {
+    position: relative;
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    height: 32px;
+    width: 62px;
+    cursor: pointer;
+}
+
+input[role=switch]::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 56px;
+    height: 26px;
+    border: 3px solid #444;
+    outline: 3px solid #555;
+    background-color: #444;
+}
+
+input[role=switch]::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #777;
+    background-color: #222;
+    transition: left 0.25s cubic-bezier(.14, 1.54, .16, .91);
+}
+
+input[role=switch]:checked::before {
+    background-color: #ac3416;
+    border-color: #ac3416;
+    outline-color: #FB4213;
+}
+
+input[role=switch]:checked::after {
+    left: 33px;
+    border: 3px solid #fff;
+    background-color: #ddd;
+}
+
+input[role=switch]:disabled::before {
+    background-color: #555;
+    border-color: #666;
+    outline-color: #666;
+}
+
+input[role=switch]:disabled::after {
+    background-color: #666;
+    border-color: #777;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    padding: .5rem 1rem;
+}
+
+ul li:nth-child(odd) {
+    background-color: rgba(255, 255, 255, 0.1);
 }

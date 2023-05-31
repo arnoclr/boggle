@@ -2,22 +2,33 @@
 
 class AntiCheat
 {
-    public function generateImageFor(String $letter, int $size = 32): string
+    public function generateImageFor(String $letters, int $size = 32, int $seed = 0): string
     {
         $image = imagecreatetruecolor($size, $size);
-        $backgroundColor = imagecolorallocate($image, 255, 255, 255);
-        $textColor = imagecolorallocate($image, 0, 0, 0);
-        $availableFontVariants = ["Xed", "Noise", "False"];
-        $fontVariant = $availableFontVariants[array_rand($availableFontVariants)];
+        $backgroundColor = imagecolorallocate($image, 253, 244, 235);
+        $textColor = imagecolorallocate($image, 56, 88, 111);
+        $availableFontVariants = ["Xed", "Noise"];
+        $availableOrientations = [-90, 0, 90];
+        $seed += ord($letters);
+        $fontVariant = $availableFontVariants[$seed % count($availableFontVariants)];
+        $orientation = $availableOrientations[$seed % count($availableOrientations)];
         $font = realpath("./assets/fonts/anticheat/ZXX $fontVariant.otf");
-        $fontSize = $size;
+        $fontSize = $size / sizeof(str_split($letters));
+        $y = $size - ($size - $fontSize) / 2;
         imagefill($image, 0, 0, $backgroundColor);
-        imagefttext($image, $fontSize, 0, 0, $fontSize, $textColor, $font, $letter);
+        imagefttext($image, $fontSize, 0, 0, $y, $textColor, $font, $letters);
+        // $image = imagerotate($image, $orientation, $backgroundColor);
         ob_start();
-        imagepng($image);
+        imagejpeg($image, null, 50);
         $imageData = ob_get_contents();
         ob_end_clean();
         imagedestroy($image);
-        return "data:image/png;base64," . base64_encode($imageData);
+        return $imageData;
+    }
+
+    public function returnImageFor(String $letter, int $size = 32, int $seed = 0): void
+    {
+        header("Content-type: image/jpeg");
+        echo $this->generateImageFor($letter, $size);
     }
 }
