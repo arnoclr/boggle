@@ -52,7 +52,7 @@ export async function getUserName(token: string): Promise<string> {
   });
 }
 
-const getUserId = (token: string): Promise<number> => {
+export async function getUserId(token: string): Promise<number> {
   return new Promise((resolve, reject) => {
     connection.query(
       "SELECT * FROM players WHERE websocketToken = ?",

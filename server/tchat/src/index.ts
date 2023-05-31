@@ -18,6 +18,7 @@ import {
   wordIsAlreadySubmitted,
 } from "./game";
 import { getWordPathIfValid } from "./words";
+import { saveMessage, getMessages } from "./message";
 
 const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
@@ -47,6 +48,7 @@ server.on("connection", (socket) => {
           ...payload,
           displayName: await getUserName(token),
         });
+        await saveMessage({ type, token, payload }, token);
         break;
       case "joinGame":
         if (await gameIsActive(token)) {
@@ -56,6 +58,8 @@ server.on("connection", (socket) => {
           sendConnectedUsersList(token);
         } else if (await joinGame(token, payload.gameId)) {
           sendConnectedUsersList(token);
+          let messages = await getMessages(9);
+          console.log(messages);
         } else {
           await sendTo(token, "error", {
             code: "joinGameFailed",
