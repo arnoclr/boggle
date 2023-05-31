@@ -32,8 +32,17 @@ body {
     font-family: Body, fantasy;
 }
 
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
 .padding {
     padding: 2rem;
+}
+
+.padding-top {
+    padding-top: 2rem;
 }
 
 .padding-left {
@@ -72,6 +81,13 @@ button {
 button.secondary {
     background-color: #555;
     border: 2px solid #666;
+}
+
+button.tertiary {
+    background-color: transparent;
+    border: none;
+    text-decoration: underline;
+    font-size: 12px;
 }
 
 button:disabled {

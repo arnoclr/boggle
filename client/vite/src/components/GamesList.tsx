@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ago } from "../utils/time";
 import { callAction } from "../utils/req";
+import "./GamesList.css";
 
 interface Game {
   publicId: string;
@@ -25,18 +26,17 @@ export default function GamesList({ whenCreated }: GamesListProps) {
   }, []);
 
   return (
-    <ul>
+    <ul className="GamesList">
       {games.map((game) => (
         <li>
-          <span>{game.playersInRoom} joueur(s) connecté(s)</span>
-          <br />
-          <small>créée {ago(new Date(game.createdAt))}</small>
-          <br />
           <button
             className="secondary"
             onClick={() => whenCreated(game.publicId)}
           >
-            Rejoindre {game.publicId.toUpperCase()}
+            <span>{game.publicId.toUpperCase()}</span>
+            <small>
+              {ago(new Date(game.createdAt))} - {game.playersInRoom} joueur(s)
+            </small>
           </button>
         </li>
       ))}

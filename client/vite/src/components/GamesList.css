@@ -1,0 +1,18 @@
+.GamesList {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.GamesList li:nth-child(odd),
+.GamesList li:nth-child(even) {
+    padding: 0;
+    background-color: transparent;
+}
+
+.GamesList button {
+    padding: 12px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}

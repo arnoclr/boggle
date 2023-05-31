@@ -1,5 +1,6 @@
 import { createRef, useState } from "react";
 import { GameJoinerProps } from "./CreateGame";
+import "./joinGame.css";
 
 export default function JoinGame({ whenCreated }: GameJoinerProps) {
   const form = createRef<HTMLFormElement>();
@@ -14,11 +15,10 @@ export default function JoinGame({ whenCreated }: GameJoinerProps) {
   }
 
   return (
-    <div>
-      <p>Si vous avez un code envoyé par quelqu'un</p>
-      <form ref={form} onSubmit={handleSubmit}>
+    <div className="joinGame">
+      <form ref={form} aria-busy={isLoading} onSubmit={handleSubmit}>
         <label>
-          <span>Identifiant de partie</span>
+          <span>Je connais le code</span>
           <input
             type="text"
             name="gameId"
@@ -27,10 +27,14 @@ export default function JoinGame({ whenCreated }: GameJoinerProps) {
             spellCheck={false}
             autoCapitalize="characters"
             style={{ textTransform: "uppercase" }}
+            minLength={5}
+            maxLength={5}
+            required
           />
         </label>
-        <br />
-        <button type="submit">Rejoindre la partie</button>
+        <button className="tertiary" type="submit">
+          Rejoindre la partie
+        </button>
       </form>
     </div>
   );
