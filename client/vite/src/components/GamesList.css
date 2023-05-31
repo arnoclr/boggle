@@ -12,6 +12,7 @@
 
 .GamesList button {
     padding: 12px 22px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: start;
