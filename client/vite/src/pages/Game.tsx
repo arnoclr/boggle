@@ -14,22 +14,20 @@ export default function Game() {
   }
 
   return (
-    <>
+    <div className="Game">
       {inGame ? (
         <WithRealtime gameId={inGame}></WithRealtime>
       ) : (
-        <div className="selection padding">
-          <div>
-            <Navbar></Navbar>
-            <h1>Créer ou rejoindre une partie</h1>
-            <div className="choices">
-              <CreateGame whenCreated={whenCreated}></CreateGame>
-              <JoinGame whenCreated={whenCreated}></JoinGame>
-            </div>
-            <GamesList whenCreated={whenCreated}></GamesList>
-          </div>
+        <div className="container padding-top">
+          <Navbar></Navbar>
+          <h2>Rejoindre une partie</h2>
+          <GamesList whenCreated={whenCreated}></GamesList>
+          <br />
+          <JoinGame whenCreated={whenCreated}></JoinGame>
+          <h2>Créer une partie</h2>
+          <CreateGame whenCreated={whenCreated}></CreateGame>
         </div>
       )}
-    </>
+    </div>
   );
 }
