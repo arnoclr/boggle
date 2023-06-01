@@ -46,6 +46,7 @@ export interface WordFoundMessage extends BaseWebSocketMessage {
 export interface ConnectedUsersListMessage extends BaseWebSocketMessage {
   type: "users";
   payload: {
+    gameOwnerToken: string;
     users: { name: string }[];
   };
 }

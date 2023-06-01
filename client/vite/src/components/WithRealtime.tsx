@@ -33,9 +33,10 @@ export default function WithRealtime({ gameId }: Props) {
   const [gameActive, setGameActive] = useState<boolean>(false);
   const [endAt, setEndAt] = useState<Date>(new Date());
   const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
+  const [iAmGameOwner, setIAmGameOwner] = useState<boolean>(false);
 
   function canStartGame(): boolean {
-    return users.length >= 2;
+    return users.length >= 2 && iAmGameOwner;
   }
 
   function startGame(): void {
@@ -106,6 +107,7 @@ export default function WithRealtime({ gameId }: Props) {
             ])
           )
         );
+        setIAmGameOwner(payload.gameOwnerToken === websocketToken);
       }
 
       if (type === "startGame") {

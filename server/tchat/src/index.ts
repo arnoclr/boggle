@@ -5,6 +5,7 @@ import {
   addWordToGame,
   gameEndAt,
   gameIsActive,
+  gameOwnerToken,
   getAllTokensOfAPartyFromUserToken,
   getAllUserOfAParty,
   getGridString,
@@ -140,7 +141,9 @@ async function sendTo(
 }
 
 async function sendConnectedUsersList(userToken: string): Promise<void> {
+  console.log(await gameOwnerToken(userToken));
   await broadcastToParty(true, userToken, "users", {
+    gameOwnerToken: await gameOwnerToken(userToken),
     users: (await getAllUserOfAParty(userToken))
       .filter((user) => connectedUsers.has(user.websocketToken))
       .map((user) => ({ name: user.name })),
