@@ -125,7 +125,7 @@ export default function WithRealtime({ gameId }: Props) {
       console.log("error", error);
       tryToReconnect();
     };
-  }, []);
+  }, [websocketToken]);
 
   return (
     <>
