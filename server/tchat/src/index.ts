@@ -55,11 +55,9 @@ server.on("connection", (socket) => {
           await broadcastToParty(true, token, "startGame", {
             endAt: await gameEndAt(token),
           });
-          sendConnectedUsersList(token);
+          let messages = await getMessages(token);
         } else if (await joinGame(token, payload.gameId)) {
           sendConnectedUsersList(token);
-          let messages = await getMessages(9);
-          console.log(messages);
         } else {
           await sendTo(token, "error", {
             code: "joinGameFailed",

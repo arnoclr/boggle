@@ -1,6 +1,6 @@
 import { connection } from "./sql";
 import { ChatMessage } from "./types";
-import { getUserId, getGameIdFromToken } from "./game";
+import { getUserId, getGameIdFromToken, getUserName } from "./game";
 
 export async function saveMessage(message: ChatMessage, token: string): Promise<boolean> {
     try {
@@ -29,26 +29,40 @@ export async function deleteOldMessages(): Promise<void> {
     );
 }
 
-export async function getMessages(gameId: number): Promise<ChatMessage[]> {
-    try {
-        const rows = await connection.query(
-            "SELECT * FROM chat WHERE idGame = ? ORDER BY sendAt ASC",
-            [gameId]
-        );
-        console.log(rows);
-        const messages = rows as any;
-        return messages.map((message: any) => ({
-            type: "chat",
-            token: "",
-            payload: {
-                gameId: message.idGame,
-                playerId: message.idPlayer,
-                content: message.message,
-                displayName: "",
+export async function getMessages(token: string): Promise<ChatMessage[]> {
+    return new Promise((resolve, reject) => {
+        getGameIdFromToken(token)
+            .then((gameId: number) => {
+                connection.query(
+                    "SELECT * FROM chat WHERE idGame = ? ORDER BY sendAt ASC",
+                    [gameId],
+                    async (error, results) => {
+                        if (error) reject(error);
+
+                        if (!results || !Array.isArray(results) || results.length === 0) {
+                            // On renvoie un tableau vide
+                            resolve([]);
+                            return;
+                        }
+
+                        let username = await getUserName(token);
+
+                        resolve(
+                            results.map((message : any) => ({
+                                type: "chat",
+                                token,
+                                payload: {
+                                    message: message.message,
+                                    displayName: username,
+                                },
+                            }))
+                        );
+                    }
+                );
+            })
+            .catch((e) => {
+                reject(e);
             }
-        }));
-    } catch (e) {
-        console.error("Error getting messages:", e);
-        return [];
-    }
+        );
+    });
 }
