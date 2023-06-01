@@ -40,7 +40,6 @@ export async function getMessages(token: string): Promise<ChatMessage[]> {
                         if (error) reject(error);
 
                         if (!results || !Array.isArray(results) || results.length === 0) {
-                            // On renvoie un tableau vide
                             resolve([]);
                             return;
                         }
