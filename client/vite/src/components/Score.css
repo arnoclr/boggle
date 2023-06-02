@@ -1,0 +1,41 @@
+.bigScore {
+    position: fixed;
+    top: 20vh;
+    left: 50%;
+    font-size: 5rem;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(-50%);
+    transform-origin: bottom;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff;
+    z-index: 99;
+}
+
+@keyframes drop {
+    0% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-100px);
+        animation-timing-function: ease-in;
+    }
+
+    10% {
+        transform: translateX(-50%) translateY(0px);
+        animation-timing-function: linear;
+    }
+
+    20% {
+        transform: translateX(-50%) scaleY(0.7) scaleX(1.4);
+    }
+
+    40% {
+        transform: translateX(-50%) scaleY(1) scaleX(1);
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

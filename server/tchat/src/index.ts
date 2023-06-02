@@ -17,7 +17,7 @@ import {
   thisUserExists,
   wordIsAlreadySubmitted,
 } from "./game";
-import { getWordPathIfValid } from "./words";
+import { getWordPathIfValid, wordScore } from "./words";
 
 const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
@@ -89,6 +89,7 @@ server.on("connection", (socket) => {
             displayName: await getUserName(token),
             path,
             scores: await getScores(token),
+            wordScore: await wordScore(word),
           });
         } else {
           await sendTo(token, "wrongWord", null);

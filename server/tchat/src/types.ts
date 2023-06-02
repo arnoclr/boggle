@@ -40,6 +40,7 @@ export interface WordFoundMessage extends BaseWebSocketMessage {
     displayName: string;
     path: number[];
     scores: Score[];
+    wordScore: number;
   };
 }
 
