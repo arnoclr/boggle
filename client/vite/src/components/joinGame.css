@@ -1,0 +1,10 @@
+.joinGame {
+    position: relative;
+    max-width: 400px;
+}
+
+.joinGame button {
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+}

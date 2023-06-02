@@ -1,5 +1,5 @@
 import { Player, PlayerName, Score } from "./types";
-import { connection } from "./sql";
+import { connection, query } from "./sql";
 import { wordScore } from "./words";
 
 export const DEFAULT_GAME_DURATION = 90;
@@ -26,17 +26,26 @@ export async function getAllTokensOfAPartyFromUserToken(
   );
 }
 
+export async function removePlayerFromGame(token: string): Promise<void> {
+  // remove user by its token in all games with a startedAt is NULL
+  await query(
+    `DELETE FROM gamesplayers 
+    WHERE idPlayer = (SELECT idPlayer FROM players WHERE websocketToken = ?) 
+    AND idGame IN (SELECT idGame FROM games WHERE startedAt IS NULL)`,
+    [token]
+  );
+}
+
 export async function thisUserExists(token: string): Promise<boolean> {
-  return new Promise((resolve, reject) => {
-    connection.query(
+  try {
+    const results = await query(
       "SELECT * FROM players WHERE websocketToken = ?",
-      [token],
-      (error, results) => {
-        if (error) reject(error);
-        resolve(results.length > 0);
-      }
+      [token]
     );
-  });
+    return results && results.length > 0;
+  } catch (e) {
+    return false;
+  }
 }
 
 export async function getUserName(token: string): Promise<string> {
@@ -181,6 +190,14 @@ export async function gameIsActive(token: string): Promise<boolean> {
       }
     );
   });
+}
+
+export async function gameHasStarted(gameId: number): Promise<boolean> {
+  const results = await query(
+    "SELECT * FROM games WHERE idGame = ? AND startedAt IS NOT NULL",
+    [gameId]
+  );
+  return results.length > 0;
 }
 
 export async function startGame(
