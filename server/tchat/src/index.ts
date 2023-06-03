@@ -58,6 +58,7 @@ server.on("connection", (socket) => {
           let messages = await getMessages(token);
         } else if (await joinGame(token, payload.gameId)) {
           sendConnectedUsersList(token);
+          let messages = await getMessages(token);
         } else {
           await sendTo(token, "error", {
             code: "joinGameFailed",

@@ -6,12 +6,11 @@ interface Props {
   sendRealtimeEvent: (event: string, data: any) => void;
   colors: PlayerColors;
   ws: WebSocket;
+  initialMessages: { message: string; displayName: string; receivedAt: Date }[];
 }
 
-export default function Chat({ sendRealtimeEvent, ws, colors }: Props) {
-  const [messages, setMessages] = useState<
-    { message: string; displayName: string; receivedAt: Date }[]
-  >([]);
+export default function Chat({ sendRealtimeEvent, ws, colors, initialMessages }: Props) {
+  const [messages, setMessages] = useState<{ message: string; displayName: string; receivedAt: Date }[]>(initialMessages);
 
   const form = createRef<HTMLFormElement>();
 
@@ -27,7 +26,7 @@ export default function Chat({ sendRealtimeEvent, ws, colors }: Props) {
       const data = JSON.parse(event.data);
       if (data.type === "chat") {
         const { message, displayName } = data.payload;
-        setMessages((messages) => [
+        setMessages((messages:any) => [
           ...messages,
           { message, displayName, receivedAt: new Date() },
         ]);
