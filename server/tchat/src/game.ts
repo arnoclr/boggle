@@ -2,7 +2,7 @@ import { Player, PlayerName, Score } from "./types";
 import { connection, query } from "./sql";
 import { wordScore } from "./words";
 
-export const DEFAULT_GAME_DURATION = 90;
+export const DEFAULT_GAME_DURATION = 20;
 export const DEFAULT_TIMEOUT_SECONDS = 3;
 
 export async function getAllUserOfAParty(userToken: string): Promise<Player[]> {

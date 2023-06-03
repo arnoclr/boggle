@@ -58,6 +58,7 @@ server.on("connection", (socket) => {
           await broadcastToParty(true, token, "startGame", {
             endAt: await gameEndAt(token),
           });
+          sendConnectedUsersList(token);
           for (const message of messages) {
             await sendTo(token, "chat", message.payload);
           }
