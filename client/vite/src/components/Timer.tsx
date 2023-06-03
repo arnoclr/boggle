@@ -12,8 +12,8 @@ export default function Timer({ remainingSeconds }: TimerProps) {
 
   return remainingSeconds > 0 ? (
     <div
-      className="timer padding-left"
-      style={{ fontVariantNumeric: "proportional-nums" }}
+      className="timer"
+      style={{ fontVariantNumeric: "tabular-nums", paddingLeft: "8px" }}
     >
       <span className="minutes">{withLeadingsZeroes(minutes)}</span>
       <span className="separator blinking">:</span>

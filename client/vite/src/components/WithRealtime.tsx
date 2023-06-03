@@ -161,12 +161,9 @@ export default function WithRealtime({ gameId }: Props) {
                 </div>
               </>
             ) : (
-              <div className="padding marginAuto">
+              <div className="container">
                 <Navbar></Navbar>
-                <div
-                  className="waitingRoom padding"
-                  style={{ marginTop: "1rem" }}
-                >
+                <div className="waitingRoom" style={{ marginTop: "1rem" }}>
                   <div>
                     <p>
                       Partie :{" "}

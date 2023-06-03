@@ -7,12 +7,14 @@
     width: fit-content;
     display: flex;
     flex-direction: column;
+    order: 1;
     gap: 1rem;
 }
 
 .wordsFound {
     display: flex;
     flex-direction: column;
+    order: 2;
     gap: 8px;
 }
 
@@ -34,9 +36,23 @@
     }
 }
 
+.waitingRoom {
+    display: flex;
+    gap: 1rem;
+    width: fit-content;
+}
+
 @media (max-width: 800px) {
     .gridContainer {
-        flex-direction: column-reverse;
+        flex-direction: column;
+    }
+
+    .gridContainer.padding-top {
+        padding-top: 5px;
+    }
+
+    .gridContainerGrid {
+        margin: 0 auto;
     }
 
     .wordsFound {
@@ -47,15 +63,11 @@
     }
 
     .wordsFound .Word {
-        outline: 4px solid #eee;
         outline-offset: 6px;
-        transform: scale(0.7);
+        transform: scale(0.9);
     }
-}
 
-.waitingRoom {
-    display: flex;
-    gap: 1rem;
-    background-color: #000000;
-    width: fit-content;
+    .waitingRoom {
+        flex-direction: column;
+    }
 }

@@ -20,3 +20,9 @@
     font-size: 10px;
     text-align: start;
 }
+
+@media (max-width: 800px) {
+    .CreateGame {
+        grid-template-columns: 1fr;
+    }
+}

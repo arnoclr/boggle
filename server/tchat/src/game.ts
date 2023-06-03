@@ -100,6 +100,15 @@ export const joinGame = async (
     const userId = await getUserId(token);
     const gameId = await getInternalGameId(publicGameId);
 
+    const results = await query(
+      "SELECT * FROM gamesplayers WHERE idPlayer = ? AND idGame = ?",
+      [userId, gameId]
+    );
+
+    if (results.length > 0) {
+      return true;
+    }
+
     return new Promise((resolve, reject) => {
       connection.query(
         "INSERT INTO gamesplayers (idPlayer, idGame) VALUES (?, ?)",
