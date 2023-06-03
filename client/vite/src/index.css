@@ -1,12 +1,12 @@
 @font-face {
     font-family: Headline;
     /* src: url("fonts/m41.TTF"); */
-    src: url("fonts/Pixel Sans Serif.ttf");
+    src: url("/fonts/Pixel Sans Serif.ttf");
 }
 
 @font-face {
     font-family: Body;
-    src: url("fonts/Pixel Sans Serif.ttf");
+    src: url("/fonts/Pixel Sans Serif.ttf");
 }
 
 * {
