@@ -26,6 +26,13 @@ export async function getAllTokensOfAPartyFromUserToken(
   );
 }
 
+export async function invalidateToken(token: string): Promise<void> {
+  await query(
+    "UPDATE players SET websocketToken = NULL WHERE websocketToken = ?",
+    [token]
+  );
+}
+
 export async function removePlayerFromGame(token: string): Promise<void> {
   // remove user by its token in all games with a startedAt is NULL
   await query(
