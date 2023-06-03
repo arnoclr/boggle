@@ -33,6 +33,9 @@ export default function WithRealtime({ gameId }: Props) {
   const [gameActive, setGameActive] = useState<boolean>(false);
   const [endAt, setEndAt] = useState<Date>(new Date());
   const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
+  const [messages, setMessages] = useState<
+    { message: string; displayName: string; receivedAt: Date }[]
+  >([]);
 
   function canStartGame(): boolean {
     return users.length >= 2;
@@ -145,6 +148,7 @@ export default function WithRealtime({ gameId }: Props) {
                     sendRealtimeEvent={sendRealtimeEvent}
                     ws={ws}
                     colors={playerColors}
+                    initialMessages={messages}
                   ></Chat>
                   <div className="gridContainerGrid">
                     <Grid gameId={gameId} ws={ws} colors={playerColors}></Grid>

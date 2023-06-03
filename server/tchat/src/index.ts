@@ -40,6 +40,8 @@ server.on("connection", (socket) => {
       return;
     }
 
+    const messages = await getMessages(token);
+
     connectedUsers.set(token, socket);
     connectedSockets.set(socket, token);
 
@@ -56,10 +58,14 @@ server.on("connection", (socket) => {
           await broadcastToParty(true, token, "startGame", {
             endAt: await gameEndAt(token),
           });
-          let messages = await getMessages(token);
+          for (const message of messages) {
+            await sendTo(token, "chat", message.payload);
+          }
         } else if (await joinGame(token, payload.gameId)) {
           sendConnectedUsersList(token);
-          let messages = await getMessages(token);
+          for (const message of messages) {
+            await sendTo(token, "chat", message.payload);
+          }
         } else {
           await sendTo(token, "error", {
             code: "joinGameFailed",
