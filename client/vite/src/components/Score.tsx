@@ -70,7 +70,9 @@ export default function Score({ ws, colors, connectedUsers }: ScoreProps) {
         setScores(payload.scores);
         setBigScore(payload.wordScore);
         setBigScoreColor(colors.get(payload.displayName) || "transparent");
-        launchAnimation(bigScoreSpan.current, "drop", 1500);
+        setTimeout(() => {
+          launchAnimation(bigScoreSpan.current, "drop", 1500);
+        }, 400);
       }
     });
   }, [ws]);
