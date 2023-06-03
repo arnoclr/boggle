@@ -1,5 +1,6 @@
 import { createRef, useState } from "react";
 import { ErrorWithStatus, callAction, toMap } from "../utils/req";
+import "./CreateGame.css";
 
 export interface GameJoinerProps {
   whenCreated: (gameId: string) => void;
@@ -9,10 +10,8 @@ export default function CreateGame({ whenCreated }: GameJoinerProps) {
   const form = createRef<HTMLFormElement>();
   const [isLoading, setIsLoading] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function createGame(isPrivateGame: boolean): Promise<void> {
     setIsLoading(true);
-    const isPrivateGame = form.current?.publicStatus.value === "private";
     try {
       const response = await callAction(
         "game.createGame",
@@ -31,25 +30,21 @@ export default function CreateGame({ whenCreated }: GameJoinerProps) {
   }
 
   return (
-    <div>
-      <p>Si vous souhaitez créer une nouvelle partie</p>
-      <form aria-busy={isLoading} ref={form} onSubmit={handleSubmit}>
-        <label>
-          <input
-            type="radio"
-            name="publicStatus"
-            value="public"
-            defaultChecked
-          />
-          <span>Partie publique</span>
-        </label>
-        <label>
-          <input type="radio" name="publicStatus" value="private" />
-          <span>Partie privée</span>
-        </label>
-        <br />
-        <button type="submit">Créer la partie</button>
-      </form>
+    <div className="CreateGame" aria-busy={isLoading}>
+      <button className="secondary" onClick={() => createGame(false)}>
+        <h3>Partie publique</h3>
+        <p>
+          La partie s'affichera en page d'accueil du site et d'autres joueurs
+          pourront vous rejoindre.
+        </p>
+      </button>
+      <button className="secondary" onClick={() => createGame(true)}>
+        <h3>Partie privée</h3>
+        <p>
+          La partie ne sera pas affichée. Seules les personnes qui connaissent
+          le nom de la partie pourront la rejoindre.
+        </p>
+      </button>
     </div>
   );
 }

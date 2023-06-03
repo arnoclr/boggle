@@ -13,6 +13,7 @@ import {
   isGameOwner,
   joinGame,
   previousWordSubmittedTooRecently,
+  removePlayerFromGame,
   startGame,
   thisUserExists,
   wordIsAlreadySubmitted,
@@ -103,11 +104,11 @@ server.on("connection", (socket) => {
   });
 
   socket.on("close", () => {
-    // TODO: faire une fonction qui supprime le socket et le token des Maps. Qui broadcast la nouvelle liste des utilisateurs connectés dans la partie ou le joueur était. Et qui supprime le joueur de la partie en BDD si la partie n'a pas encore commencée (startedAt est NULL)
     const token = connectedSockets.get(socket);
     if (token) {
       connectedUsers.delete(token);
       connectedSockets.delete(socket);
+      removePlayerFromGame(token);
       sendConnectedUsersList(token);
     }
   });

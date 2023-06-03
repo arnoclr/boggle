@@ -4,6 +4,7 @@ import CreateGame from "../components/CreateGame";
 import JoinGame from "../components/joinGame";
 import "./Game.css";
 import Navbar from "../components/Navbar";
+import GamesList from "../components/GamesList";
 
 export default function Game() {
   const [inGame, setInGame] = useState<false | string>(false);
@@ -13,21 +14,20 @@ export default function Game() {
   }
 
   return (
-    <>
+    <div className="Game">
       {inGame ? (
         <WithRealtime gameId={inGame}></WithRealtime>
       ) : (
-        <div className="selection padding">
-          <div>
-            <Navbar></Navbar>
-            <h1>Créer ou rejoindre une partie</h1>
-            <div className="choices">
-              <CreateGame whenCreated={whenCreated}></CreateGame>
-              <JoinGame whenCreated={whenCreated}></JoinGame>
-            </div>
-          </div>
+        <div className="container padding-top">
+          <Navbar></Navbar>
+          <h2>Rejoindre une partie</h2>
+          <GamesList whenCreated={whenCreated}></GamesList>
+          <br />
+          <JoinGame whenCreated={whenCreated}></JoinGame>
+          <h2>Créer une partie</h2>
+          <CreateGame whenCreated={whenCreated}></CreateGame>
         </div>
       )}
-    </>
+    </div>
   );
 }
