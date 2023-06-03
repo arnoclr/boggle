@@ -41,6 +41,7 @@ export function WordInput({ sendRealtimeEvent, ws }: WordInputProps) {
             placeholder="Mot"
             name="word"
             pattern="[A-Za-z]{1,}"
+            autoFocus
           />
           <button className="tertiary">Soumettre</button>
         </nav>

@@ -54,7 +54,7 @@ export function Grid({ gameId, ws, colors }: GridProps) {
     const gridBounds = getAbsoluteBoundsOf(gridRef.current);
     const PADDING = 12;
     const GAP = 8;
-    const SCALE = 0.62;
+    const SCALE = 0.593;
     const index = path.indexOf(cell);
     const y = gridBounds.y;
     const x =

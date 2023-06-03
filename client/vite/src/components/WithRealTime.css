@@ -7,14 +7,12 @@
     width: fit-content;
     display: flex;
     flex-direction: column;
-    order: 1;
     gap: 1rem;
 }
 
 .wordsFound {
     display: flex;
     flex-direction: column;
-    order: 2;
     gap: 8px;
 }
 
@@ -42,6 +40,10 @@
     width: fit-content;
 }
 
+.wordsFound .Word .letter {
+    --size: 38px;
+}
+
 @media (max-width: 800px) {
     .gridContainer {
         flex-direction: column;
@@ -53,18 +55,40 @@
 
     .gridContainerGrid {
         margin: 0 auto;
+        order: 1;
+        flex-direction: column-reverse;
+    }
+
+    .grid {
+        margin-top: 10px;
+        margin-right: auto;
+        border-width: 20px;
+        z-index: 2;
+    }
+
+    .grid .cell,
+    .grid .cell img {
+        width: 32px;
+        height: 32px;
     }
 
     .wordsFound {
+        position: absolute;
         display: flex;
-        flex-direction: row;
-        overflow-x: auto;
-        max-width: 100vw;
+        flex-direction: column;
+        align-items: end;
+        right: 12px;
+        top: 110px;
+        order: 2;
+        z-index: 1;
     }
 
-    .wordsFound .Word {
-        outline-offset: 6px;
-        transform: scale(0.9);
+    .wordsFound .Word .letter {
+        --size: 32px;
+    }
+
+    .chat {
+        order: 3;
     }
 
     .waitingRoom {

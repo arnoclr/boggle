@@ -82,9 +82,14 @@ button {
     background-color: #2871E2;
     border: 2px solid #1f519b;
     padding: .3rem 1rem;
-    font-size: 1.2rem;
+    font-size: 0.8rem;
     cursor: pointer;
     color: white;
+}
+
+button.big {
+    height: 100px;
+    width: 100%;
 }
 
 button.secondary {

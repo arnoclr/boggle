@@ -172,7 +172,11 @@ export default function WithRealtime({ gameId }: Props) {
                       </span>
                     </p>
                     <p>Attente d'autres joueurs ...</p>
-                    <button onClick={startGame} disabled={!canStartGame()}>
+                    <button
+                      className="big"
+                      onClick={startGame}
+                      disabled={!canStartGame()}
+                    >
                       Démarrer la partie
                     </button>
                   </div>

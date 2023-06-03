@@ -1,6 +1,5 @@
 .chat {
     position: relative;
-    order: 3;
     min-width: 340px;
     max-width: 340px;
     max-height: 80vh;
@@ -11,8 +10,4 @@
     position: sticky;
     bottom: 0;
     background-color: #111;
-}
-
-.chat ul {
-    min-height: 295px;
 }
