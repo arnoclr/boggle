@@ -25,7 +25,8 @@
     position: absolute;
     outline: 0px solid #ddd;
     transition-property: top, left, outline, transform;
-    transition-duration: 0.3s;
+    transition-duration: 0.5s;
+    transition-delay: var(--delay);
     transition-timing-function: cubic-bezier(.2, .96, .65, 1.08);
     display: block;
 }

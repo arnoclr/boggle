@@ -72,7 +72,7 @@ export default function Score({ ws, colors, connectedUsers }: ScoreProps) {
         setBigScoreColor(colors.get(payload.displayName) || "transparent");
         setTimeout(() => {
           launchAnimation(bigScoreSpan.current, "drop", 1500);
-        }, 400);
+        }, 800);
       }
     });
   }, [ws]);

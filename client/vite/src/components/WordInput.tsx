@@ -1,6 +1,6 @@
 import { createRef, useEffect } from "react";
-import "./WordInput.css";
 import { launchAnimation } from "../utils/animations";
+import "./WordInput.css";
 
 export interface WordInputProps {
   sendRealtimeEvent: (event: string, data: any) => void;
@@ -42,7 +42,7 @@ export function WordInput({ sendRealtimeEvent, ws }: WordInputProps) {
             name="word"
             pattern="[A-Za-z]{1,}"
           />
-          <button>Soumettre</button>
+          <button className="tertiary">Soumettre</button>
         </nav>
       </form>
     </>

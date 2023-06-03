@@ -11,3 +11,7 @@
     bottom: 0;
     background-color: #111;
 }
+
+.chat ul {
+    min-height: 295px;
+}
