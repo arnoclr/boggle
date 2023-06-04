@@ -135,6 +135,7 @@ export default function Profile() {
                     isChecked={!profileData?.isPublicAccount}
                   >
                   </AccountDetailsFormProps>
+                  <br />
                   <button type="submit">
                     Sauvegarder
                   </button>
@@ -153,6 +154,9 @@ export default function Profile() {
                 </div>
                 <h2>Liste des parties jouées :</h2>
                 <div className="profile-history">
+                  {profileData.games.length === 0 && (
+                    <p className="profile-no-game">Aucune partie jouée</p>
+                  )}
                   {profileData.games.map((game) => (
                     <div className="profile-game-card" key={game.publicId}>
                       <p>Partie commencée {ago(new Date(game.startedAt))}</p>
