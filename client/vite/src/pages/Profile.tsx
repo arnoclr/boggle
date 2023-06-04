@@ -101,7 +101,7 @@ export default function Profile() {
                         <span className="no-best-word">Aucun</span>
                       )}
                     </p>
-                    <a href={`/g/${game.publicId}`}>Voir la partie</a>
+                    <a href={`/g/${game.publicId}/results`}>Voir la partie</a>
                   </li>
                 ))}
               </ul>
