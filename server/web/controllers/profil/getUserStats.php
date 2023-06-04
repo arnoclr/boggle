@@ -53,7 +53,6 @@ $stmt->execute([
 $games = $stmt->fetchAll();
 
 $gamesStats = [];
-// On va parcourir les parties et récupérer les stats de chaque partie ainsi que les mots trouvés, le score, le meilleur mot,etc
 foreach ($games as $game) {
     $stmt = $pdo->prepare("
         SELECT 
