@@ -138,4 +138,14 @@
     display: flex;
     flex-direction: column;
   }
+
+  .avatar-list {
+    display: flex;
+  }
+  
+  .avatar-option {
+    width: 32px;
+    height: 32px;
+    margin-right: 8px; /* Espacement entre les avatars */
+  }
   

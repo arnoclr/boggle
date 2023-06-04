@@ -25,6 +25,20 @@ export default function Profile() {
       bestWordScore: number
     }>
   } | null>(null);
+  const [avatars, setAvatars] = useState<Array<string>>([]);
+
+  async function fetchAvatars(): Promise<void> {
+    try {
+      const response = await callAction(
+        "profil.getAvatars",
+        toMap({})
+      );
+      setAvatars(response.data);
+    } catch (e) {
+      const { message, status } = e as ErrorWithStatus;
+      console.log("error", e);
+    }
+  }
   
   async function fetchProfileData(userName: string): Promise<void> {
     setIsLoading(true);
@@ -118,6 +132,7 @@ export default function Profile() {
   
 
   useEffect(() => {
+    fetchAvatars();
     fetchProfileData(username);
   }, [username]);
 
@@ -152,6 +167,20 @@ export default function Profile() {
                     isChecked={!profileData?.isPublicAccount}
                   >
                   </AccountDetailsFormProps>
+                  <br />
+                  <label>
+                    <span>Avatar</span>
+                    <div className="avatar-list">
+                    {avatars.map((avatar, index) => (
+                      <img
+                        key={index}
+                        src={avatar}
+                        alt={`Avatar ${index}`}
+                        className="avatar-option"
+                      />
+                    ))}
+                  </div>
+                </label>
                   <br />
                   <button type="submit">
                     Sauvegarder
