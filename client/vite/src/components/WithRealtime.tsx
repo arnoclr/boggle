@@ -19,7 +19,7 @@ export interface PlayerScore {
   score: number;
 }
 
-const PLAYER_COLORS: CSSColor[] = ["red", "blue", "green", "yellow"];
+const PLAYER_COLORS: CSSColor[] = ["#E40027", "#E88823", "#264BCC", "#2AA146"];
 
 const DURATIONS: { label: string; value: number }[] = [
   { label: "Partie rapide", value: 100 },
@@ -40,9 +40,10 @@ export default function WithRealtime({ gameId }: Props) {
   const [endAt, setEndAt] = useState<Date>(new Date());
   const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
   const [durationSeconds, setDurationSeconds] = useState<number>(0);
+  const [iAmGameOwner, setIAmGameOwner] = useState<boolean>(false);
 
   function canStartGame(): boolean {
-    return users.length >= 2;
+    return users.length >= 2 && iAmGameOwner;
   }
 
   function startGame(): void {
@@ -119,6 +120,7 @@ export default function WithRealtime({ gameId }: Props) {
             ])
           )
         );
+        setIAmGameOwner(payload.gameOwnerToken === websocketToken);
       }
 
       if (type === "startGame") {
@@ -136,7 +138,7 @@ export default function WithRealtime({ gameId }: Props) {
       console.log("error", error);
       tryToReconnect();
     };
-  }, []);
+  }, [websocketToken]);
 
   return (
     <>
@@ -152,8 +154,7 @@ export default function WithRealtime({ gameId }: Props) {
                   connectedUsers={users}
                   ws={ws}
                 ></Score>
-                <Timer remainingSeconds={remainingSeconds}></Timer>
-                <div className="gridContainer">
+                <div className="gridContainer padding-top">
                   <Chat
                     sendRealtimeEvent={sendRealtimeEvent}
                     ws={ws}
@@ -162,19 +163,22 @@ export default function WithRealtime({ gameId }: Props) {
                   <div className="gridContainerGrid">
                     <Grid gameId={gameId} ws={ws} colors={playerColors}></Grid>
                     {remainingSeconds > 0 && (
-                      <WordInput
-                        sendRealtimeEvent={sendRealtimeEvent}
-                        ws={ws}
-                      ></WordInput>
+                      <div role="group" style={{ width: "356px" }}>
+                        <WordInput
+                          sendRealtimeEvent={sendRealtimeEvent}
+                          ws={ws}
+                        ></WordInput>
+                        <Timer remainingSeconds={remainingSeconds}></Timer>
+                      </div>
                     )}
                   </div>
                   <WordsFound ws={ws}></WordsFound>
                 </div>
               </>
             ) : (
-              <div className="padding">
+              <div className="container">
                 <Navbar></Navbar>
-                <div className="waitingRoom">
+                <div className="waitingRoom" style={{ marginTop: "1rem" }}>
                   <div>
                     <p>
                       Partie :&nbsp;
@@ -194,7 +198,11 @@ export default function WithRealtime({ gameId }: Props) {
                         </option>
                       ))}
                     </select>
-                    <button onClick={startGame} disabled={!canStartGame()}>
+                    <button
+                      className="big"
+                      onClick={startGame}
+                      disabled={!canStartGame()}
+                    >
                       Démarrer la partie
                     </button>
                   </div>

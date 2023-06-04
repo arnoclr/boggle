@@ -1,5 +1,7 @@
 FROM node:18-alpine
 
+ENV NODE_ENV=${NODE_ENV}
+
 WORKDIR /app
 
 COPY package*.json ./
@@ -10,4 +12,7 @@ COPY . .
 
 EXPOSE 5173
 
-CMD ["npm", "run", "dev"]
+CMD if [ "$NODE_ENV" = "production" ]; \
+    then npm run serve; \
+    else npm run dev; \
+    fi
