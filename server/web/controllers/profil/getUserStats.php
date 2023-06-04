@@ -48,6 +48,7 @@ $stats = $stmt->fetch();
 
 respondWithSuccessJSON([
     "userName" => $user->name,
+    "isPublic" => $user->isPrivateAccount == 0,
     "totalGames" => $totalGames->totalGames ?? 0,
     "totalScore" => $stats->totalScore ?? 0,
     "totalWordsFound" => $stats->totalWordsFound ?? 0
