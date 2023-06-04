@@ -246,16 +246,11 @@ export default function Profile() {
                 </div>
               </div>
             ) : (
-              <div className="profile-warning">
-                <svg
+              <div className="profile-private-section">
+                <img
+                  src="https://cdn.discordapp.com/attachments/886301152759644272/1115052065434128444/image-removebg-preview.png"
                   className="profile-warning-icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2C6.485 2 2 6.485 2 12c0 5.515 4.485 10 10 10s10-4.485 10-10c0-5.515-4.485-10-10-10zm1 15h-2v-2h2v2zm0-4h-2v-6h2v6z" />
-                </svg>
+                ></img>
                 <p className="profile-warning-text">
                   Vous ne pouvez pas accéder aux statistiques de ce joueur car ce compte est privé.
                 </p>

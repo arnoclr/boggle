@@ -52,15 +52,21 @@
     padding: 10px;
     color: black;
     font-weight: bold;
-
   }
   
   .profile-warning-icon {
     margin-right: 10px;
+    width: 64px;
+    height: 64px;
+  }
+
+  .profile-private-section {
+    display: flex;
+    align-items: center;
+    padding: 10px;
   }
   
   .profile-warning-text {
-    color: black;
     font-weight: bold;
   }
 
