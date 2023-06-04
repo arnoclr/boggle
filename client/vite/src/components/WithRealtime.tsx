@@ -10,6 +10,7 @@ import { wsUrl } from "../vars";
 import Score from "./Score";
 import "./WithRealtime.css";
 import Navbar from "./Navbar";
+import BlurredQR from "./BlurredQR";
 
 export type PlayerName = string;
 export type CSSColor = string;
@@ -39,6 +40,7 @@ export default function WithRealtime({ gameId }: Props) {
   const [gameActive, setGameActive] = useState<boolean>(false);
   const [endAt, setEndAt] = useState<Date>(new Date());
   const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
+  const gameUrl = window.location.href;
   const [durationSeconds, setDurationSeconds] = useState<number>(0);
   const [gameOwnerToken, setGameOwnerToken] = useState<string>("");
 
@@ -218,6 +220,7 @@ export default function WithRealtime({ gameId }: Props) {
                     >
                       Démarrer la partie
                     </button>
+                    <BlurredQR url={gameUrl}></BlurredQR>
                   </div>
                   <ConnectedUsers
                     users={users}

@@ -1,10 +1,41 @@
-import { useState } from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Footer from "../components/Footer";
 import LoginModal from "../components/LoginModal";
 import "./App.css";
+import ErrorPage from "./ErrorPage";
 import Game from "./Game";
-import Footer from "../components/Footer";
+import Home from "./Home";
+import Profile from "./Profile";
+import { useState } from "react";
+import Results from "./Results";
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Home></Home>,
+      errorElement: <ErrorPage></ErrorPage>,
+    },
+    {
+      path: "/g/:gameId",
+      element: <Game loggedIn={loggedIn}></Game>,
+    },
+    {
+      path: "/g/:gameId/results",
+      element: <Results></Results>,
+    },
+    {
+      path: "/p/:username",
+      element: <Profile></Profile>,
+    },
+  ]);
+
+  function onLogin() {
+    setLoggedIn(true);
+  }
+
   return (
     <div
       style={{
@@ -14,8 +45,8 @@ function App() {
       }}
     >
       <div>
-        <LoginModal />
-        <Game></Game>
+        <LoginModal onLogin={onLogin} />
+        <RouterProvider router={router}></RouterProvider>
       </div>
       <Footer></Footer>
     </div>
