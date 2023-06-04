@@ -47,7 +47,7 @@ export default function Profile() {
       {isLoading && <p>Loading...</p>}
       {profileData.isPublicAccount ? (
         <div>
-          <p>Nombre de parties joués: {profileData.totalGames}</p>
+          <p>Nombre de parties jouées: {profileData.totalGames}</p>
           <p>Nombre de points: {profileData.totalScore}</p>
           <p>Nombre de mots trouvés: {profileData.totalWordsFound}</p>
         </div>
