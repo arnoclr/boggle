@@ -8,7 +8,6 @@
 */
 
 $userName = $_POST['userName'] ?? null;
-echo $userName;
 
 if (!$userName) {
     // TODO: Récupérer le nom de l'utilisateur connecté
