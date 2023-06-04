@@ -11,6 +11,7 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [profileData, setProfileData] = useState<{
+    profilePictureURL: string | null,
     isPublicAccount: boolean,
     totalGames: number,
     totalScore: number,
@@ -48,13 +49,15 @@ export default function Profile() {
         toMap({ userName: userName })
       );
 
+      const profilePictureURL = response.data.profilPicUrl;
+      console.log(profilePictureURL);
       const isPublicAccount = response.data.isPublic;
       const totalGames = response.data.totalGames;
       const totalScore = response.data.totalScore;
       const totalWordsFound = response.data.totalWordsFound;
       const games = response.data.games;
 
-      setProfileData({ isPublicAccount: isPublicAccount, totalGames: totalGames, totalScore: totalScore, totalWordsFound: totalWordsFound, games: games });
+      setProfileData({profilePictureURL: profilePictureURL, isPublicAccount: isPublicAccount, totalGames: totalGames, totalScore: totalScore, totalWordsFound: totalWordsFound, games: games });
     } catch (e) {
       const { message, status } = e as ErrorWithStatus;
       if (status === "user_not_found") {
@@ -122,8 +125,21 @@ export default function Profile() {
   return (
     <div className="profile-container">
       <h1>Profile</h1>
-      <div className="profile-section">
-        <p className="profile-username">@{username}</p>
+        <div className="profile-section">
+          <div className="profile-avatar">
+            <img
+              src={profileData.profilePictureURL}
+              alt="Profile Picture"
+              className="avatar-image"
+              width="64"
+              height="64"
+            />
+          </div>
+          <div className="profile-username-container">
+            <p className="profile-username">@{username}</p>
+          </div>
+        </div>
+        <br />
         {isLoading && <p>Loading...</p>}
         {profileData && (
           <>
@@ -197,7 +213,6 @@ export default function Profile() {
             )}
           </>
         )}
-      </div>
     </div>
   );
 }

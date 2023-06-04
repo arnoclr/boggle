@@ -119,4 +119,23 @@
     transform: translateX(24px);
   }
   
+  .profile-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile-avatar {
+    margin-right: 16px;
+  }
+  
+  .avatar-image {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+  }
+  
+  .profile-username-container {
+    display: flex;
+    flex-direction: column;
+  }
   

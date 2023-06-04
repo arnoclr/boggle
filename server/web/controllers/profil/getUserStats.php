@@ -99,8 +99,13 @@ foreach ($games as $game) {
     ];
 }
 
+if (!$user->profilPicUrl || $user->profilPicUrl == "") {
+    $user->profilPicUrl = "https://cdn.discordapp.com/attachments/886301152759644272/1115018794562232360/av_1.png";
+}
+
 respondWithSuccessJSON([
     "userName" => $user->name,
+    "profilPicUrl" => $user->profilPicUrl,
     "isPublic" => $user->isPrivateAccount == 0,
     "totalGames" => $totalGames->totalGames ?? 0,
     "totalScore" => $stats->totalScore ?? 0,
