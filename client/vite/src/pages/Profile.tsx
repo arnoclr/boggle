@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import { createRef, useState, useEffect } from "react";
 import { ErrorWithStatus, callAction, toMap } from "../utils/req";
+import "./Profile.css";
+import { ago } from "../utils/time";
 
 export default function Profile() {
   const { username } = useParams<{ username: string }>();
@@ -51,20 +53,20 @@ export default function Profile() {
   }, [username]);
 
   return (
-    <div>
+    <div className="profile-container">
       <h1>Profile</h1>
       <p>@{username}</p>
       {isLoading && <p>Loading...</p>}
       {profileData && profileData.isPublicAccount ? (
         <div>
-          <p>Nombre de parties jouées: {profileData.totalGames}</p>
-          <p>Nombre de points: {profileData.totalScore}</p>
-          <p>Nombre de mots trouvés: {profileData.totalWordsFound}</p>
+          <p className="total-games">Nombre de parties jouées: {profileData.totalGames}</p>
+          <p className="total-score">Nombre de points: {profileData.totalScore}</p>
+          <p className="total-words">Nombre de mots trouvés: {profileData.totalWordsFound}</p>
           <h2>Liste des parties jouées :</h2>
           <ul>
             {profileData.games.map((game) => (
               <li key={game.publicId}>
-                <p>Started at: {game.startedAt}</p>
+                <p>Partie commencée {ago(new Date(game.startedAt))}</p>
                 <p>Nombre de mots trouvés: {game.totalWordsFound}</p>
                 <p>Score total: {game.totalScore}</p>
                 <p>
@@ -72,7 +74,7 @@ export default function Profile() {
                   {game.bestWord ? (
                     game.bestWord
                   ) : (
-                    <span style={{ fontStyle: "italic", color: "gray" }}>Aucun</span>
+                    <span className="no-best-word">Aucun</span>
                   )}
                 </p>
                 <a href={`/g/${game.publicId}`}>Voir la partie</a>
