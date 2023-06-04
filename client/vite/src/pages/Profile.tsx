@@ -3,6 +3,7 @@ import { createRef, useState, useEffect } from "react";
 import { ErrorWithStatus, callAction, toMap } from "../utils/req";
 import "./Profile.css";
 import { ago } from "../utils/time";
+import AccountDetailsFormProps from "../components/AccountDetailsForm";
 
 export default function Profile() {
   const { username } = useParams<{ username: string }>();
@@ -70,6 +71,19 @@ export default function Profile() {
     }
   }
 
+  const handleNameChange = async (newName: string) => {
+    try {
+      await callAction(
+        "users.updateInformations",
+        toMap({ name: newName, isPrivateAccount: profileData?.isPublicAccount ? 0 : 1 })
+      );
+      setProfileData({ ...profileData, name: newName });
+    }
+    catch (e) {
+      console.log("error", e);
+    }
+  };
+
   const handlePrivacyToggle = async () => {
     const newPrivacyStatus = !profileData?.isPublicAccount ? 0 : 1;
     try {
@@ -84,6 +98,23 @@ export default function Profile() {
     }
   };
 
+  const onSubmit = (event: any) => {
+    event.preventDefault();
+    
+    const form = event.target;
+    const name = form.playerNameInput.value;
+    const isPrivateAccount = !form.profileVisibility.checked;
+
+    if (name !== username) {
+      handleNameChange(name);
+    }
+      
+    if (isPrivateAccount !== profileData?.isPublicAccount) {
+      handlePrivacyToggle();
+    }
+  };
+  
+
   useEffect(() => {
     fetchProfileData(username);
   }, [username]);
@@ -97,20 +128,18 @@ export default function Profile() {
         {profileData && (
           <>
             {isOwner && (
-              <div className="privacy-section">
-                <div className="privacy-toggle">
-                  <input
-                    type="checkbox"
-                    id="privacy-toggle"
-                    checked={!profileData?.isPublicAccount}
-                    onChange={handlePrivacyToggle}
-                  />
-                </div>
-                <label htmlFor="privacy-toggle" className="privacy-toggle-label">
-                  <span className="privacy-toggle-text">{profileData?.isPublicAccount ? 'Public' : 'Privé'}</span>
-                  <span className="privacy-toggle-slider"></span>
-                </label>
-              </div>
+              <>
+                <form className="form" onSubmit={onSubmit}>
+                  <AccountDetailsFormProps 
+                    defaultUserName={username}
+                    isChecked={!profileData?.isPublicAccount}
+                  >
+                  </AccountDetailsFormProps>
+                  <button type="submit">
+                    Sauvegarder
+                  </button>
+                </form>
+              </>
             )}
             {isOwner && !profileData.isPublicAccount && (
                 <p className="profile-warning">Votre profil est privé, seuls vous et les administrateurs pouvez le voir.</p>
