@@ -16,7 +16,11 @@ export interface Account {
   authMethod: "password" | "webauthn";
 }
 
-export default function LoginModal() {
+export interface LoginModalProps {
+  onLogin: () => void;
+}
+
+export default function LoginModal({ onLogin }: LoginModalProps) {
   const [section, setSection] = useState<
     "email" | "code" | "name" | "accountSelection"
   >("email");
@@ -124,6 +128,7 @@ export default function LoginModal() {
   }
 
   function closeModal(): void {
+    onLogin();
     if (isDialogOpen()) {
       dialogRef.current?.close();
     }
