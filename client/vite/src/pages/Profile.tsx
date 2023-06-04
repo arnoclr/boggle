@@ -129,6 +129,8 @@ export default function Profile() {
           <>
             {isOwner && (
               <>
+                <details>
+                <summary>Options du profil</summary>
                 <form className="form" onSubmit={onSubmit}>
                   <AccountDetailsFormProps 
                     defaultUserName={username}
@@ -140,6 +142,8 @@ export default function Profile() {
                     Sauvegarder
                   </button>
                 </form>
+                </details>
+                
               </>
             )}
             {isOwner && !profileData.isPublicAccount && (
