@@ -11,7 +11,7 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [profileData, setProfileData] = useState<{
-    profilePictureURL: string | null,
+    profilePictureURL: string,
     isPublicAccount: boolean,
     totalGames: number,
     totalScore: number,
@@ -50,7 +50,6 @@ export default function Profile() {
       );
 
       const profilePictureURL = response.data.profilPicUrl;
-      console.log(profilePictureURL);
       const isPublicAccount = response.data.isPublic;
       const totalGames = response.data.totalGames;
       const totalScore = response.data.totalScore;
@@ -128,7 +127,7 @@ export default function Profile() {
         <div className="profile-section">
           <div className="profile-avatar">
             <img
-              src={profileData.profilePictureURL}
+              src={profileData.profilePictureURL ? profileData.profilePictureURL : ""}
               alt="Profile Picture"
               className="avatar-image"
               width="64"
