@@ -143,6 +143,7 @@ export default function WithRealtime({ gameId }: Props) {
   }, []);
 
   useEffect(() => {
+    websocketToken; // not working without this line
     ws.onopen = () => {
       sendRealtimeEvent("joinGame", { gameId });
     };
