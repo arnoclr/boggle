@@ -63,6 +63,8 @@ export default function Profile() {
       if (status === "user_email_not_found") {
         console.log("user email not found");
       }
+
+      console.log("error", e);
     } finally {
       setIsLoading(false);
     }
