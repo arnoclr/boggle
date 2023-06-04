@@ -7,6 +7,7 @@ import Game from "./Game";
 import Home from "./Home";
 import Profile from "./Profile";
 import { useState } from "react";
+import Results from "./Results";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -20,6 +21,10 @@ function App() {
     {
       path: "/g/:gameId",
       element: <Game loggedIn={loggedIn}></Game>,
+    },
+    {
+      path: "/g/:gameId/results",
+      element: <Results></Results>,
     },
     {
       path: "/p/:username",
