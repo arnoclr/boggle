@@ -117,10 +117,21 @@ export default function Profile() {
     }
   };
 
+  const handleAvatarChange = async (newAvatar: string) => {
+    try {
+      await callAction(
+        "users.updateInformations",
+        toMap({ profilPicUrl: newAvatar })
+      );
+      setProfileData({ ...profileData, profilePictureURL: newAvatar });
+    }
+    catch (e) {
+      console.log("error", e);
+    }
+  };
+
   const onSubmit = (event: any) => {
     event.preventDefault();
-
-    console.log("Avatar sélectionné :", selectedAvatar);
     
     const form = event.target;
     const name = form.playerNameInput.value;
@@ -132,6 +143,10 @@ export default function Profile() {
       
     if (isPrivateAccount !== profileData?.isPublicAccount) {
       handlePrivacyToggle();
+    }
+
+    if (selectedAvatar !== profileData?.profilePictureURL) {
+      handleAvatarChange(selectedAvatar);
     }
   };
   
