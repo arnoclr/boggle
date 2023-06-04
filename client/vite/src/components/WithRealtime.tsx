@@ -40,10 +40,14 @@ export default function WithRealtime({ gameId }: Props) {
   const [endAt, setEndAt] = useState<Date>(new Date());
   const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
   const [durationSeconds, setDurationSeconds] = useState<number>(0);
-  const [iAmGameOwner, setIAmGameOwner] = useState<boolean>(false);
+  const [gameOwnerToken, setGameOwnerToken] = useState<string>("");
+
+  function iAmGameOwner(): boolean {
+    return gameOwnerToken === websocketToken;
+  }
 
   function canStartGame(): boolean {
-    return users.length >= 2 && iAmGameOwner;
+    return users.length >= 2 && iAmGameOwner();
   }
 
   function startGame(): void {
@@ -73,6 +77,7 @@ export default function WithRealtime({ gameId }: Props) {
             ])
           )
         );
+        setGameOwnerToken(payload.gameOwnerToken);
       }
 
       if (type === "startGame") {
@@ -192,6 +197,7 @@ export default function WithRealtime({ gameId }: Props) {
                     </p>
                     {!canStartGame() && <p>Attente d'autres joueurs ...</p>}
                     <select
+                      disabled={iAmGameOwner() === false}
                       onChange={(event) =>
                         setDurationSeconds(parseInt(event.target.value))
                       }
@@ -202,6 +208,8 @@ export default function WithRealtime({ gameId }: Props) {
                         </option>
                       ))}
                     </select>
+                    <br />
+                    <br />
                     <button
                       className="big"
                       onClick={startGame}
