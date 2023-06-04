@@ -46,10 +46,24 @@ $stmt->execute([
 
 $stats = $stmt->fetch();
 
+$stmt = $pdo->prepare("
+    SELECT g.grid, g.startedAt, g.endedAt, g.publicId
+    from games g
+    JOIN gamesplayers gp ON g.idGame = gp.idGame
+    JOIN players p ON gp.idPlayer = p.idPlayer
+    WHERE p.idPlayer = :idPlayer
+");
+$stmt->execute([
+    "idPlayer" => $user->idPlayer
+]);
+
+$games = $stmt->fetchAll();
+
 respondWithSuccessJSON([
     "userName" => $user->name,
     "isPublic" => $user->isPrivateAccount == 0,
     "totalGames" => $totalGames->totalGames ?? 0,
     "totalScore" => $stats->totalScore ?? 0,
-    "totalWordsFound" => $stats->totalWordsFound ?? 0
+    "totalWordsFound" => $stats->totalWordsFound ?? 0,
+    "games" => $games ?? []
 ]);
