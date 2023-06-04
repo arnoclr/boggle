@@ -68,6 +68,7 @@ export interface startGameMessage extends BaseWebSocketMessage {
   type: "startGame";
   payload: {
     endAt: Date;
+    durationSeconds?: number;
   };
 }
 

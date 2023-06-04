@@ -21,6 +21,12 @@ export interface PlayerScore {
 
 const PLAYER_COLORS: CSSColor[] = ["#E40027", "#E88823", "#264BCC", "#2AA146"];
 
+const DURATIONS: { label: string; value: number }[] = [
+  { label: "Partie rapide", value: 100 },
+  { label: "Partie normale", value: 180 },
+  { label: "Partie longue", value: 300 },
+];
+
 interface Props {
   gameId: string;
 }
@@ -33,6 +39,7 @@ export default function WithRealtime({ gameId }: Props) {
   const [gameActive, setGameActive] = useState<boolean>(false);
   const [endAt, setEndAt] = useState<Date>(new Date());
   const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
+  const [durationSeconds, setDurationSeconds] = useState<number>(0);
   const [iAmGameOwner, setIAmGameOwner] = useState<boolean>(false);
 
   function canStartGame(): boolean {
@@ -41,7 +48,7 @@ export default function WithRealtime({ gameId }: Props) {
 
   function startGame(): void {
     if (!canStartGame()) return;
-    sendRealtimeEvent("startGame", { durationSeconds: 0 });
+    sendRealtimeEvent("startGame", { durationSeconds });
   }
 
   function tryToReconnect(): void {
@@ -70,6 +77,12 @@ export default function WithRealtime({ gameId }: Props) {
     }
     console.log("sending", type, payload);
     ws.send(JSON.stringify({ type, payload, token: websocketToken }));
+  }
+
+  function secondsToMinutes(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   }
 
   useEffect(() => {
@@ -168,12 +181,23 @@ export default function WithRealtime({ gameId }: Props) {
                 <div className="waitingRoom" style={{ marginTop: "1rem" }}>
                   <div>
                     <p>
-                      Partie :{" "}
+                      Partie :&nbsp;
                       <span style={{ textTransform: "uppercase" }}>
                         {gameId}
                       </span>
                     </p>
-                    <p>Attente d'autres joueurs ...</p>
+                    {!canStartGame() && <p>Attente d'autres joueurs ...</p>}
+                    <select
+                      onChange={(event) =>
+                        setDurationSeconds(parseInt(event.target.value))
+                      }
+                    >
+                      {DURATIONS.map((duration) => (
+                        <option key={duration.value} value={duration.value}>
+                          {duration.label} ({secondsToMinutes(duration.value)})
+                        </option>
+                      ))}
+                    </select>
                     <button
                       className="big"
                       onClick={startGame}

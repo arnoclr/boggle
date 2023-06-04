@@ -37,6 +37,7 @@ server.on("connection", (socket) => {
     ) as WebSocketMessage;
 
     if ((await thisUserExists(token)) === false) {
+      console.log("User tried to connect with invalid token", token);
       socket.close();
       return;
     }
@@ -68,7 +69,8 @@ server.on("connection", (socket) => {
         break;
       case "startGame":
         if (await isGameOwner(token)) {
-          const durationSeconds = DEFAULT_GAME_DURATION;
+          const durationSeconds =
+            payload.durationSeconds || DEFAULT_GAME_DURATION;
           await startGame(token, durationSeconds);
           await broadcastToParty(true, token, type, {
             endAt: await gameEndAt(token),
