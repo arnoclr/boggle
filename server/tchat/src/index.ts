@@ -1,5 +1,6 @@
 import WebSocket from "ws";
 import { WebSocketMessage, startGameMessage } from "./types";
+import { AntiSpam } from "./AntiSpam";
 import {
   DEFAULT_GAME_DURATION,
   addWordToGame,
@@ -12,6 +13,7 @@ import {
   getNextPlayerOfGame,
   getScores,
   getUserName,
+  invalidateToken,
   isGameOwner,
   joinGame,
   previousWordSubmittedTooRecently,
@@ -26,6 +28,8 @@ const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
 const connectedSockets: Map<WebSocket.WebSocket, string> = new Map();
 
+const antiSpam = new AntiSpam();
+
 server.on("listening", () => {
   console.log("Listening on port 8082");
 });
@@ -38,6 +42,12 @@ server.on("connection", (socket) => {
 
     if ((await thisUserExists(token)) === false) {
       console.log("User tried to connect with invalid token", token);
+      socket.close();
+      return;
+    }
+
+    if (antiSpam.userHasSendTooManyRequests(token)) {
+      await invalidateToken(token);
       socket.close();
       return;
     }

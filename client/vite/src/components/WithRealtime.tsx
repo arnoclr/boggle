@@ -51,11 +51,50 @@ export default function WithRealtime({ gameId }: Props) {
     sendRealtimeEvent("startGame", { durationSeconds });
   }
 
-  function tryToReconnect(): void {
-    setTimeout(() => {
-      console.log("try to reconnect");
-      setWebSocket(new WebSocket(wsUrl));
-    }, 1000);
+  async function connectWebsocket(): Promise<void> {
+    console.log("get websocket token");
+    await fetchWebsocketToken();
+
+    const socket = new WebSocket(wsUrl);
+
+    socket.onmessage = (event) => {
+      console.log("message", event.data);
+
+      const { type, payload } = JSON.parse(event.data);
+
+      if (type === "users") {
+        const users = [...payload.users];
+        setUsers(users.map((user: { name: string }) => user.name));
+        setPlayerColors(
+          new Map(
+            users.map((user: { name: string }, index: number) => [
+              user.name,
+              PLAYER_COLORS[index],
+            ])
+          )
+        );
+      }
+
+      if (type === "startGame") {
+        setGameActive(true);
+        setEndAt(new Date(payload.endAt));
+      }
+    };
+
+    socket.onclose = () => {
+      console.log("disconnected");
+      setWebsocketToken(null);
+      setTimeout(() => {
+        connectWebsocket();
+      }, 1000);
+    };
+
+    socket.onerror = (error) => {
+      console.log("error", error);
+    };
+
+    console.log("set websocket");
+    setWebSocket(socket);
   }
 
   async function fetchWebsocketToken(): Promise<void> {
@@ -67,12 +106,11 @@ export default function WithRealtime({ gameId }: Props) {
   function sendRealtimeEvent(type: string, payload: any): void {
     console.log(websocketToken, ws.readyState);
     if (websocketToken === null) {
-      // fetchWebsocketToken();
       return;
     }
     if (ws.readyState !== WebSocket.OPEN) {
       console.log("not open");
-      tryToReconnect();
+      connectWebsocket();
       return;
     }
     console.log("sending", type, payload);
@@ -96,52 +134,18 @@ export default function WithRealtime({ gameId }: Props) {
   }, [gameActive]);
 
   useEffect(() => {
-    sendRealtimeEvent("joinGame", { gameId });
-  }, [websocketToken]);
+    connectWebsocket();
+  }, []);
 
   useEffect(() => {
     ws.onopen = () => {
-      fetchWebsocketToken();
+      sendRealtimeEvent("joinGame", { gameId });
     };
-
-    ws.onmessage = (event) => {
-      console.log("message", event.data);
-
-      const { type, payload } = JSON.parse(event.data);
-
-      if (type === "users") {
-        const users = [...payload.users];
-        setUsers(users.map((user: { name: string }) => user.name));
-        setPlayerColors(
-          new Map(
-            users.map((user: { name: string }, index: number) => [
-              user.name,
-              PLAYER_COLORS[index],
-            ])
-          )
-        );
-        setIAmGameOwner(payload.gameOwnerToken === websocketToken);
-      }
-
-      if (type === "startGame") {
-        setGameActive(true);
-        setEndAt(new Date(payload.endAt));
-      }
-    };
-
-    ws.onclose = () => {
-      console.log("disconnected");
-      tryToReconnect();
-    };
-
-    ws.onerror = (error) => {
-      console.log("error", error);
-      tryToReconnect();
-    };
-  }, [websocketToken]);
+  }, [ws]);
 
   return (
     <>
+      {websocketToken === null && <p>Connexion en cours ...</p>}
       {websocketToken !== null &&
         ws.readyState === WebSocket.OPEN &&
         users.length > 0 &&
