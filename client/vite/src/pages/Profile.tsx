@@ -127,7 +127,7 @@ export default function Profile() {
         <div className="profile-section">
           <div className="profile-avatar">
             <img
-              src={profileData.profilePictureURL ? profileData.profilePictureURL : ""}
+              src={profileData?.profilePictureURL}
               alt="Profile Picture"
               className="avatar-image"
               width="64"
