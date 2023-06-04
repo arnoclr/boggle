@@ -1,12 +1,5 @@
 <?php
 
-/*
-- Affichage que si la personne a un compte publique (verification en faisant la condition dans la requete SQL directement)
-- Affichage infos sur joueur, nom, stats générales ...
-- Affichage de l'historique avec possibilité de cliquer sur une partie et sa ramène vers /g/ID partie. La aussi il faut quelques stats générales sur la partie, donc meilleur mot trouvé par le joueur, sa position dans le classement, nombre de mots trouvés, score, joueurs présents, date ...
-- En bonus : affichage des PP et possibilité de les choisir parmis une liste
-*/
-
 $userName = $_POST['userName'] ?? null;
 
 if (!$userName) {
@@ -47,7 +40,7 @@ $stmt->execute([
 $stats = $stmt->fetch();
 
 $stmt = $pdo->prepare("
-    SELECT g.grid, g.startedAt, g.endedAt, g.publicId
+    SELECT *
     from games g
     JOIN gamesplayers gp ON g.idGame = gp.idGame
     JOIN players p ON gp.idPlayer = p.idPlayer
@@ -59,11 +52,59 @@ $stmt->execute([
 
 $games = $stmt->fetchAll();
 
+$gamesStats = [];
+// On va parcourir les parties et récupérer les stats de chaque partie ainsi que les mots trouvés, le score, le meilleur mot,etc
+foreach ($games as $game) {
+    $stmt = $pdo->prepare("
+        SELECT 
+            COUNT(*) AS totalWordsFound,
+            SUM(score) AS totalScore
+        FROM 
+            wordsfound 
+        WHERE 
+            idPlayer = :idPlayer AND idGame = :idGame
+    ");
+    $stmt->execute([
+        "idPlayer" => $user->idPlayer,
+        "idGame" => $game->idGame
+    ]);
+
+    $gameStats = $stmt->fetch();
+
+    $stmt = $pdo->prepare("
+        SELECT 
+            word,
+            score
+        FROM 
+            wordsfound
+        WHERE 
+            idPlayer = :idPlayer AND idGame = :idGame
+        ORDER BY score DESC
+        LIMIT 1
+    ");
+    $stmt->execute([
+        "idPlayer" => $user->idPlayer,
+        "idGame" => $game->idGame
+    ]);
+
+    $bestWord = $stmt->fetch();
+
+    $gamesStats[] = [
+        "publicId" => $game->publicId,
+        "startedAt" => $game->startedAt,
+
+        "totalWordsFound" => $gameStats->totalWordsFound,
+        "totalScore" => $gameStats->totalScore ?? 0,
+        "bestWord" => $bestWord->word ?? null,
+        "bestWordScore" => $bestWord->score ?? 0
+    ];
+}
+
 respondWithSuccessJSON([
     "userName" => $user->name,
     "isPublic" => $user->isPrivateAccount == 0,
     "totalGames" => $totalGames->totalGames ?? 0,
     "totalScore" => $stats->totalScore ?? 0,
     "totalWordsFound" => $stats->totalWordsFound ?? 0,
-    "games" => $games ?? []
+    "games" => $gamesStats ?? []
 ]);
