@@ -33,7 +33,7 @@ export default function JoinGame({ whenCreated }: GameJoinerProps) {
           />
         </label>
         <button className="tertiary" type="submit">
-          Rejoindre la partie
+          Rejoindre
         </button>
       </form>
     </div>

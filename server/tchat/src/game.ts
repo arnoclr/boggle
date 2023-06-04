@@ -109,31 +109,33 @@ const getInternalGameId = (gameId: string): Promise<number> => {
   });
 };
 
-const _joinGame = async (
-  token: string,
-  publicGameId: string
-): Promise<boolean> => {
-  const userId = await getUserId(token);
-  const gameId = await getInternalGameId(publicGameId);
-
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "INSERT INTO gamesplayers (idPlayer, idGame, joinedAt) VALUES (?, ?, NOW())",
-      [userId, gameId],
-      (error, results) => {
-        if (error) reject(error);
-        resolve(true);
-      }
-    );
-  });
-};
-
 export const joinGame = async (
   token: string,
   publicGameId: string
 ): Promise<boolean> => {
   try {
-    return await _joinGame(token, publicGameId);
+    const userId = await getUserId(token);
+    const gameId = await getInternalGameId(publicGameId);
+
+    const results = await query(
+      "SELECT * FROM gamesplayers WHERE idPlayer = ? AND idGame = ?",
+      [userId, gameId]
+    );
+
+    if (results.length > 0) {
+      return true;
+    }
+
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "INSERT INTO gamesplayers (idPlayer, idGame) VALUES (?, ?)",
+        [userId, gameId],
+        (error, results) => {
+          if (error) reject(error);
+          resolve(true);
+        }
+      );
+    });
   } catch (e) {
     return false;
   }

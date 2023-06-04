@@ -54,13 +54,14 @@ export function Grid({ gameId, ws, colors }: GridProps) {
     const gridBounds = getAbsoluteBoundsOf(gridRef.current);
     const PADDING = 12;
     const GAP = 8;
+    const SCALE = 0.593;
     const index = path.indexOf(cell);
     const y = gridBounds.y;
     const x =
       gridBounds.x +
       PADDING * 2 +
       index * GAP +
-      index * cellSize +
+      index * cellSize * SCALE +
       gridBounds.width;
     return { x, y };
   }
@@ -81,7 +82,13 @@ export function Grid({ gameId, ws, colors }: GridProps) {
     return {
       left: `${position.x}px`,
       top: `${position.y}px`,
+      "--delay": `${cellIndexOfCurrentPath(cell) * 100}ms`,
     };
+  }
+
+  function cellIndexOfCurrentPath(cell: number) {
+    if (currentPath === undefined) return -1;
+    return currentPath.indexOf(cell);
   }
 
   useEffect(() => {
