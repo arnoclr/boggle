@@ -1,15 +1,19 @@
 import WebSocket from "ws";
 import { WebSocketMessage, startGameMessage } from "./types";
+import { AntiSpam } from "./AntiSpam";
 import {
   DEFAULT_GAME_DURATION,
   addWordToGame,
   gameEndAt,
   gameIsActive,
+  gameOwnerToken,
   getAllTokensOfAPartyFromUserToken,
   getAllUserOfAParty,
   getGridString,
+  getNextPlayerOfGame,
   getScores,
   getUserName,
+  invalidateToken,
   isGameOwner,
   joinGame,
   previousWordSubmittedTooRecently,
@@ -18,11 +22,13 @@ import {
   thisUserExists,
   wordIsAlreadySubmitted,
 } from "./game";
-import { getWordPathIfValid } from "./words";
+import { getWordPathIfValid, wordScore } from "./words";
 
 const server = new WebSocket.Server({ port: 8082 });
 const connectedUsers: Map<string, WebSocket.WebSocket> = new Map();
 const connectedSockets: Map<WebSocket.WebSocket, string> = new Map();
+
+const antiSpam = new AntiSpam();
 
 server.on("listening", () => {
   console.log("Listening on port 8082");
@@ -35,6 +41,13 @@ server.on("connection", (socket) => {
     ) as WebSocketMessage;
 
     if ((await thisUserExists(token)) === false) {
+      console.log("User tried to connect with invalid token", token);
+      socket.close();
+      return;
+    }
+
+    if (antiSpam.userHasSendTooManyRequests(token)) {
+      await invalidateToken(token);
       socket.close();
       return;
     }
@@ -66,7 +79,8 @@ server.on("connection", (socket) => {
         break;
       case "startGame":
         if (await isGameOwner(token)) {
-          const durationSeconds = DEFAULT_GAME_DURATION;
+          const durationSeconds =
+            payload.durationSeconds || DEFAULT_GAME_DURATION;
           await startGame(token, durationSeconds);
           await broadcastToParty(true, token, type, {
             endAt: await gameEndAt(token),
@@ -90,6 +104,7 @@ server.on("connection", (socket) => {
             displayName: await getUserName(token),
             path,
             scores: await getScores(token),
+            wordScore: await wordScore(word),
           });
         } else {
           await sendTo(token, "wrongWord", null);
@@ -100,13 +115,14 @@ server.on("connection", (socket) => {
     }
   });
 
-  socket.on("close", () => {
+  socket.on("close", async () => {
     const token = connectedSockets.get(socket);
     if (token) {
       connectedUsers.delete(token);
       connectedSockets.delete(socket);
+      const partyPlayerToken = await getNextPlayerOfGame(token);
       removePlayerFromGame(token);
-      sendConnectedUsersList(token);
+      sendConnectedUsersList(partyPlayerToken);
     }
   });
 });
@@ -142,6 +158,7 @@ async function sendTo(
 
 async function sendConnectedUsersList(userToken: string): Promise<void> {
   await broadcastToParty(true, userToken, "users", {
+    gameOwnerToken: await gameOwnerToken(userToken),
     users: (await getAllUserOfAParty(userToken))
       .filter((user) => connectedUsers.has(user.websocketToken))
       .map((user) => ({ name: user.name })),

@@ -40,12 +40,14 @@ export interface WordFoundMessage extends BaseWebSocketMessage {
     displayName: string;
     path: number[];
     scores: Score[];
+    wordScore: number;
   };
 }
 
 export interface ConnectedUsersListMessage extends BaseWebSocketMessage {
   type: "users";
   payload: {
+    gameOwnerToken: string;
     users: { name: string }[];
   };
 }
@@ -66,6 +68,7 @@ export interface startGameMessage extends BaseWebSocketMessage {
   type: "startGame";
   payload: {
     endAt: Date;
+    durationSeconds?: number;
   };
 }
 

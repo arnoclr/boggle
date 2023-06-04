@@ -20,7 +20,13 @@ export interface PlayerScore {
   score: number;
 }
 
-const PLAYER_COLORS: CSSColor[] = ["red", "blue", "green", "yellow"];
+const PLAYER_COLORS: CSSColor[] = ["#E40027", "#E88823", "#264BCC", "#2AA146"];
+
+const DURATIONS: { label: string; value: number }[] = [
+  { label: "Partie rapide", value: 100 },
+  { label: "Partie normale", value: 180 },
+  { label: "Partie longue", value: 300 },
+];
 
 interface Props {
   gameId: string;
@@ -35,64 +41,29 @@ export default function WithRealtime({ gameId }: Props) {
   const [endAt, setEndAt] = useState<Date>(new Date());
   const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
   const gameUrl = window.location.href;
+  const [durationSeconds, setDurationSeconds] = useState<number>(0);
+  const [gameOwnerToken, setGameOwnerToken] = useState<string>("");
+
+  function iAmGameOwner(): boolean {
+    return gameOwnerToken === websocketToken;
+  }
 
   function canStartGame(): boolean {
-    return users.length >= 2;
+    return users.length >= 2 && iAmGameOwner();
   }
 
   function startGame(): void {
     if (!canStartGame()) return;
-    sendRealtimeEvent("startGame", { durationSeconds: 0 });
+    sendRealtimeEvent("startGame", { durationSeconds });
   }
 
-  function tryToReconnect(): void {
-    setTimeout(() => {
-      console.log("try to reconnect");
-      setWebSocket(new WebSocket(wsUrl));
-    }, 1000);
-  }
+  async function connectWebsocket(): Promise<void> {
+    console.log("get websocket token");
+    await fetchWebsocketToken();
 
-  async function fetchWebsocketToken(): Promise<void> {
-    if (websocketToken !== null) return;
-    const response = await callAction("auth.getWebsocketToken", new Map());
-    setWebsocketToken(response.data.token);
-  }
+    const socket = new WebSocket(wsUrl);
 
-  function sendRealtimeEvent(type: string, payload: any): void {
-    console.log(websocketToken, ws.readyState);
-    if (websocketToken === null) {
-      // fetchWebsocketToken();
-      return;
-    }
-    if (ws.readyState !== WebSocket.OPEN) {
-      console.log("not open");
-      tryToReconnect();
-      return;
-    }
-    console.log("sending", type, payload);
-    ws.send(JSON.stringify({ type, payload, token: websocketToken }));
-  }
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      if (gameActive === false) return;
-      setRemainingSeconds(Math.floor((endAt.getTime() - Date.now()) / 1000));
-    }, 1000);
-    return () => {
-      clearInterval(id);
-    };
-  }, [gameActive]);
-
-  useEffect(() => {
-    sendRealtimeEvent("joinGame", { gameId });
-  }, [websocketToken]);
-
-  useEffect(() => {
-    ws.onopen = () => {
-      fetchWebsocketToken();
-    };
-
-    ws.onmessage = (event) => {
+    socket.onmessage = (event) => {
       console.log("message", event.data);
 
       const { type, payload } = JSON.parse(event.data);
@@ -108,6 +79,7 @@ export default function WithRealtime({ gameId }: Props) {
             ])
           )
         );
+        setGameOwnerToken(payload.gameOwnerToken);
       }
 
       if (type === "startGame") {
@@ -116,19 +88,72 @@ export default function WithRealtime({ gameId }: Props) {
       }
     };
 
-    ws.onclose = () => {
+    socket.onclose = () => {
       console.log("disconnected");
-      tryToReconnect();
+      setWebsocketToken(null);
+      setTimeout(() => {
+        connectWebsocket();
+      }, 1000);
     };
 
-    ws.onerror = (error) => {
+    socket.onerror = (error) => {
       console.log("error", error);
-      tryToReconnect();
     };
+
+    console.log("set websocket");
+    setWebSocket(socket);
+  }
+
+  async function fetchWebsocketToken(): Promise<void> {
+    if (websocketToken !== null) return;
+    const response = await callAction("auth.getWebsocketToken", new Map());
+    setWebsocketToken(response.data.token);
+  }
+
+  function sendRealtimeEvent(type: string, payload: any): void {
+    console.log(websocketToken, ws.readyState);
+    if (websocketToken === null) {
+      return;
+    }
+    if (ws.readyState !== WebSocket.OPEN) {
+      console.log("not open");
+      connectWebsocket();
+      return;
+    }
+    console.log("sending", type, payload);
+    ws.send(JSON.stringify({ type, payload, token: websocketToken }));
+  }
+
+  function secondsToMinutes(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  }
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (gameActive === false) return;
+      setRemainingSeconds(Math.floor((endAt.getTime() - Date.now()) / 1000));
+    }, 1000);
+    return () => {
+      clearInterval(id);
+    };
+  }, [gameActive]);
+
+  useEffect(() => {
+    connectWebsocket();
   }, []);
+
+  useEffect(() => {
+    websocketToken; // not working without this line
+    ws.onopen = () => {
+      sendRealtimeEvent("joinGame", { gameId });
+    };
+  }, [ws]);
 
   return (
     <>
+      {websocketToken === null && <p>Connexion en cours ...</p>}
       {websocketToken !== null &&
         ws.readyState === WebSocket.OPEN &&
         users.length > 0 &&
@@ -141,8 +166,7 @@ export default function WithRealtime({ gameId }: Props) {
                   connectedUsers={users}
                   ws={ws}
                 ></Score>
-                <Timer remainingSeconds={remainingSeconds}></Timer>
-                <div className="gridContainer">
+                <div className="gridContainer padding-top">
                   <Chat
                     sendRealtimeEvent={sendRealtimeEvent}
                     ws={ws}
@@ -151,28 +175,49 @@ export default function WithRealtime({ gameId }: Props) {
                   <div className="gridContainerGrid">
                     <Grid gameId={gameId} ws={ws} colors={playerColors}></Grid>
                     {remainingSeconds > 0 && (
-                      <WordInput
-                        sendRealtimeEvent={sendRealtimeEvent}
-                        ws={ws}
-                      ></WordInput>
+                      <div role="group" style={{ width: "356px" }}>
+                        <WordInput
+                          sendRealtimeEvent={sendRealtimeEvent}
+                          ws={ws}
+                        ></WordInput>
+                        <Timer remainingSeconds={remainingSeconds}></Timer>
+                      </div>
                     )}
                   </div>
                   <WordsFound ws={ws}></WordsFound>
                 </div>
               </>
             ) : (
-              <div className="padding">
+              <div className="container">
                 <Navbar></Navbar>
-                <div className="waitingRoom">
+                <div className="waitingRoom" style={{ marginTop: "1rem" }}>
                   <div>
                     <p>
-                      Partie :{" "}
+                      Partie :&nbsp;
                       <span style={{ textTransform: "uppercase" }}>
                         {gameId}
                       </span>
                     </p>
-                    <p>Attente d'autres joueurs ...</p>
-                    <button onClick={startGame} disabled={!canStartGame()}>
+                    {!canStartGame() && <p>Attente d'autres joueurs ...</p>}
+                    <select
+                      disabled={iAmGameOwner() === false}
+                      onChange={(event) =>
+                        setDurationSeconds(parseInt(event.target.value))
+                      }
+                    >
+                      {DURATIONS.map((duration) => (
+                        <option key={duration.value} value={duration.value}>
+                          {duration.label} ({secondsToMinutes(duration.value)})
+                        </option>
+                      ))}
+                    </select>
+                    <br />
+                    <br />
+                    <button
+                      className="big"
+                      onClick={startGame}
+                      disabled={!canStartGame()}
+                    >
                       Démarrer la partie
                     </button>
                     <BlurredQR url={gameUrl}></BlurredQR>

@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PlayerColors, PlayerName, PlayerScore } from "./WithRealtime";
+import { launchAnimation } from "../utils/animations";
+import "./Score.css";
 
 export interface ScoreProps {
   colors: PlayerColors;
@@ -15,6 +17,9 @@ interface DisplayedScore {
 
 export default function Score({ ws, colors, connectedUsers }: ScoreProps) {
   const [scores, setScores] = useState<PlayerScore[]>([]);
+  const [bigScore, setBigScore] = useState<number>(0);
+  const [bigScoreColor, setBigScoreColor] = useState<string>("");
+  const bigScoreSpan = useRef<HTMLSpanElement>(null);
 
   function scoreList(): DisplayedScore[] {
     const allUsers = new Set(connectedUsers);
@@ -63,18 +68,32 @@ export default function Score({ ws, colors, connectedUsers }: ScoreProps) {
       const { type, payload } = JSON.parse(event.data);
       if (type === "wordFound") {
         setScores(payload.scores);
+        setBigScore(payload.wordScore);
+        setBigScoreColor(colors.get(payload.displayName) || "transparent");
+        setTimeout(() => {
+          launchAnimation(bigScoreSpan.current, "drop", 1500);
+        }, 800);
       }
     });
   }, [ws]);
 
   return (
-    <ul style={scoresCSS()}>
-      {scoreList().map(({ name, score, isConnected }) => (
-        <li key={name} style={scoreCSS(name)}>
-          <span style={{ whiteSpace: "nowrap" }}>{name}</span>
-          <span>{score}</span>
-        </li>
-      ))}
-    </ul>
+    <>
+      <span
+        ref={bigScoreSpan}
+        className="bigScore"
+        style={{ color: bigScoreColor }}
+      >
+        +{bigScore}
+      </span>
+      <ul style={scoresCSS()}>
+        {scoreList().map(({ name, score, isConnected }) => (
+          <li key={name} style={scoreCSS(name)}>
+            <span style={{ whiteSpace: "nowrap" }}>{name}</span>
+            <span>{score}</span>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
