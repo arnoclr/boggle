@@ -1,8 +1,27 @@
-import { useState } from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Footer from "../components/Footer";
 import LoginModal from "../components/LoginModal";
 import "./App.css";
+import ErrorPage from "./ErrorPage";
 import Game from "./Game";
-import Footer from "../components/Footer";
+import Home from "./Home";
+import Profile from "./Profile";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home></Home>,
+    errorElement: <ErrorPage></ErrorPage>,
+  },
+  {
+    path: "/g/:gameId",
+    element: <Game></Game>,
+  },
+  {
+    path: "/p/:username",
+    element: <Profile></Profile>,
+  },
+]);
 
 function App() {
   return (
@@ -15,7 +34,7 @@ function App() {
     >
       <div>
         <LoginModal />
-        <Game></Game>
+        <RouterProvider router={router}></RouterProvider>
       </div>
       <Footer></Footer>
     </div>
