@@ -44,7 +44,7 @@ export default function Profile() {
 
       const response = await callAction(
         "profil.getUserStats",
-        toMap({ userName })
+        toMap({ userName: userName })
       );
 
       const isPublicAccount = response.data.isPublic;
@@ -70,6 +70,20 @@ export default function Profile() {
     }
   }
 
+  const handlePrivacyToggle = async () => {
+    const newPrivacyStatus = !profileData?.isPublicAccount ? 0 : 1;
+    try {
+      await callAction(
+        "users.updateInformations",
+        toMap({ name: username, isPrivateAccount: newPrivacyStatus })
+      );
+      setProfileData({ ...profileData, isPublicAccount: !profileData?.isPublicAccount });
+    }
+    catch (e) {
+      console.log("error", e);
+    }
+  };
+
   useEffect(() => {
     fetchProfileData(username);
   }, [username]);
@@ -82,6 +96,22 @@ export default function Profile() {
         {isLoading && <p>Loading...</p>}
         {profileData && (
           <>
+            {isOwner && (
+              <div className="privacy-section">
+                <div className="privacy-toggle">
+                  <input
+                    type="checkbox"
+                    id="privacy-toggle"
+                    checked={!profileData?.isPublicAccount}
+                    onChange={handlePrivacyToggle}
+                  />
+                </div>
+                <label htmlFor="privacy-toggle" className="privacy-toggle-label">
+                  <span className="privacy-toggle-text">{profileData?.isPublicAccount ? 'Public' : 'Privé'}</span>
+                  <span className="privacy-toggle-slider"></span>
+                </label>
+              </div>
+            )}
             {isOwner && !profileData.isPublicAccount && (
                 <p className="profile-warning">Votre profil est privé, seuls vous et les administrateurs pouvez le voir.</p>
             )}

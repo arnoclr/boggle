@@ -48,9 +48,12 @@
   .profile-warning {
     display: flex;
     align-items: center;
-    background-color: #f5f5f5;
+    background-color: orange;
     padding: 10px;
     border-radius: 5px;
+    color: black;
+    font-weight: bold;
+
   }
   
   .profile-warning-icon {
@@ -60,6 +63,63 @@
   .profile-warning-text {
     color: orange;
     font-weight: bold;
+  }
+
+  .privacy-section {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .privacy-toggle {
+    display: inline-block;
+    position: relative;
+    margin-right: 10px;
+  }
+  
+  .privacy-toggle input {
+    display: none;
+  }
+  
+  .privacy-toggle-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .privacy-toggle-text {
+    font-weight: bold;
+    margin-right: 8px;
+  }
+  
+  .privacy-toggle-slider {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+    border-radius: 12px;
+    background-color: #ccc;
+    transition: background-color 0.3s;
+  }
+  
+  .privacy-toggle-slider:before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fff;
+    transition: transform 0.3s;
+  }
+  
+  .privacy-toggle input:checked + .privacy-toggle-label .privacy-toggle-slider {
+    background-color: orange;
+  }
+  
+  .privacy-toggle input:checked + .privacy-toggle-label .privacy-toggle-slider:before {
+    transform: translateX(24px);
   }
   
   
