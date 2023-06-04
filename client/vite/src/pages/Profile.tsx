@@ -77,40 +77,60 @@ export default function Profile() {
   return (
     <div className="profile-container">
       <h1>Profile</h1>
-      <p>@{username}</p>
-      {isLoading && <p>Loading...</p>}
-      {profileData && (
-        <>
-          {profileData.isPublicAccount || isOwner ? (
-            <div>
-              <p className="total-games">Nombre de parties jouées: {profileData.totalGames}</p>
-              <p className="total-score">Nombre de points: {profileData.totalScore}</p>
-              <p className="total-words">Nombre de mots trouvés: {profileData.totalWordsFound}</p>
-              <h2>Liste des parties jouées :</h2>
-              <ul>
-                {profileData.games.map((game) => (
-                  <li key={game.publicId}>
-                    <p>Partie commencée {ago(new Date(game.startedAt))}</p>
-                    <p>Nombre de mots trouvés: {game.totalWordsFound}</p>
-                    <p>Score total: {game.totalScore}</p>
-                    <p>
-                      Meilleur mot trouvé:{" "}
-                      {game.bestWord ? (
-                        game.bestWord
-                      ) : (
-                        <span className="no-best-word">Aucun</span>
-                      )}
-                    </p>
-                    <a href={`/g/${game.publicId}/results`}>Voir la partie</a>
-                  </li>
-                ))}
-              </ul>
+      <div className="profile-section">
+        <p className="profile-username">@{username}</p>
+        {isLoading && <p>Loading...</p>}
+        {profileData && (
+          <>
+            {isOwner && !profileData.isPublicAccount && (
+                <p className="profile-warning">Votre profil est privé, seuls vous et les administrateurs pouvez le voir.</p>
+            )}
+            {profileData.isPublicAccount || isOwner ? (
+              <div>
+                <div className="profile-stats">
+                  <p className="profile-stat">Nombre de parties jouées: {profileData.totalGames}</p>
+                  <p className="profile-stat">Nombre de points: {profileData.totalScore}</p>
+                  <p className="profile-stat">Nombre de mots trouvés: {profileData.totalWordsFound}</p>
+                </div>
+                <h2>Liste des parties jouées :</h2>
+                <div className="profile-history">
+                  {profileData.games.map((game) => (
+                    <div className="profile-game-card" key={game.publicId}>
+                      <p>Partie commencée {ago(new Date(game.startedAt))}</p>
+                      <p>Nombre de mots trouvés: {game.totalWordsFound}</p>
+                      <p>Score total: {game.totalScore}</p>
+                      <p>
+                        Meilleur mot trouvé:{" "}
+                        {game.bestWord ? (
+                          game.bestWord
+                        ) : (
+                          <span className="no-best-word">Aucun</span>
+                        )}
+                      </p>
+                      <a href={`/g/${game.publicId}/results`}>Voir la partie</a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="profile-warning">
+                <svg
+                  className="profile-warning-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 2C6.485 2 2 6.485 2 12c0 5.515 4.485 10 10 10s10-4.485 10-10c0-5.515-4.485-10-10-10zm1 15h-2v-2h2v2zm0-4h-2v-6h2v6z" />
+                </svg>
+                <p className="profile-warning-text">
+                  Vous ne pouvez pas accéder aux statistiques de ce joueur car ce compte est privé.
+                </p>
             </div>
-          ) : (
-            <p>Ce compte est privé.</p>
-          )}
-        </>
-      )}
+            )}
+          </>
+        )}
+      </div>
     </div>
-  );  
+  );
 }
