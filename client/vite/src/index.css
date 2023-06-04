@@ -25,7 +25,8 @@ html {
 
 body,
 input,
-button {
+button,
+select {
     font-family: Body, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
@@ -88,6 +89,7 @@ button.secondary {
 }
 
 button.tertiary {
+    padding-left: 0;
     background-color: transparent;
     border: none;
     text-decoration: underline;
@@ -294,4 +296,32 @@ ul li {
 
 ul li:nth-child(odd) {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+.defaultDialog {
+    border: 5px solid #222;
+    outline: 30px solid #111;
+    box-sizing: content-box;
+    max-width: 500px;
+    animation: openDialog .3s cubic-bezier(0.39, 0.575, 0.565, 1)
+}
+
+.defaultDialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+@keyframes openDialog {
+    0% {
+        opacity: 0;
+        transform: scale(1.2);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.relative {
+    position: relative;
 }

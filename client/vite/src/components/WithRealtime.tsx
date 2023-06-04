@@ -11,6 +11,7 @@ import Score from "./Score";
 import "./WithRealtime.css";
 import Navbar from "./Navbar";
 import BlurredQR from "./BlurredQR";
+import ShareModal from "./ShareModal";
 
 export type PlayerName = string;
 export type CSSColor = string;
@@ -220,7 +221,7 @@ export default function WithRealtime({ gameId }: Props) {
                     >
                       Démarrer la partie
                     </button>
-                    <BlurredQR url={gameUrl}></BlurredQR>
+                    <ShareModal url={gameUrl}></ShareModal>
                   </div>
                   <ConnectedUsers
                     users={users}
