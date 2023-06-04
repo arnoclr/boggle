@@ -5,9 +5,11 @@ import {
   addWordToGame,
   gameEndAt,
   gameIsActive,
+  gameOwnerToken,
   getAllTokensOfAPartyFromUserToken,
   getAllUserOfAParty,
   getGridString,
+  getNextPlayerOfGame,
   getScores,
   getUserName,
   isGameOwner,
@@ -100,13 +102,14 @@ server.on("connection", (socket) => {
     }
   });
 
-  socket.on("close", () => {
+  socket.on("close", async () => {
     const token = connectedSockets.get(socket);
     if (token) {
       connectedUsers.delete(token);
       connectedSockets.delete(socket);
+      const partyPlayerToken = await getNextPlayerOfGame(token);
       removePlayerFromGame(token);
-      sendConnectedUsersList(token);
+      sendConnectedUsersList(partyPlayerToken);
     }
   });
 });
@@ -142,6 +145,7 @@ async function sendTo(
 
 async function sendConnectedUsersList(userToken: string): Promise<void> {
   await broadcastToParty(true, userToken, "users", {
+    gameOwnerToken: await gameOwnerToken(userToken),
     users: (await getAllUserOfAParty(userToken))
       .filter((user) => connectedUsers.has(user.websocketToken))
       .map((user) => ({ name: user.name })),
