@@ -43,6 +43,23 @@ export async function removePlayerFromGame(token: string): Promise<void> {
   );
 }
 
+export async function getNextPlayerOfGame(token: string): Promise<string> {
+  const results = await query(
+    `SELECT * FROM gamesplayers gp
+    JOIN players p ON gp.idPlayer = p.idPlayer
+    WHERE idGame = (
+      SELECT idGame FROM gamesplayers WHERE idPlayer = (
+        SELECT idPlayer FROM players WHERE websocketToken = ?
+      )
+      ORDER BY joinedAt DESC LIMIT 1
+    )
+    AND p.idPlayer != (SELECT idPlayer FROM players WHERE websocketToken = ?)
+    ORDER BY joinedAt DESC LIMIT 1`,
+    [token, token]
+  );
+  return results[0]?.websocketToken || "";
+}
+
 export async function thisUserExists(token: string): Promise<boolean> {
   try {
     const results = await query(
@@ -75,7 +92,7 @@ const getUserId = (token: string): Promise<number> => {
       [token],
       (error, results) => {
         if (error) reject(error);
-        resolve(results[0].idPlayer);
+        resolve(results[0]?.idPlayer);
       }
     );
   });
@@ -107,6 +124,15 @@ export const joinGame = async (
     const userId = await getUserId(token);
     const gameId = await getInternalGameId(publicGameId);
 
+    const results = await query(
+      "SELECT * FROM gamesplayers WHERE idPlayer = ? AND idGame = ?",
+      [userId, gameId]
+    );
+
+    if (results.length > 0) {
+      return true;
+    }
+
     return new Promise((resolve, reject) => {
       connection.query(
         "INSERT INTO gamesplayers (idPlayer, idGame) VALUES (?, ?)",
@@ -129,7 +155,10 @@ export const getGameIdFromToken = async (token: string): Promise<number> => {
       [token],
       (error, results) => {
         if (error) reject(error);
-        resolve(results.length > 0 && results[0].idGame);
+        if (results && results.length > 0) {
+          resolve(results[0].idGame);
+        }
+        resolve(0);
       }
     );
   });
@@ -224,19 +253,28 @@ export async function startGame(
   });
 }
 
-export async function isGameOwner(token: string): Promise<boolean> {
+export async function gameOwnerToken(token: string): Promise<string> {
   const gameId = await getGameIdFromToken(token);
   const playerId = await getUserId(token);
   return new Promise((resolve, reject) => {
     connection.query(
-      "SELECT * FROM gamesplayers WHERE idGame = ? ORDER BY idGame ASC LIMIT 1",
+      `SELECT * FROM gamesplayers gp 
+      JOIN players p ON gp.idPlayer = p.idPlayer 
+      WHERE idGame = ? 
+      ORDER BY gp.joinedAt ASC 
+      LIMIT 1`,
       [gameId, playerId],
       (error, results) => {
         if (error) reject(error);
-        resolve(results.length > 0 && results[0].idPlayer === playerId);
+        console.log(results);
+        resolve(results.length > 0 && results[0].websocketToken);
       }
     );
   });
+}
+
+export async function isGameOwner(token: string): Promise<boolean> {
+  return (await gameOwnerToken(token)) === token;
 }
 
 export async function gameEndAt(token: string): Promise<Date> {

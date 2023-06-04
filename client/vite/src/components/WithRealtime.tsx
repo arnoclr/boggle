@@ -19,7 +19,13 @@ export interface PlayerScore {
   score: number;
 }
 
-const PLAYER_COLORS: CSSColor[] = ["red", "blue", "green", "yellow"];
+const PLAYER_COLORS: CSSColor[] = ["#E40027", "#E88823", "#264BCC", "#2AA146"];
+
+const DURATIONS: { label: string; value: number }[] = [
+  { label: "Partie rapide", value: 100 },
+  { label: "Partie normale", value: 180 },
+  { label: "Partie longue", value: 300 },
+];
 
 interface Props {
   gameId: string;
@@ -33,14 +39,16 @@ export default function WithRealtime({ gameId }: Props) {
   const [gameActive, setGameActive] = useState<boolean>(false);
   const [endAt, setEndAt] = useState<Date>(new Date());
   const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
+  const [durationSeconds, setDurationSeconds] = useState<number>(0);
+  const [iAmGameOwner, setIAmGameOwner] = useState<boolean>(false);
 
   function canStartGame(): boolean {
-    return users.length >= 2;
+    return users.length >= 2 && iAmGameOwner;
   }
 
   function startGame(): void {
     if (!canStartGame()) return;
-    sendRealtimeEvent("startGame", { durationSeconds: 0 });
+    sendRealtimeEvent("startGame", { durationSeconds });
   }
 
   async function connectWebsocket(): Promise<void> {
@@ -109,6 +117,12 @@ export default function WithRealtime({ gameId }: Props) {
     ws.send(JSON.stringify({ type, payload, token: websocketToken }));
   }
 
+  function secondsToMinutes(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  }
+
   useEffect(() => {
     const id = setInterval(() => {
       if (gameActive === false) return;
@@ -144,8 +158,7 @@ export default function WithRealtime({ gameId }: Props) {
                   connectedUsers={users}
                   ws={ws}
                 ></Score>
-                <Timer remainingSeconds={remainingSeconds}></Timer>
-                <div className="gridContainer">
+                <div className="gridContainer padding-top">
                   <Chat
                     sendRealtimeEvent={sendRealtimeEvent}
                     ws={ws}
@@ -154,28 +167,46 @@ export default function WithRealtime({ gameId }: Props) {
                   <div className="gridContainerGrid">
                     <Grid gameId={gameId} ws={ws} colors={playerColors}></Grid>
                     {remainingSeconds > 0 && (
-                      <WordInput
-                        sendRealtimeEvent={sendRealtimeEvent}
-                        ws={ws}
-                      ></WordInput>
+                      <div role="group" style={{ width: "356px" }}>
+                        <WordInput
+                          sendRealtimeEvent={sendRealtimeEvent}
+                          ws={ws}
+                        ></WordInput>
+                        <Timer remainingSeconds={remainingSeconds}></Timer>
+                      </div>
                     )}
                   </div>
                   <WordsFound ws={ws}></WordsFound>
                 </div>
               </>
             ) : (
-              <div className="padding">
+              <div className="container">
                 <Navbar></Navbar>
-                <div className="waitingRoom">
+                <div className="waitingRoom" style={{ marginTop: "1rem" }}>
                   <div>
                     <p>
-                      Partie :{" "}
+                      Partie :&nbsp;
                       <span style={{ textTransform: "uppercase" }}>
                         {gameId}
                       </span>
                     </p>
-                    <p>Attente d'autres joueurs ...</p>
-                    <button onClick={startGame} disabled={!canStartGame()}>
+                    {!canStartGame() && <p>Attente d'autres joueurs ...</p>}
+                    <select
+                      onChange={(event) =>
+                        setDurationSeconds(parseInt(event.target.value))
+                      }
+                    >
+                      {DURATIONS.map((duration) => (
+                        <option key={duration.value} value={duration.value}>
+                          {duration.label} ({secondsToMinutes(duration.value)})
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      className="big"
+                      onClick={startGame}
+                      disabled={!canStartGame()}
+                    >
                       Démarrer la partie
                     </button>
                   </div>
