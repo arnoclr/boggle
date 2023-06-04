@@ -20,7 +20,6 @@ export default function Profile() {
         "profil.getUserStats",
         toMap({ userName })
       );
-      console.log(response);
       const isPublicAccout = response.data.isPublic;
       const totalGames = response.data.totalGames;
       const totalScore = response.data.totalScore;
