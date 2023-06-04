@@ -135,7 +135,7 @@ export const joinGame = async (
 
     return new Promise((resolve, reject) => {
       connection.query(
-        "INSERT INTO gamesplayers (idPlayer, idGame) VALUES (?, ?)",
+        "INSERT INTO gamesplayers (idPlayer, idGame, joinedAt) VALUES (?, ?, NOW())",
         [userId, gameId],
         (error, results) => {
           if (error) reject(error);
