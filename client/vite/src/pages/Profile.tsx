@@ -26,6 +26,7 @@ export default function Profile() {
     }>
   } | null>(null);
   const [avatars, setAvatars] = useState<Array<string>>([]);
+  const [selectedAvatar, setSelectedAvatar] = useState("");
 
   async function fetchAvatars(): Promise<void> {
     try {
@@ -69,6 +70,8 @@ export default function Profile() {
       const totalScore = response.data.totalScore;
       const totalWordsFound = response.data.totalWordsFound;
       const games = response.data.games;
+
+      setSelectedAvatar(profilePictureURL);
 
       setProfileData({profilePictureURL: profilePictureURL, isPublicAccount: isPublicAccount, totalGames: totalGames, totalScore: totalScore, totalWordsFound: totalWordsFound, games: games });
     } catch (e) {
@@ -116,6 +119,8 @@ export default function Profile() {
 
   const onSubmit = (event: any) => {
     event.preventDefault();
+
+    console.log("Avatar sélectionné :", selectedAvatar);
     
     const form = event.target;
     const name = form.playerNameInput.value;
@@ -176,7 +181,9 @@ export default function Profile() {
                         key={index}
                         src={avatar}
                         alt={`Avatar ${index}`}
-                        className="avatar-option"
+                        className={`avatar-option ${selectedAvatar === avatar ? "selected" : ""}`}
+                        onClick={() => setSelectedAvatar(avatar)}
+                        value={avatar}
                       />
                     ))}
                   </div>
