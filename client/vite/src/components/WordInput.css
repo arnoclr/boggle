@@ -1,0 +1,41 @@
+.wordInput nav {
+    position: relative;
+}
+
+.wordInput button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+}
+
+@keyframes inputError {
+    0% {
+        border-color: red;
+        transform: translateX(0%);
+    }
+
+    10% {
+        transform: translateX(-10%);
+    }
+
+    20% {
+        transform: translateX(0%);
+    }
+
+    30% {
+        transform: translateX(-8%);
+    }
+
+    50% {
+        transform: translateX(0%);
+    }
+
+    80% {
+        transform: translateX(-6%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+}

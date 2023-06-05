@@ -1,0 +1,174 @@
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+.profile-section {
+  margin: 0 20px;
+}
+
+.profile-username {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 20px;
+}
+
+.profile-stat {
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.profile-stat span:first-child {
+  font-size: 4rem;
+}
+
+.profile-stat span:last-child {
+  font-size: .8rem;
+}
+
+.profile-history {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.profile-game-card {
+  width: calc(33.33% - 20px);
+  padding: 20px;
+  border: 5px solid #ccc;
+}
+
+@media (max-width: 600px) {
+  .profile-game-card {
+    width: calc(50% - 20px);
+  }
+}
+
+.profile-warning {
+  display: flex;
+  align-items: center;
+  background-color: orange;
+  padding: 10px;
+  color: black;
+  font-weight: bold;
+}
+
+.profile-warning-icon {
+  margin-right: 10px;
+  width: 64px;
+  height: 64px;
+}
+
+.profile-private-section {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.profile-warning-text {
+  font-weight: bold;
+}
+
+.privacy-section {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.privacy-toggle {
+  display: inline-block;
+  position: relative;
+  margin-right: 10px;
+}
+
+.privacy-toggle input {
+  display: none;
+}
+
+.privacy-toggle-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.privacy-toggle-text {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.privacy-toggle-slider {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+  background-color: #ccc;
+  transition: background-color 0.3s;
+}
+
+.privacy-toggle-slider:before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  transition: transform 0.3s;
+}
+
+.privacy-toggle input:checked+.privacy-toggle-label .privacy-toggle-slider {
+  background-color: orange;
+}
+
+.privacy-toggle input:checked+.privacy-toggle-label .privacy-toggle-slider:before {
+  transform: translateX(24px);
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+}
+
+.profile-avatar {
+  margin-right: 16px;
+}
+
+.avatar-image {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+}
+
+.profile-username-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.avatar-list {
+  display: flex;
+}
+
+.avatar-option {
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+  opacity: 0.50;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.avatar-option.selected {
+  opacity: 1;
+}

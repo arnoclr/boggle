@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+  nodejs:
+    build:
+      context: server
+      dockerfile: tchat/Dockerfile
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./server/tchat/src:/app/src
+      - ./server/tchat/public:/app/public
+    depends_on:
+      - db
+  db:
+    image: mariadb:10
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: boggle
+      MYSQL_USER: boggle
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - db:/var/lib/mysql
+      - ./server/sql:/docker-entrypoint-initdb.d
+  php:
+    build:
+      context: server
+      dockerfile: web/Dockerfile
+    ports:
+      - "8081:80"
+    volumes:
+      - ./server/web:/var/www/html
+      - /var/www/html/vendor
+    depends_on:
+      - db
+  vite:
+    build: client/vite
+    ports:
+      - "5173:5173"
+    env_file:
+      - .env
+    volumes:
+      - ./client/vite/src:/app/src
+      - ./client/vite/public:/app/public
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+volumes:
+  db:

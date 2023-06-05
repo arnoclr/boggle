@@ -1,0 +1,28 @@
+.CreateGame {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.CreateGame button {
+    padding: 12px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 12px;
+    text-align: start;
+}
+
+.CreateGame h3 {
+    margin: 0;
+}
+
+.CreateGame p {
+    font-size: 10px;
+}
+
+@media (max-width: 800px) {
+    .CreateGame {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,39 @@
+.GameResults .graph {
+    display: flex;
+    gap: 1rem;
+    height: 80vh;
+}
+
+.GameResults .graph .point {
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+
+.GameResults .graph .point .bar {
+    position: relative;
+    background-color: #2871E2;
+    transform-origin: bottom;
+    animation: scaleUp 0.5s ease-in-out;
+}
+
+.GameResults .graph .point .bar.best {
+    opacity: 1;
+}
+
+.GameResults .graph .point .score {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+}
+
+@keyframes scaleUp {
+    0% {
+        transform: scaleY(0);
+    }
+
+    100% {
+        transform: scaleY(1);
+    }
+}

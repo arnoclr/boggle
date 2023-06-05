@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3307,
+            "driver": "MariaDB",
+            "name": "Boggle Docker",
+            "database": "boggle",
+            "username": "boggle",
+            "askForPassword": true
+        }
+    ]
+}

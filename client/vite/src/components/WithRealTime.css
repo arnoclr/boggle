@@ -1,0 +1,97 @@
+.gridContainer {
+    display: flex;
+    gap: 1rem;
+}
+
+.gridContainerGrid {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.wordsFound {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.wordsFound .Word {
+    animation: appear 0.5s ease-out;
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+
+    80% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.waitingRoom {
+    display: flex;
+    gap: 1rem;
+    width: fit-content;
+}
+
+.wordsFound .Word .letter {
+    --size: 38px;
+}
+
+@media (max-width: 800px) {
+    .gridContainer {
+        flex-direction: column;
+    }
+
+    .gridContainer.padding-top {
+        padding-top: 5px;
+    }
+
+    .gridContainerGrid {
+        margin: 0 auto;
+        order: 1;
+        flex-direction: column-reverse;
+    }
+
+    .grid {
+        margin-top: 10px;
+        margin-right: auto;
+        border-width: 20px;
+        z-index: 2;
+    }
+
+    .grid .cell,
+    .grid .cell img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .wordsFound {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        right: 12px;
+        top: 110px;
+        order: 2;
+        z-index: 1;
+    }
+
+    .wordsFound .Word .letter {
+        --size: 32px;
+    }
+
+    .chat {
+        order: 3;
+    }
+
+    .waitingRoom {
+        flex-direction: column;
+    }
+}

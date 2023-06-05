@@ -1,0 +1,38 @@
+.grid {
+    --gap: .5rem;
+    padding: var(--gap);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    background-color: #1f519b;
+    border: 30px solid #2871E2;
+    outline: 5px solid #3679dd;
+    width: fit-content;
+}
+
+.row {
+    display: flex;
+    gap: var(--gap);
+}
+
+.cell {
+    width: 64px;
+    height: 64px;
+    background-color: #3772cc;
+}
+
+.cell img {
+    position: absolute;
+    outline: 0px solid #ddd;
+    transition-property: top, left, outline, transform;
+    transition-duration: 0.5s;
+    transition-delay: var(--delay);
+    transition-timing-function: cubic-bezier(.2, .96, .65, 1.08);
+    display: block;
+}
+
+.cell img[aria-active=true] {
+    outline: 8px solid #ddd;
+    transform: scale(0.593);
+    transform-origin: top left;
+}
