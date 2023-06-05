@@ -213,7 +213,7 @@ export default function LoginModal({ onLogin }: LoginModalProps) {
   }
 
   return (
-    <dialog ref={dialogRef} className="loginModal">
+    <dialog ref={dialogRef} className="defaultDialog">
       {section === "email" && (
         <form aria-busy={loading} onSubmit={handleEmailSubmit}>
           <h1>Bienvenue sur Boggle</h1>
