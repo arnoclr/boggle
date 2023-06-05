@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { createRef, useState, useEffect } from "react";
 import { ErrorWithStatus, callAction, toMap } from "../utils/req";
 import "./Profile.css";
@@ -11,36 +11,33 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [profileData, setProfileData] = useState<{
-    profilePictureURL: string,
-    isPublicAccount: boolean,
-    totalGames: number,
-    totalScore: number,
-    totalWordsFound: number,
+    profilePictureURL: string;
+    isPublicAccount: boolean;
+    totalGames: number;
+    totalScore: number;
+    totalWordsFound: number;
     games: Array<{
-      publicId: string,
-      startedAt: string,
-      totalWordsFound: string,
-      totalScore: number,
-      bestWord: string | null,
-      bestWordScore: number
-    }>
+      publicId: string;
+      startedAt: string;
+      totalWordsFound: string;
+      totalScore: number;
+      bestWord: string | null;
+      bestWordScore: number;
+    }>;
   } | null>(null);
   const [avatars, setAvatars] = useState<Array<string>>([]);
   const [selectedAvatar, setSelectedAvatar] = useState("");
 
   async function fetchAvatars(): Promise<void> {
     try {
-      const response = await callAction(
-        "profil.getAvatars",
-        toMap({})
-      );
+      const response = await callAction("profil.getAvatars", toMap({}));
       setAvatars(response.data);
     } catch (e) {
       const { message, status } = e as ErrorWithStatus;
       console.log("error", e);
     }
   }
-  
+
   async function fetchProfileData(userName: string): Promise<void> {
     setIsLoading(true);
     try {
@@ -73,7 +70,14 @@ export default function Profile() {
 
       setSelectedAvatar(profilePictureURL);
 
-      setProfileData({profilePictureURL: profilePictureURL, isPublicAccount: isPublicAccount, totalGames: totalGames, totalScore: totalScore, totalWordsFound: totalWordsFound, games: games });
+      setProfileData({
+        profilePictureURL: profilePictureURL,
+        isPublicAccount: isPublicAccount,
+        totalGames: totalGames,
+        totalScore: totalScore,
+        totalWordsFound: totalWordsFound,
+        games: games,
+      });
     } catch (e) {
       const { message, status } = e as ErrorWithStatus;
       if (status === "user_not_found") {
@@ -94,11 +98,13 @@ export default function Profile() {
     try {
       await callAction(
         "users.updateInformations",
-        toMap({ name: newName, isPrivateAccount: profileData?.isPublicAccount ? 0 : 1 })
+        toMap({
+          name: newName,
+          isPrivateAccount: profileData?.isPublicAccount ? 0 : 1,
+        })
       );
       setProfileData({ ...profileData, name: newName });
-    }
-    catch (e) {
+    } catch (e) {
       console.log("error", e);
     }
   };
@@ -110,9 +116,11 @@ export default function Profile() {
         "users.updateInformations",
         toMap({ name: username, isPrivateAccount: newPrivacyStatus })
       );
-      setProfileData({ ...profileData, isPublicAccount: !profileData?.isPublicAccount });
-    }
-    catch (e) {
+      setProfileData({
+        ...profileData,
+        isPublicAccount: !profileData?.isPublicAccount,
+      });
+    } catch (e) {
       console.log("error", e);
     }
   };
@@ -124,15 +132,14 @@ export default function Profile() {
         toMap({ profilPicUrl: newAvatar })
       );
       setProfileData({ ...profileData, profilePictureURL: newAvatar });
-    }
-    catch (e) {
+    } catch (e) {
       console.log("error", e);
     }
   };
 
   const onSubmit = (event: any) => {
     event.preventDefault();
-    
+
     const form = event.target;
     const name = form.playerNameInput.value;
     const isPrivateAccount = !form.profileVisibility.checked;
@@ -140,7 +147,7 @@ export default function Profile() {
     if (name !== username) {
       handleNameChange(name);
     }
-      
+
     if (isPrivateAccount !== profileData?.isPublicAccount) {
       handlePrivacyToggle();
     }
@@ -149,7 +156,6 @@ export default function Profile() {
       handleAvatarChange(selectedAvatar);
     }
   };
-  
 
   useEffect(() => {
     fetchAvatars();
@@ -157,107 +163,120 @@ export default function Profile() {
   }, [username]);
 
   return (
-    <div className="profile-container">
+    <div className="profile-container container padding-top">
       <h1>Profile</h1>
-        <div className="profile-section">
-          <div className="profile-avatar">
-            <img
-              src={profileData?.profilePictureURL}
-              alt="Profile Picture"
-              className="avatar-image"
-              width="64"
-              height="64"
-            />
-          </div>
-          <div className="profile-username-container">
-            <p className="profile-username">@{username}</p>
-          </div>
+      <div className="profile-section">
+        <div className="profile-avatar">
+          <img
+            src={profileData?.profilePictureURL}
+            alt="Profile Picture"
+            className="avatar-image"
+            width="64"
+            height="64"
+          />
         </div>
-        <br />
-        {isLoading && <p>Loading...</p>}
-        {profileData && (
-          <>
-            {isOwner && (
-              <>
-                <details>
+        <div className="profile-username-container">
+          <p className="profile-username">@{username}</p>
+        </div>
+      </div>
+      <br />
+      {isLoading && <p>Loading...</p>}
+      {profileData && (
+        <>
+          {isOwner && (
+            <>
+              <details>
                 <summary>Options du profil</summary>
                 <form className="form" onSubmit={onSubmit}>
-                  <AccountDetailsFormProps 
+                  <AccountDetailsFormProps
                     defaultUserName={username}
                     isChecked={!profileData?.isPublicAccount}
-                  >
-                  </AccountDetailsFormProps>
+                  ></AccountDetailsFormProps>
                   <br />
                   <label>
                     <span>Avatar</span>
                     <div className="avatar-list">
-                    {avatars.map((avatar, index) => (
-                      <img
-                        key={index}
-                        src={avatar}
-                        alt={`Avatar ${index}`}
-                        className={`avatar-option ${selectedAvatar === avatar ? "selected" : ""}`}
-                        onClick={() => setSelectedAvatar(avatar)}
-                        value={avatar}
-                      />
-                    ))}
-                  </div>
-                </label>
-                  <br />
-                  <button type="submit">
-                    Sauvegarder
-                  </button>
-                </form>
-                </details>
-                
-              </>
-            )}
-            {isOwner && !profileData.isPublicAccount && (
-                <p className="profile-warning">Votre profil est privé, seuls vous et les administrateurs pouvez le voir.</p>
-            )}
-            {profileData.isPublicAccount || isOwner ? (
-              <div>
-                <div className="profile-stats">
-                  <p className="profile-stat">Nombre de parties jouées: {profileData.totalGames}</p>
-                  <p className="profile-stat">Nombre de points: {profileData.totalScore}</p>
-                  <p className="profile-stat">Nombre de mots trouvés: {profileData.totalWordsFound}</p>
-                </div>
-                <h2>Liste des parties jouées :</h2>
-                <div className="profile-history">
-                  {profileData.games.length === 0 && (
-                    <p className="profile-no-game">Aucune partie jouée</p>
-                  )}
-                  {profileData.games.map((game) => (
-                    <div className="profile-game-card" key={game.publicId}>
-                      <p>Partie commencée {ago(new Date(game.startedAt))}</p>
-                      <p>Nombre de mots trouvés: {game.totalWordsFound}</p>
-                      <p>Score total: {game.totalScore}</p>
-                      <p>
-                        Meilleur mot trouvé:{" "}
-                        {game.bestWord ? (
-                          game.bestWord
-                        ) : (
-                          <span className="no-best-word">Aucun</span>
-                        )}
-                      </p>
-                      <a href={`/g/${game.publicId}/results`}>Voir la partie</a>
+                      {avatars.map((avatar, index) => (
+                        <img
+                          key={index}
+                          src={avatar}
+                          alt={`Avatar ${index}`}
+                          className={`avatar-option ${
+                            selectedAvatar === avatar ? "selected" : ""
+                          }`}
+                          onClick={() => setSelectedAvatar(avatar)}
+                          value={avatar}
+                        />
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div className="profile-private-section">
-                <img
-                  src="https://cdn.discordapp.com/attachments/886301152759644272/1115052065434128444/image-removebg-preview.png"
-                  className="profile-warning-icon"
-                ></img>
-                <p className="profile-warning-text">
-                  Vous ne pouvez pas accéder aux statistiques de ce joueur car ce compte est privé.
+                  </label>
+                  <br />
+                  <button type="submit">Sauvegarder</button>
+                </form>
+              </details>
+            </>
+          )}
+          {isOwner && !profileData.isPublicAccount && (
+            <p className="profile-warning">
+              Votre profil est privé, seuls vous et les administrateurs pouvez
+              le voir.
+            </p>
+          )}
+          {profileData.isPublicAccount || isOwner ? (
+            <div>
+              <div className="profile-stats">
+                <p className="profile-stat">
+                  <span>{profileData.totalGames}</span>
+                  <span>Nombre de parties jouées</span>
                 </p>
+                <p className="profile-stat">
+                  <span>{profileData.totalScore}</span>
+                  <span>Nombre de points</span>
+                </p>
+                <p className="profile-stat">
+                  <span>{profileData.totalWordsFound}</span>
+                  <span>Nombre de mots trouvés</span>
+                </p>
+              </div>
+              <h2>Liste des parties jouées :</h2>
+              <div className="profile-history">
+                {profileData.games.length === 0 && (
+                  <p className="profile-no-game">Aucune partie jouée</p>
+                )}
+                {profileData.games.map((game) => (
+                  <div className="profile-game-card" key={game.publicId}>
+                    <p>Partie commencée {ago(new Date(game.startedAt))}</p>
+                    <p>Nombre de mots trouvés: {game.totalWordsFound}</p>
+                    <p>Score total: {game.totalScore}</p>
+                    <p>
+                      Meilleur mot trouvé:{" "}
+                      {game.bestWord ? (
+                        game.bestWord
+                      ) : (
+                        <span className="no-best-word">Aucun</span>
+                      )}
+                    </p>
+                    <Link to={`/g/${game.publicId}/results`}>
+                      Voir la partie
+                    </Link>
+                  </div>
+                ))}
+              </div>
             </div>
-            )}
-          </>
-        )}
+          ) : (
+            <div className="profile-private-section">
+              <img
+                src="https://cdn.discordapp.com/attachments/886301152759644272/1115052065434128444/image-removebg-preview.png"
+                className="profile-warning-icon"
+              ></img>
+              <p className="profile-warning-text">
+                Vous ne pouvez pas accéder aux statistiques de ce joueur car ce
+                compte est privé.
+              </p>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
